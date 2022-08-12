@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f00d434cde0fbf4cb7bf9de69eed200, type: 3}
+  m_Name: DataPlayer
+  m_EditorClassIdentifier: 
+  MaxHealth: 20
+  DamageHopSpeed: 5
+  DamageHopDirection: {x: 3, y: 2}
+  StunResistance: 3
+  StunRecoveryTime: 2
+  GroundCheckRadius: 0.3
+  EnvironmentCheckDistance: 0.5
+  LedgeCheckRadius: 0.3
+  WhatIsGround:
+    serializedVersion: 2
+    m_Bits: 512
+  MovementVelocity: 10
+  JumpVelocity: 15
+  AmountOfJumps: 2
+  JumpHeightMultiplier: 0.5
+  MaxVelocityY: 50
+  WallSlideVelocity: 1
+  WallClimbVelocity: 3
+  WallJumpVelocity: 20
+  WallJumpTime: 0.25
+  WallJumpAngle: {x: 1, y: 2}
+  StartOffset: {x: 0.4, y: 1}
+  StopOffset: {x: 0.4, y: 0.7}
+  DashCooldown: 0.5
+  MaxHoldTime: 1
+  HoldTimeScale: 0
+  DashTime: 0.2
+  DashVelocity: 30
+  Drag: 10
+  DashEndYMultiplier: 0.2
+  DistanceBetweenAfterimages: 1
+  CrouchMovementVelocity: 5
+  CrouchColliderHeight: 0.8
+  StandColliderHeight: 1.6
+  CrouchLightOrbPosition: {x: -1, y: 0}
+  StandLightOrbPosition: {x: -1, y: 1.5}
+  RollVelocity: 15
+  DeathBloodParticle: {fileID: 334284730873873302, guid: 4a122dcc68153794295f6953dd91521e, type: 3}
+  DeathChunkParticle: {fileID: 4538229753742813869, guid: 3d13ef1f52d189642930444f906fc622, type: 3}

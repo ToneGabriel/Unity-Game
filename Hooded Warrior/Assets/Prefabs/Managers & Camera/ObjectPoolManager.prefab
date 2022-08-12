@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2546744384286142603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2546744384286142605}
+  - component: {fileID: 2546744384286142602}
+  m_Layer: 0
+  m_Name: ObjectPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2546744384286142605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2546744384286142603}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2546744384286142602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2546744384286142603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04410e0f197ab364c82b1d8236f1cec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pools:
+  - Tag: PlayerAfterImagePool
+    Size: 10
+    Prefab: {fileID: 4266336564012166310, guid: b3af7e1b10d16434a9b63f554b5f6878, type: 3}
+  - Tag: PlayerMagicOrbPool
+    Size: 5
+    Prefab: {fileID: 9016572125485966263, guid: b01d6aa4308c7ef48a7012c182a38bac, type: 3}
+  - Tag: ArrowPool
+    Size: 10
+    Prefab: {fileID: 7094473787076998584, guid: 820836ae4f4f18648b1f10083a427ef6, type: 3}
+  - Tag: BringerOfDeathPortalPool
+    Size: 3
+    Prefab: {fileID: 7040834541838249268, guid: 8fc28ed51a7479748bf728c06bf70d98, type: 3}
+  - Tag: BringerOfDeathOrbPool
+    Size: 2
+    Prefab: {fileID: 3559929106401104446, guid: eb386f6e245ab5a48b951255ed6f19ac, type: 3}
+  - Tag: BringerOfDeathOrbProjectilePool
+    Size: 5
+    Prefab: {fileID: 8258060520011684125, guid: fee111cacf35aa445a3e7a276bdfdff9, type: 3}
+  - Tag: HitParticlesPool
+    Size: 5
+    Prefab: {fileID: 2886043226331418517, guid: b6fc10166a62c874aa69bdc5f84a780d, type: 3}

@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Archer
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Background
+  - Ground
+  - Player
+  - Enemy
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Forest
+    uniqueID: 2105536085
+    locked: 0
+  - name: Dungeon
+    uniqueID: 370585049
+    locked: 0
+  - name: Platforms
+    uniqueID: 3902861323
+    locked: 0
+  - name: Enemy
+    uniqueID: 1133473767
+    locked: 0
+  - name: Player
+    uniqueID: 764489349
+    locked: 0
+  - name: FrontBackground
+    uniqueID: 3856517031
+    locked: 0
