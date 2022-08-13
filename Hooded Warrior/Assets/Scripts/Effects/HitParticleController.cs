@@ -1,22 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class HitParticleController : MonoBehaviour, IPoolComponent
 {
-    public static string PoolTag;
-
     private void FinishAnim()
     {
-        ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+        ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
     }
 
-    public string GetTag()
+    public Type GetObjectType()
     {
-        return PoolTag;
-    }
-
-    public void SetTag(string tag)
-    {
-        PoolTag = tag;
+        return GetType();
     }
 
 }

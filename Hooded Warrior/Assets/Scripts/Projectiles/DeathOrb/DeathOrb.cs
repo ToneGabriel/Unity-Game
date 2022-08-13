@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class DeathOrb : MonoBehaviour, IPoolComponent
 {
-    public static string PoolTag;
-
     private GameObject _target;
     private float _spellCastTime;
     private bool _isCoroutineStarted;
@@ -48,7 +47,7 @@ public class DeathOrb : MonoBehaviour, IPoolComponent
             for (int i = 0; i < _deathOrbData.MaxNumberOfProjectiles; i++)
             {
                 SetCastRotation();
-                ObjectPoolManager.Instance.GetFromPool(DeathOrbProjectile.PoolTag, transform.position, transform.rotation).GetComponent<DeathOrbProjectile>().SetTarget(_target);
+                ObjectPoolManager.Instance.GetFromPool(typeof(DeathOrbProjectile), transform.position, transform.rotation).GetComponent<DeathOrbProjectile>().SetTarget(_target);
             }
 
             StartCoroutine(KillOrb());
@@ -92,17 +91,12 @@ public class DeathOrb : MonoBehaviour, IPoolComponent
             yield return _deathOrbData.TimeToScale;
         }
 
-        ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+        ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
     }
 
-    public string GetTag()
+    public Type GetObjectType()
     {
-        return PoolTag;
-    }
-
-    public void SetTag(string tag)
-    {
-        PoolTag = tag;
+        return GetType();
     }
 
     public void OnDrawGizmos()

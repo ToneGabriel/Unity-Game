@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class DeathPortal : MonoBehaviour, IPoolComponent
 {
-    public static string PoolTag;
-
     private BoxCollider2D _boxCollider;
     private GameObject _target;
     private AttackDetails _attackDetails;
@@ -47,16 +46,11 @@ public class DeathPortal : MonoBehaviour, IPoolComponent
 
     public void FinishPortalAttack()
     {
-        ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+        ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
     }
 
-    public string GetTag()
+    public Type GetObjectType()
     {
-        return PoolTag;
-    }
-
-    public void SetTag(string tag)
-    {
-        PoolTag = tag;
+        return GetType();
     }
 }

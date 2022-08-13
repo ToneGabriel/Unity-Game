@@ -26,6 +26,6 @@ public class Archer_RangedAttackState : RangedAttackState
     {
         base.TriggerRangedAttack();
 
-        ObjectPoolManager.Instance.GetFromPool(Arrow.PoolTag, _archer.RangedAttackPosition.transform.position, _archer.RangedAttackPosition.transform.rotation);
+        ObjectPoolManager.Instance.GetFromPool(typeof(Arrow), _archer.RangedAttackPosition.transform.position, _archer.RangedAttackPosition.transform.rotation);
     }
 }

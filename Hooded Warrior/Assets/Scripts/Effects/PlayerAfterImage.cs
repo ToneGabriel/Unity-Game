@@ -1,19 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerAfterImage : MonoBehaviour, IPoolComponent
 {
-    public static string PoolTag;
-
     private GameObject _player;
     private SpriteRenderer _spriteRenderer;
     private SpriteRenderer _playerSpriteRenderer;
 
-    private float _activeTime = 0.5f;
-    private float _timeActivated;
+    [SerializeField] private float _activeTime;
+    [SerializeField] private float _alphaSet;
+    [SerializeField] private float _alphaMultiplier;
 
+    private float _timeActivated;
     private float _alpha;
-    private float _alphaSet = 1f;
-    private float _alphaMultiplier = 0.8f;
     private Color _color;
 
     private void Awake()
@@ -38,17 +37,12 @@ public class PlayerAfterImage : MonoBehaviour, IPoolComponent
         _spriteRenderer.color = _color;
 
         if (Time.time >= _timeActivated + _activeTime)
-            ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+            ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
     }
 
-    public string GetTag()
+    public Type GetObjectType()
     {
-        return PoolTag;
-    }
-
-    public void SetTag(string tag)
-    {
-        PoolTag = tag;
+        return GetType();
     }
 
 }

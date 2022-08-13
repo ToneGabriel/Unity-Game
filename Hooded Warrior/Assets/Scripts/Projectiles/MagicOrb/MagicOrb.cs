@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class MagicOrb : MonoBehaviour, IPoolComponent
 {
-    public static string PoolTag;
-
     private Rigidbody2D _rigidbody;
     private GameObject _target;
     private AttackDetails _attackDetails;
@@ -61,7 +60,7 @@ public class MagicOrb : MonoBehaviour, IPoolComponent
             _rotateAmount = Vector3.Cross(_direction, transform.right).z;
         }
         else
-            _rotateAmount = Random.Range(-5f, 5f);   // random rotation if target not found
+            _rotateAmount = UnityEngine.Random.Range(-5f, 5f);   // random rotation if target not found
 
         _rigidbody.angularVelocity = -_rotateAmount * _orbSpellData.SpellRotateSpeed;
         _rigidbody.velocity = transform.right * _orbSpellData.SpellSpeed;
@@ -70,7 +69,7 @@ public class MagicOrb : MonoBehaviour, IPoolComponent
     private void CheckOrbHit()
     {
         if (Time.time >= _spellCastTime + _orbSpellData.SpellLifeTime)
-            ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+            ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
         else
         {
             Collider2D damageHit = Physics2D.OverlapCircle(transform.position, _orbSpellData.DamageRadius, _orbSpellData.WhatIsEnemy);
@@ -80,21 +79,16 @@ public class MagicOrb : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
             }
             else if (groundHit)
-                ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
         }
     }
 
-    public string GetTag()
+    public Type GetObjectType()
     {
-        return PoolTag;
-    }
-
-    public void SetTag(string tag)
-    {
-        PoolTag = tag;
+        return GetType();
     }
 
     public void OnDrawGizmos()

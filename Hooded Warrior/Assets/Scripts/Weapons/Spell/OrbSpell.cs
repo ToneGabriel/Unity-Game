@@ -28,7 +28,7 @@ public class OrbSpell : Spell
         for (int i = 0; i <= Mathf.FloorToInt(_cooldownStartTime - _spellHoldStartTime) && i <= _spellData.MaxNumberOfSpells - 1; i++)
         {
             SetCastRotation();
-            ObjectPoolManager.Instance.GetFromPool(MagicOrb.PoolTag, _castPosition.transform.position, _castPosition.transform.rotation);
+            ObjectPoolManager.Instance.GetFromPool(typeof(MagicOrb), _castPosition.transform.position, _castPosition.transform.rotation);
         }
     }
 }

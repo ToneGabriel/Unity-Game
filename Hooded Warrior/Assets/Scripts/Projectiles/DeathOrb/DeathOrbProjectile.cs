@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
 {
-    public static string PoolTag;
-
     private Rigidbody2D _rigidbody;
     private GameObject _target;
     private AttackDetails _attackDetails;
@@ -42,7 +41,7 @@ public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
     private void CheckOrbHit()
     {
         if (Time.time >= _spellCastTime + _deathOrbProjectileData.SpellLifeTime)
-            ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+            ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
         else
         {
             Collider2D damageHit = Physics2D.OverlapCircle(transform.position, _deathOrbProjectileData.DamageRadius, _deathOrbProjectileData.WhatIsPlayer);
@@ -52,10 +51,10 @@ public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
             }
             else if (groundHit)
-                ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
         }
     }
     
@@ -64,14 +63,9 @@ public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
         _target = target;
     }
 
-    public string GetTag()
+    public Type GetObjectType()
     {
-        return PoolTag;
-    }
-
-    public void SetTag(string tag)
-    {
-        PoolTag = tag;
+        return GetType();
     }
 
     public void OnDrawGizmos()

@@ -154,7 +154,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
             CurrentHealth -= attackDetails.DamageAmount;
             _healthBar.SetHealthBar(CurrentHealth);
-            ObjectPoolManager.Instance.GetFromPool(HitParticleController.PoolTag, transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
+            ObjectPoolManager.Instance.GetFromPool(typeof(HitParticleController), transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
 
             CheckStatus();
         }

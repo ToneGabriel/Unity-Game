@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager Instance;
-    private Dictionary<string, Queue<GameObject>> _poolDictionary;
+    private Dictionary<Type, Queue<GameObject>> _poolDictionary;
     [SerializeField] private Pool[] _pools;
 
     private void Awake()
@@ -17,10 +18,9 @@ public class ObjectPoolManager : MonoBehaviour
     
     private void Start()
     {
-        SetPoolTags();
+        _poolDictionary = new Dictionary<Type, Queue<GameObject>>();
 
-        _poolDictionary = new Dictionary<string, Queue<GameObject>>();
-        foreach(Pool pool in _pools)
+        foreach (Pool pool in _pools)
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
 
@@ -32,19 +32,20 @@ public class ObjectPoolManager : MonoBehaviour
                 objectPool.Enqueue(instance);
             }
 
-            _poolDictionary.Add(pool.Tag, objectPool);
+            _poolDictionary.Add(pool.Prefab.GetComponent<IPoolComponent>().GetObjectType(), objectPool);
+
         }
     }
 
-    public void AddToPool(string poolTag, GameObject instance)
+    public void AddToPool(Type poolType, GameObject instance)
     {
         instance.SetActive(false);
-        _poolDictionary[poolTag].Enqueue(instance);
+        _poolDictionary[poolType].Enqueue(instance);
     }
 
-    public GameObject GetFromPool(string poolTag, Vector3 positionToSet, Quaternion rotationToSet)
+    public GameObject GetFromPool(Type poolType, Vector3 positionToSet, Quaternion rotationToSet)
     {
-        GameObject instance = _poolDictionary[poolTag].Dequeue();
+        GameObject instance = _poolDictionary[poolType].Dequeue();
 
         instance.transform.position = positionToSet;
         instance.transform.rotation = rotationToSet;
@@ -57,13 +58,6 @@ public class ObjectPoolManager : MonoBehaviour
     {
         foreach (Transform child in transform)
             if (child.gameObject.activeSelf)
-                AddToPool(child.GetComponent<IPoolComponent>().GetTag(), child.gameObject);
-    }
-
-    private void SetPoolTags()                          // Set the tag of the pool prefab equal to pool tag
-    {                                                   // All objects in pool have the same pool tag
-        foreach (Pool pool in _pools)
-            pool.Prefab.GetComponent<IPoolComponent>().SetTag(pool.Tag);
-
+                AddToPool(child.GetComponent<IPoolComponent>().GetObjectType(), child.gameObject);
     }
 }

@@ -88,7 +88,7 @@ public class PlayerDashState : PlayerAbilityState
 
     private void PlaceAfterImage()
     {
-        ObjectPoolManager.Instance.GetFromPool(PlayerAfterImage.PoolTag, _player.transform.position, _player.transform.rotation);
+        ObjectPoolManager.Instance.GetFromPool(typeof(PlayerAfterImage), _player.transform.position, _player.transform.rotation);
         _lastAIPosition = _player.transform.position;
     }
 

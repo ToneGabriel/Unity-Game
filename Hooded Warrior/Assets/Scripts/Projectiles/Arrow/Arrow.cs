@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Arrow : MonoBehaviour, IPoolComponent
 {
-    public static string PoolTag;
-
     private Rigidbody2D _rigidbody2D;
     private AttackDetails _attackDetails;
     [SerializeField] private GameObject _damagePosition;
@@ -43,7 +42,7 @@ public class Arrow : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
             }
             else if (groundHit)     // if ground hit - wait before disable
             {
@@ -52,7 +51,7 @@ public class Arrow : MonoBehaviour, IPoolComponent
             }
         }
         else if (Time.time >= _groundedStartTime + _arrowData.ArrowGroundedTime)      // disable arrow after time on ground
-            ObjectPoolManager.Instance.AddToPool(PoolTag, gameObject);
+            ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
     }
 
     private void SetArrowDirection()                                                // arrow movement
@@ -74,14 +73,9 @@ public class Arrow : MonoBehaviour, IPoolComponent
         }
     }
 
-    public string GetTag()
+    public Type GetObjectType()
     {
-        return PoolTag;
-    }
-
-    public void SetTag(string tag)
-    {
-        PoolTag = tag;
+        return GetType();
     }
 
     private void OnDrawGizmos()
