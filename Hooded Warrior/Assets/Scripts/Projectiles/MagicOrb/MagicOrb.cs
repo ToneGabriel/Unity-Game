@@ -69,7 +69,7 @@ public class MagicOrb : MonoBehaviour, IPoolComponent
     private void CheckOrbHit()
     {
         if (Time.time >= _spellCastTime + _orbSpellData.SpellLifeTime)
-            ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+            ObjectPoolManager.Instance.AddToPool(gameObject);
         else
         {
             Collider2D damageHit = Physics2D.OverlapCircle(transform.position, _orbSpellData.DamageRadius, _orbSpellData.WhatIsEnemy);
@@ -79,10 +79,10 @@ public class MagicOrb : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+                ObjectPoolManager.Instance.AddToPool(gameObject);
             }
             else if (groundHit)
-                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+                ObjectPoolManager.Instance.AddToPool(gameObject);
         }
     }
 

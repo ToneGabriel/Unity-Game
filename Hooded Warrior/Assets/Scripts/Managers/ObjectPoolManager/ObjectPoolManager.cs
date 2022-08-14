@@ -33,31 +33,30 @@ public class ObjectPoolManager : MonoBehaviour
             }
 
             _poolDictionary.Add(pool.Prefab.GetComponent<IPoolComponent>().GetObjectType(), objectPool);
-
         }
     }
 
-    public void AddToPool(Type poolType, GameObject instance)
+    public void AddToPool(GameObject instance)
     {
         instance.SetActive(false);
-        _poolDictionary[poolType].Enqueue(instance);
+        _poolDictionary[instance.GetComponent<IPoolComponent>().GetObjectType()].Enqueue(instance);
     }
 
-    public GameObject GetFromPool(Type poolType, Vector3 positionToSet, Quaternion rotationToSet)
+    public ObjectType GetFromPool<ObjectType>(Vector3 positionToSet, Quaternion rotationToSet)
     {
-        GameObject instance = _poolDictionary[poolType].Dequeue();
+        GameObject instance = _poolDictionary[typeof(ObjectType)].Dequeue();
 
         instance.transform.position = positionToSet;
         instance.transform.rotation = rotationToSet;
         instance.SetActive(true);
 
-        return instance;
+        return instance.GetComponent<ObjectType>();
     }
 
     public void ClearScene()    // clear scene from pool objects when loading
     {
         foreach (Transform child in transform)
             if (child.gameObject.activeSelf)
-                AddToPool(child.GetComponent<IPoolComponent>().GetObjectType(), child.gameObject);
+                AddToPool(child.gameObject);
     }
 }

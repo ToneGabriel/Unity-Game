@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class LoadingScreenState : GameManagerState
 {
     private LoadingScreenData _loadingScreenData;
-    private Action _loadData;
     private GameManagerState _nextState;
     private int _loadingBarLength;                                  // The number of processes included in loading bar
     private int _loadingProcessCounter;                             // The counter of these processes

@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
 
 public class StartMenuState : GameManagerState
 {
     private StartMenuData _startMenuData;
-    private Action _loadData;
 
     public StartMenuState(GameManager gameManager, GameManagerFiniteStateMachine stateMachine, StartMenuData startMenuData)
         : base(gameManager, stateMachine) 

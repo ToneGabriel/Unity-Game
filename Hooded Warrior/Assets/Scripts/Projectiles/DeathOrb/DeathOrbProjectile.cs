@@ -41,7 +41,7 @@ public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
     private void CheckOrbHit()
     {
         if (Time.time >= _spellCastTime + _deathOrbProjectileData.SpellLifeTime)
-            ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+            ObjectPoolManager.Instance.AddToPool(gameObject);
         else
         {
             Collider2D damageHit = Physics2D.OverlapCircle(transform.position, _deathOrbProjectileData.DamageRadius, _deathOrbProjectileData.WhatIsPlayer);
@@ -51,10 +51,10 @@ public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+                ObjectPoolManager.Instance.AddToPool(gameObject);
             }
             else if (groundHit)
-                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+                ObjectPoolManager.Instance.AddToPool(gameObject);
         }
     }
     

@@ -26,14 +26,14 @@ public class BringerOfDeath_RangedAttackState : RangedAttackState
     {
         base.TriggerRangedAttack();
 
-        ObjectPoolManager.Instance.GetFromPool(typeof(DeathPortal), _bod.PortalRangedAttackPosition.transform.position, _bod.PortalRangedAttackPosition.transform.rotation);
+        ObjectPoolManager.Instance.GetFromPool<DeathPortal>(_bod.PortalRangedAttackPosition.transform.position, _bod.PortalRangedAttackPosition.transform.rotation);
     }
 
     public void TriggerOrbRangedAttack()
     {
         base.TriggerRangedAttack();
 
-        ObjectPoolManager.Instance.GetFromPool(typeof(DeathOrb), _bod.OrbRangedAttackPosition.transform.position, _bod.OrbRangedAttackPosition.transform.rotation);
+        ObjectPoolManager.Instance.GetFromPool<DeathOrb>(_bod.OrbRangedAttackPosition.transform.position, _bod.OrbRangedAttackPosition.transform.rotation);
     }
 
     public void FinishPortalRangedAttack()

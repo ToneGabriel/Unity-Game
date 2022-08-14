@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
 
 public class GameplayState : GameManagerState
 {
     private GameplayData _gameplayData;
-    private Action _loadData;
     private bool _pauseGameInput;
 
     public GameplayState(GameManager gameManager, GameManagerFiniteStateMachine stateMachine, GameplayData gameplayData)

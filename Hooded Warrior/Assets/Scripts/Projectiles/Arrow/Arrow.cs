@@ -42,7 +42,7 @@ public class Arrow : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+                ObjectPoolManager.Instance.AddToPool(gameObject);
             }
             else if (groundHit)     // if ground hit - wait before disable
             {
@@ -51,7 +51,7 @@ public class Arrow : MonoBehaviour, IPoolComponent
             }
         }
         else if (Time.time >= _groundedStartTime + _arrowData.ArrowGroundedTime)      // disable arrow after time on ground
-            ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+            ObjectPoolManager.Instance.AddToPool(gameObject);
     }
 
     private void SetArrowDirection()                                                // arrow movement

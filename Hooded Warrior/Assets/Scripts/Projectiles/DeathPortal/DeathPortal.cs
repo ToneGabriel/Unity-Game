@@ -46,7 +46,7 @@ public class DeathPortal : MonoBehaviour, IPoolComponent
 
     public void FinishPortalAttack()
     {
-        ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+        ObjectPoolManager.Instance.AddToPool(gameObject);
     }
 
     public Type GetObjectType()

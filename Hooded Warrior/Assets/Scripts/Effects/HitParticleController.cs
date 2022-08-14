@@ -5,7 +5,7 @@ public class HitParticleController : MonoBehaviour, IPoolComponent
 {
     private void FinishAnim()
     {
-        ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+        ObjectPoolManager.Instance.AddToPool(gameObject);
     }
 
     public Type GetObjectType()

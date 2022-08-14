@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 public class ResetGameState : GameManagerState
 {
     private ResetGameData _resetGameData;
-    private Action _loadData;
     private WaitForSeconds _timeBeforeDeathPrompt;
 
     public ResetGameState(GameManager gameManager, GameManagerFiniteStateMachine stateMachine, ResetGameData resetGameData)

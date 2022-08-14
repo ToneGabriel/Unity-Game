@@ -47,7 +47,7 @@ public class DeathOrb : MonoBehaviour, IPoolComponent
             for (int i = 0; i < _deathOrbData.MaxNumberOfProjectiles; i++)
             {
                 SetCastRotation();
-                ObjectPoolManager.Instance.GetFromPool(typeof(DeathOrbProjectile), transform.position, transform.rotation).GetComponent<DeathOrbProjectile>().SetTarget(_target);
+                ObjectPoolManager.Instance.GetFromPool<DeathOrbProjectile>(transform.position, transform.rotation).SetTarget(_target);
             }
 
             StartCoroutine(KillOrb());
@@ -91,7 +91,7 @@ public class DeathOrb : MonoBehaviour, IPoolComponent
             yield return _deathOrbData.TimeToScale;
         }
 
-        ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+        ObjectPoolManager.Instance.AddToPool(gameObject);
     }
 
     public Type GetObjectType()

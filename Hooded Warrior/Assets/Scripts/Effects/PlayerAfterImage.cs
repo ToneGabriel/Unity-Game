@@ -37,7 +37,7 @@ public class PlayerAfterImage : MonoBehaviour, IPoolComponent
         _spriteRenderer.color = _color;
 
         if (Time.time >= _timeActivated + _activeTime)
-            ObjectPoolManager.Instance.AddToPool(GetType(), gameObject);
+            ObjectPoolManager.Instance.AddToPool(gameObject);
     }
 
     public Type GetObjectType()
