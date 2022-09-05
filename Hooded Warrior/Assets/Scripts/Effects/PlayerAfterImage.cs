@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerAfterImage : MonoBehaviour, IPoolComponent
 {
@@ -38,11 +37,6 @@ public class PlayerAfterImage : MonoBehaviour, IPoolComponent
 
         if (Time.time >= _timeActivated + _activeTime)
             ObjectPoolManager.Instance.AddToPool(gameObject);
-    }
-
-    public Type GetObjectType()
-    {
-        return GetType();
     }
 
 }

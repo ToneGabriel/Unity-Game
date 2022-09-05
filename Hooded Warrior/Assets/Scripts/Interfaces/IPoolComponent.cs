@@ -1,6 +1,5 @@
-using System;
-
 public interface IPoolComponent
 {
-    Type GetObjectType();
+    // Empty interface
+    // Used to find the IPoolComponent in Gameobject (called in ObjectPoolManager)
 }

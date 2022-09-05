@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class SaveableEntity : MonoBehaviour
 {
+    // This script is attached to a gameobject that has at leas 1 ISaveable component
+
+
     public object CaptureState()
     {
         var state = new Dictionary<string, object>();
-        
+
+        // Loop through all ISaveable components on this gameobject and capture their states into a Dictionary
         foreach (var saveable in GetComponents<ISaveable>())
             state.Add(saveable.GetType().ToString(), saveable.CaptureState());
 

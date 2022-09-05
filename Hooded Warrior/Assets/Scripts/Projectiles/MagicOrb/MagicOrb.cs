@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MagicOrb : MonoBehaviour, IPoolComponent
 {
@@ -84,11 +83,6 @@ public class MagicOrb : MonoBehaviour, IPoolComponent
             else if (groundHit)
                 ObjectPoolManager.Instance.AddToPool(gameObject);
         }
-    }
-
-    public Type GetObjectType()
-    {
-        return GetType();
     }
 
     public void OnDrawGizmos()

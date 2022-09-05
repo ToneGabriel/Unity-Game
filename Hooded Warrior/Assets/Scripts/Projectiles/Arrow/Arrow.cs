@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Arrow : MonoBehaviour, IPoolComponent
 {
@@ -71,11 +70,6 @@ public class Arrow : MonoBehaviour, IPoolComponent
             _rigidbody2D.velocity = Vector2.zero;
             _rigidbody2D.angularVelocity = 0f;
         }
-    }
-
-    public Type GetObjectType()
-    {
-        return GetType();
     }
 
     private void OnDrawGizmos()

@@ -2,7 +2,7 @@
 using System;
 
 [Serializable]
-public struct Pool
+public class Pool
 {
     public int Size;
     public GameObject Prefab;

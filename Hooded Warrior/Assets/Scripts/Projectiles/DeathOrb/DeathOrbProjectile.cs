@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
 {
@@ -61,11 +60,6 @@ public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
     public void SetTarget(GameObject target)
     {
         _target = target;
-    }
-
-    public Type GetObjectType()
-    {
-        return GetType();
     }
 
     public void OnDrawGizmos()

@@ -32,14 +32,14 @@ public class ObjectPoolManager : MonoBehaviour
                 objectPool.Enqueue(instance);
             }
 
-            _poolDictionary.Add(pool.Prefab.GetComponent<IPoolComponent>().GetObjectType(), objectPool);
+            _poolDictionary.Add(pool.Prefab.GetComponent<IPoolComponent>().GetType(), objectPool);
         }
     }
 
     public void AddToPool(GameObject instance)
     {
         instance.SetActive(false);
-        _poolDictionary[instance.GetComponent<IPoolComponent>().GetObjectType()].Enqueue(instance);
+        _poolDictionary[instance.GetComponent<IPoolComponent>().GetType()].Enqueue(instance);
     }
 
     public ObjectType GetFromPool<ObjectType>(Vector3 positionToSet, Quaternion rotationToSet)

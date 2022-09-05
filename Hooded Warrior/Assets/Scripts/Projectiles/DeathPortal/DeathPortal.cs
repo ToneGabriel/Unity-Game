@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DeathPortal : MonoBehaviour, IPoolComponent
 {
@@ -47,10 +46,5 @@ public class DeathPortal : MonoBehaviour, IPoolComponent
     public void FinishPortalAttack()
     {
         ObjectPoolManager.Instance.AddToPool(gameObject);
-    }
-
-    public Type GetObjectType()
-    {
-        return GetType();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class DeathOrb : MonoBehaviour, IPoolComponent
@@ -92,11 +91,6 @@ public class DeathOrb : MonoBehaviour, IPoolComponent
         }
 
         ObjectPoolManager.Instance.AddToPool(gameObject);
-    }
-
-    public Type GetObjectType()
-    {
-        return GetType();
     }
 
     public void OnDrawGizmos()
