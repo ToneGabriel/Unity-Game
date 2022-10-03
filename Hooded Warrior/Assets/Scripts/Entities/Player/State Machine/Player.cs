@@ -132,7 +132,7 @@ public class Player : Entity
 
     public bool CheckIfCanDefend()
     {
-        return !SecondaryDefendState.Shield.IsBroken && !SecondaryDefendState.Shield.IsOnCooldown;
+        return !SecondaryDefendState.Shield.IsOnCooldown;
     }
 
     public bool CheckIfCanCastSpell()

@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class PlayerDefendState : PlayerAbilityState
 {
     public Shield Shield { get; private set; }
@@ -29,7 +31,7 @@ public class PlayerDefendState : PlayerAbilityState
 
         IsHolding = _player.InputHandler.SecondaryDefendInput;
 
-        if (!IsHolding || Shield.IsBroken)      // exit shield if broken or stop holding
+        if (!IsHolding && !Shield.IsOnCooldown)      // exit if stop holding
             Shield.LowerShield();
     }
 

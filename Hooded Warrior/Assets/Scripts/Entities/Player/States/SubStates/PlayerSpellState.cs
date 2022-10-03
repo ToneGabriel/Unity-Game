@@ -28,7 +28,7 @@ public class PlayerSpellState : PlayerAbilityState
 
         IsHolding = _player.InputHandler.SpellCastInput;
 
-        if (!IsHolding)
+        if (!IsHolding && !Spell.IsOnCooldown)
             Spell.CastSpell();
     }
 

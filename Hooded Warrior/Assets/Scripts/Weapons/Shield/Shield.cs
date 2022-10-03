@@ -2,15 +2,13 @@
 
 public class Shield : MonoBehaviour, IDamageble, ICooldown
 {
+    public bool IsOnCooldown { get; private set; }
+
     private PlayerDefendState _defendState;
     private BoxCollider2D _shieldCollider;
     private float _shieldCurrentHealth;
-    private float _shieldRegenerationTime;
     private float _cooldownStartTime;
-    private float _shieldCooldownTime;
-
-    public bool IsBroken { get; private set; }          // set in Damage
-    public bool IsOnCooldown { get; private set; }
+    private float _currentCooldownTime;
 
     [SerializeField] private Animator _baseAnimator;
     [SerializeField] private Animator _shieldAnimator;
@@ -25,53 +23,35 @@ public class Shield : MonoBehaviour, IDamageble, ICooldown
     public void InitializeShield(PlayerDefendState defendState)
     {
         _defendState = defendState;
-        _shieldCurrentHealth = _shieldData.ShieldHealth;
-        _shieldRegenerationTime = _shieldData.ShieldRegenerationTime;
-        _shieldCooldownTime = _shieldData.ShieldCooldownTime;
     }
 
     public void EnterShield()
     {
+        SetAnimatorDefend(true);
+
         _shieldCollider.enabled = true;
         _shieldCurrentHealth = _shieldData.ShieldHealth;
-        _baseAnimator.SetBool("defend", true);
-        _shieldAnimator.SetBool("defend", true);
     }
 
     public void ExitShield()
     {
-        _baseAnimator.SetBool("defend", false);
-        _shieldAnimator.SetBool("defend", false);
+        SetAnimatorDefend(false);
 
         CooldownManager.Instance.Subscribe(this);
     }
     
-    public void LowerShield()   // triggers animation finish
+    public void LowerShield()       // exit if not holding
     {
-        // if not already stop holding
-        if(_baseAnimator.GetBool("isHolding"))
-        {
-            _baseAnimator.SetBool("isHolding", false);
-            _shieldAnimator.SetBool("isHolding", false);
+        SetAnimatorHolding(false);
 
-            IsOnCooldown = true;
-            _cooldownStartTime = Time.time;
-        }
+        IsOnCooldown = true;
+        _cooldownStartTime = Time.time;
+        _currentCooldownTime = _shieldData.ShieldCooldownTime;
     }
 
-    public void CheckCooldown()     //TODO: redo this broken/cooldown
+    public void CheckCooldown()
     {
-        // cooldonw if is broken
-        if (IsBroken && Time.time >= _cooldownStartTime + _shieldRegenerationTime)
-        {
-            IsBroken = false;
-            CooldownManager.Instance.UnSubscribe(this);
-
-            _baseAnimator.SetBool("isBroken", IsBroken);
-            _shieldAnimator.SetBool("isBroken", IsBroken);
-        }
-        // cooldown if stop using
-        if (!IsBroken && IsOnCooldown && Time.time >= _cooldownStartTime + _shieldCooldownTime)
+        if (IsOnCooldown && Time.time >= _cooldownStartTime + _currentCooldownTime)
         {
             IsOnCooldown = false;
             CooldownManager.Instance.UnSubscribe(this);
@@ -98,11 +78,13 @@ public class Shield : MonoBehaviour, IDamageble, ICooldown
 
     public void CheckStatus()
     {
-        if (_shieldCurrentHealth <= 0)
+        if (_shieldCurrentHealth <= 0)      // exit if shield is broken
         {
-            IsBroken = true;
-            _baseAnimator.SetBool("isBroken", IsBroken);
-            _shieldAnimator.SetBool("isBroken", IsBroken);
+            SetAnimatorBroken(true);
+
+            IsOnCooldown = true;
+            _cooldownStartTime = Time.time;
+            _currentCooldownTime = _shieldData.ShieldRegenerationTime;
         }
     }
     #endregion
@@ -110,20 +92,38 @@ public class Shield : MonoBehaviour, IDamageble, ICooldown
     #region Animation Triggers
     public virtual void AnimationFinishTrigger()
     {
+        SetAnimatorHolding(false);
         _shieldCollider.enabled = false;
         _defendState.AnimationFinishTrigger();
     }
 
     public virtual void AnimationTrigger()
     {
+        SetAnimatorHolding(true);
+        SetAnimatorBroken(false);
         _defendState.AnimationTrigger();
     }
 
-    public virtual void AnimationStartHoldingTrigger()
-    {
-        _baseAnimator.SetBool("isHolding", true);
-        _shieldAnimator.SetBool("isHolding", true);
-    }
+    public virtual void AnimationStartHoldingTrigger() { }
     #endregion
 
+    #region Animator Setters
+    private void SetAnimatorDefend(bool state)
+    {
+        _baseAnimator.SetBool("defend", state);
+        _shieldAnimator.SetBool("defend", state);
+    }
+
+    private void SetAnimatorHolding(bool state)
+    {
+        _baseAnimator.SetBool("isHolding", state);
+        _shieldAnimator.SetBool("isHolding", state);
+    }
+
+    private void SetAnimatorBroken(bool state)
+    {
+        _baseAnimator.SetBool("isBroken", state);
+        _shieldAnimator.SetBool("isBroken", state);
+    }
+    #endregion
 }

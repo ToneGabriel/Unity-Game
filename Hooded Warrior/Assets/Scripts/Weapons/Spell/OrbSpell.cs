@@ -25,7 +25,7 @@ public class OrbSpell : Spell
     {
         base.TriggerSpellAttack();
 
-        for (int i = 0; i <= Mathf.FloorToInt(_cooldownStartTime - _spellHoldStartTime) && i <= _spellData.MaxNumberOfSpells - 1; i++)
+        for (int i = 0; i <= Mathf.FloorToInt(Mathf.Abs(_cooldownStartTime - _spellHoldStartTime)) && i <= _spellData.MaxNumberOfSpells - 1; i++)
         {
             SetCastRotation();
             ObjectPoolManager.Instance.GetFromPool<MagicOrb>(_castPosition.transform.position, _castPosition.transform.rotation);

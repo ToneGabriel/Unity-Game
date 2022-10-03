@@ -2,14 +2,14 @@
 
 public class Spell : MonoBehaviour, ICooldown
 {
+    public bool IsOnCooldown { get; private set; }
+
     protected PlayerSpellState _spellState;
     protected float _spellHoldStartTime;
     protected float _cooldownStartTime;
 
-    public bool IsOnCooldown { get; private set; }
-
-    [SerializeField] protected Animator _baseAnim;
-    [SerializeField] protected Animator _spellAnim;
+    [SerializeField] protected Animator _baseAnimator;
+    [SerializeField] protected Animator _spellAnimator;
     [SerializeField] protected GameObject _castPosition;
     [SerializeField] protected SpellData _spellData;
 
@@ -21,25 +21,22 @@ public class Spell : MonoBehaviour, ICooldown
 
     public void EnterSpell()
     {
-        _baseAnim.SetBool("cast", true);
-        _spellAnim.SetBool("cast", true);
+        SetAnimatorCast(true);
     }
 
     public void ExitSpell()
     {
-        _baseAnim.SetBool("cast", false);
-        _spellAnim.SetBool("cast", false);
+        SetAnimatorCast(false);
 
         CooldownManager.Instance.Subscribe(this);
     }
 
-    public void CastSpell()
+    public void CastSpell()     // TODO: check on interrupt
     {
-        if(_baseAnim.GetBool("isHolding"))
-        {
-            _baseAnim.SetBool("isHolding", false);
-            _spellAnim.SetBool("isHolding", false);
-        }
+        SetAnimatorHolding(false);
+
+        IsOnCooldown = true;
+        _cooldownStartTime = Time.time;
     }
 
     public void CheckCooldown()
@@ -53,14 +50,11 @@ public class Spell : MonoBehaviour, ICooldown
     #endregion
 
     #region Animation Triggers
-    public virtual void TriggerSpellAttack()
-    {
-        IsOnCooldown = true;
-        _cooldownStartTime = Time.time;
-    }
+    public virtual void TriggerSpellAttack() { }
 
     public virtual void AnimationTrigger()
     {
+        SetAnimatorHolding(true);
         _spellState.AnimationTrigger();
     }
 
@@ -71,9 +65,21 @@ public class Spell : MonoBehaviour, ICooldown
 
     public virtual void AnimationStartHoldingTrigger()
     {
-        _baseAnim.SetBool("isHolding", true);
-        _spellAnim.SetBool("isHolding", true);
         _spellHoldStartTime = Time.time;
+    }
+    #endregion
+
+    #region Animator Setters
+    private void SetAnimatorCast(bool state)
+    {
+        _baseAnimator.SetBool("cast", state);
+        _spellAnimator.SetBool("cast", state);
+    }
+
+    private void SetAnimatorHolding(bool state)
+    {
+        _baseAnimator.SetBool("isHolding", state);
+        _spellAnimator.SetBool("isHolding", state);
     }
     #endregion
 }

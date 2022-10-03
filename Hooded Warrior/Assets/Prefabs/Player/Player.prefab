@@ -76,8 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d6932c64832dd641b78bab4ab5c2144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseAnim: {fileID: 2093005641}
-  _spellAnim: {fileID: 278662442}
+  _baseAnimator: {fileID: 2093005641}
+  _spellAnimator: {fileID: 278662442}
   _castPosition: {fileID: 805079154}
   _spellData: {fileID: 11400000, guid: e243c063488797149940bc744dc6880a, type: 2}
 --- !u!1 &173531984
@@ -346,8 +346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bd8c274f6db3654c8adbb6edd1466d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseAnim: {fileID: 1996921076}
-  _spellAnim: {fileID: 976921941}
+  _baseAnimator: {fileID: 1996921076}
+  _spellAnimator: {fileID: 976921941}
   _castPosition: {fileID: 671975999}
   _spellData: {fileID: 11400000, guid: 7d4c524b69961674cba61dec16cf773f, type: 2}
   _lightOrbPrefab: {fileID: 7750093499530586473, guid: 500b01c77e246d34085743c6841903df, type: 3}
