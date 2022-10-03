@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class DodgeState : EnemyState
+public abstract class DodgeState : EnemyState, ICooldown
 {
     public bool IsOnCooldown;
 
@@ -29,6 +29,7 @@ public abstract class DodgeState : EnemyState
         base.Exit();
 
         IsOnCooldown = true;
+        CooldownManager.Instance.Subscribe(this);
     }
 
     public override void LogicUpdate()                                              // Counts dodge time
@@ -46,5 +47,14 @@ public abstract class DodgeState : EnemyState
         _isPlayerInMeleeRange = _enemy.CheckPlayerInMeleeRange();
         _isPlayerInMaxAgroRange = _enemy.CheckPlayerInMaxAgroRange();
         _isGrounded = _enemy.CheckIfGrounded();
+    }
+
+    public void CheckCooldown()
+    {
+        if (IsOnCooldown && Time.time >= StartTime + _stateData.DodgeCooldown)
+        {
+            IsOnCooldown = false;
+            CooldownManager.Instance.UnSubscribe(this);
+        }
     }
 }

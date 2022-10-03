@@ -176,7 +176,7 @@ public class Player : Entity
         return new PlayerSaveData(this);
     }
 
-    public override void RestoreState(object state)
+    public override void RestoreState(ref object state)
     {
         var data = (PlayerSaveData)state;
 

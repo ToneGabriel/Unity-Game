@@ -1,5 +1,6 @@
-﻿
-public abstract class MeleeAttackState : EnemyState
+﻿using UnityEngine;
+
+public abstract class MeleeAttackState : EnemyState, ICooldown
 {
     public bool IsOnCooldown;                // boolean for cooldown ready (cooldown counts in enemy specific update)
     
@@ -29,6 +30,7 @@ public abstract class MeleeAttackState : EnemyState
         base.Exit();
 
         IsOnCooldown = true;
+        CooldownManager.Instance.Subscribe(this);
     }
 
     public override void DoChecks()
@@ -45,4 +47,12 @@ public abstract class MeleeAttackState : EnemyState
         _isAnimationFinished = true;
     }
 
+    public void CheckCooldown()
+    {
+        if (IsOnCooldown && Time.time >= StartTime + _stateData.AttackCooldown)
+        {
+            IsOnCooldown = false;
+            CooldownManager.Instance.UnSubscribe(this);
+        }
+    }
 }

@@ -112,18 +112,6 @@ public class BringerOfDeath : Enemy
         else if (Rigidbody.velocity.x != 0)
             StateMachine.ChangeState(LookForPlayerState);
     }
-
-    protected override void CheckCooldowns()
-    {
-        if (MeleeAttackState.IsOnCooldown && Time.time >= MeleeAttackState.StartTime + _meleeAttackStateData.AttackCooldown)
-            MeleeAttackState.IsOnCooldown = false;
-
-        if (PortalRangedAttackState.IsOnCooldown && Time.time >= PortalRangedAttackState.StartTime + _portalRangedAttackStateData.AttackCooldown)
-            PortalRangedAttackState.IsOnCooldown = false;
-
-        if (OrbRangedAttackState.IsOnCooldown && Time.time >= OrbRangedAttackState.StartTime + _orbRangedAttackStateData.AttackCooldown)
-            OrbRangedAttackState.IsOnCooldown = false;
-    }
     
     public override void OnDrawGizmos()
     {

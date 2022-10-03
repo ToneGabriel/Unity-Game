@@ -69,12 +69,6 @@ public class Bull : Enemy
         DeadState = new Bull_DeadState(this, StateMachine, "dead", _deadStateData);
     }
 
-    protected override void CheckCooldowns()
-    {
-        if (MeleeAttackState.IsOnCooldown && Time.time >= MeleeAttackState.StartTime + _meleeAttackStateData.AttackCooldown)
-            MeleeAttackState.IsOnCooldown = false;
-    }
-
     public override void Damage(AttackDetails attackdetails)
     {
         base.Damage(attackdetails);

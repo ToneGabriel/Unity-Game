@@ -5,7 +5,6 @@ public class SaveableEntity : MonoBehaviour
 {
     // This script is attached to a gameobject that has at leas 1 ISaveable component
 
-
     public object CaptureState()
     {
         var state = new Dictionary<string, object>();
@@ -17,13 +16,13 @@ public class SaveableEntity : MonoBehaviour
         return state;
     }
 
-    public void RestoreState(object state)
+    public void RestoreState(ref object state)
     {
         var stateDictionary = (Dictionary<string, object>)state;
 
         foreach(var saveable in GetComponents<ISaveable>())
             if (stateDictionary.TryGetValue(saveable.GetType().ToString(), out object value))
-                saveable.RestoreState(value);
+                saveable.RestoreState(ref value);
     }
 
 }

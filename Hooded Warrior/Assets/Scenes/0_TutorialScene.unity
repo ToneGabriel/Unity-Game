@@ -2083,6 +2083,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Archer
       objectReference: {fileID: 0}
+    - target: {fileID: 2843031635207637912, guid: f8a4feb14498ce841b40d337b429749d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2843031635207637915, guid: f8a4feb14498ce841b40d337b429749d, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -4100,11 +4104,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3789502491649298074, guid: 345efd5f293dc1841a002b324ff58579, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.157806
+      value: -11.02
       objectReference: {fileID: 0}
     - target: {fileID: 3789502491649298074, guid: 345efd5f293dc1841a002b324ff58579, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -14.455978
+      value: -14.49
       objectReference: {fileID: 0}
     - target: {fileID: 3789502491649298074, guid: 345efd5f293dc1841a002b324ff58579, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4141,6 +4145,10 @@ PrefabInstance:
     - target: {fileID: 6357891561337054865, guid: 345efd5f293dc1841a002b324ff58579, type: 3}
       propertyPath: m_Name
       value: BullMonster
+      objectReference: {fileID: 0}
+    - target: {fileID: 6357891561337054865, guid: 345efd5f293dc1841a002b324ff58579, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 345efd5f293dc1841a002b324ff58579, type: 3}

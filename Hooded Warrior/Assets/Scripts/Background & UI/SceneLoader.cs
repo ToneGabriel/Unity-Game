@@ -12,7 +12,7 @@ public class SceneLoader : MonoBehaviour, ISaveable
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (CanLoad() && other.gameObject == GameManager.Instance.Player.gameObject)
+        if (CanLoad() && ColliderIsPlayer(other))
         {
             SceneManager.LoadSceneAsync(gameObject.name, LoadSceneMode.Additive);
             IsLoaded = true;
@@ -21,7 +21,7 @@ public class SceneLoader : MonoBehaviour, ISaveable
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (CanUnload() && other.gameObject == GameManager.Instance.Player.gameObject)
+        if (CanUnload() && ColliderIsPlayer(other))
         {
             SceneManager.UnloadSceneAsync(gameObject.name);
             IsLoaded = false;
@@ -38,12 +38,17 @@ public class SceneLoader : MonoBehaviour, ISaveable
         return !GameManager.Instance.IsLoadingData && !GameManager.Instance.Player.IsDead;
     }
 
+    private bool ColliderIsPlayer(Collider2D other)
+    {
+        return other.gameObject == GameManager.Instance.Player.gameObject;
+    }
+
     public object CaptureState()
     {
         return new SceneSaveData(this);
     }
 
-    public void RestoreState(object state)
+    public void RestoreState(ref object state)
     {
         var data = (SceneSaveData)state;
 

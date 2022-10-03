@@ -34,7 +34,7 @@ public class SaveManager : MonoBehaviour
 
     public void Load()
     {
-        var state = LoadFile();                                                     // Load file and restore data
+        var state = LoadFile();                                      // Load file and restore data
         RestoreState(state);
     }
 
@@ -67,7 +67,7 @@ public class SaveManager : MonoBehaviour
     {
         foreach (var saveable in _saveableEntities)
             if (state.TryGetValue(saveable.gameObject.name, out object value))
-                saveable.RestoreState(value);
+                saveable.RestoreState(ref value);
     }
 
 

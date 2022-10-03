@@ -8,10 +8,15 @@ public class BossSpawner : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject == GameManager.Instance.Player.gameObject && !_boss.IsDead && !_boss.gameObject.activeSelf)
+        if (ColliderIsPlayer(other) && !_boss.IsDead && !_boss.gameObject.activeSelf)
         {
             _boss.gameObject.SetActive(true);
             _boss.transform.position = _bossSpawnPosition.position;
         }
+    }
+
+    private bool ColliderIsPlayer(Collider2D other)
+    {
+        return other.gameObject == GameManager.Instance.Player.gameObject;
     }
 }

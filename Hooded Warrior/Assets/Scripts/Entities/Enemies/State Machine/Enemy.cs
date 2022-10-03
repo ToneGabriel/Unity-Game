@@ -24,7 +24,6 @@ public abstract class Enemy : Entity                                            
     {
         base.LogicUpdate();
 
-        CheckCooldowns();
         StateMachine.CurrentState.LogicUpdate();
         Animator.SetFloat("velocityY", Rigidbody.velocity.y);
     }
@@ -52,8 +51,6 @@ public abstract class Enemy : Entity                                            
     {
         return Physics2D.Raycast(_environmentCheck.transform.position, _environmentCheck.transform.right, _dataEnemy.CloseRangeActionDistance, _dataEnemy.WhatIsPlayer);
     }
-
-    protected virtual void CheckCooldowns() { }
     #endregion
 
     #region Damage Functions
@@ -84,7 +81,7 @@ public abstract class Enemy : Entity                                            
         return new EnemySaveData(this);
     }
 
-    public override void RestoreState(object state)
+    public override void RestoreState(ref object state)
     {
         var data = (EnemySaveData)state;
 

@@ -1,5 +1,7 @@
 ﻿
-public abstract class RangedAttackState : EnemyState
+using UnityEngine;
+
+public abstract class RangedAttackState : EnemyState, ICooldown
 {
     public bool IsOnCooldown;                             // boolean for cooldown ready (cooldown counts in enemy specific update)
     
@@ -25,6 +27,7 @@ public abstract class RangedAttackState : EnemyState
         base.Exit();
 
         IsOnCooldown = true;
+        CooldownManager.Instance.Subscribe(this);
     }
 
     public override void DoChecks()
@@ -34,11 +37,19 @@ public abstract class RangedAttackState : EnemyState
         _isPlayerInMinAgroRange = _enemy.CheckPlayerInMinAgroRange();
     }
 
+    public void CheckCooldown()
+    {
+        if (IsOnCooldown && Time.time >= StartTime + _stateData.AttackCooldown)
+        {
+            IsOnCooldown = false;
+            CooldownManager.Instance.UnSubscribe(this);
+        }
+    }
+
     public virtual void TriggerRangedAttack() { }
 
     public virtual void FinishRangedAttack()
     {
         _isAnimationFinished = true;
     }
-
 }

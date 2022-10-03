@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Spell : MonoBehaviour
+public class Spell : MonoBehaviour, ICooldown
 {
     protected PlayerSpellState _spellState;
     protected float _spellHoldStartTime;
@@ -13,6 +13,7 @@ public class Spell : MonoBehaviour
     [SerializeField] protected GameObject _castPosition;
     [SerializeField] protected SpellData _spellData;
 
+    #region Spell Logic
     public void InitializeSpell(PlayerSpellState spellState)
     {
         _spellState = spellState;
@@ -28,6 +29,8 @@ public class Spell : MonoBehaviour
     {
         _baseAnim.SetBool("cast", false);
         _spellAnim.SetBool("cast", false);
+
+        CooldownManager.Instance.Subscribe(this);
     }
 
     public void CastSpell()
@@ -39,15 +42,17 @@ public class Spell : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void CheckCooldown()
     {
-        // cooldown
         if (IsOnCooldown && Time.time >= _cooldownStartTime + _spellData.SpellCooldownTime)
+        {
             IsOnCooldown = false;
+            CooldownManager.Instance.UnSubscribe(this);
+        }
     }
+    #endregion
 
     #region Animation Triggers
-
     public virtual void TriggerSpellAttack()
     {
         IsOnCooldown = true;
@@ -70,6 +75,5 @@ public class Spell : MonoBehaviour
         _spellAnim.SetBool("isHolding", true);
         _spellHoldStartTime = Time.time;
     }
-
     #endregion
 }

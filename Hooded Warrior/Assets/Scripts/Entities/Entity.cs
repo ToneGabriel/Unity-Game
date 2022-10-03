@@ -194,6 +194,6 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #region Save Functions
     public virtual object CaptureState() => null;
 
-    public virtual void RestoreState(object state) { }
+    public virtual void RestoreState(ref object state) { }
     #endregion
 }

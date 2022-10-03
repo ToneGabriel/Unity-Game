@@ -96,18 +96,6 @@ public class Archer : Enemy
             StateMachine.ChangeState(RangedAttackState);
     }
 
-    protected override void CheckCooldowns()                                        // Counts cooldowns for attacks
-    {
-        if (MeleeAttackState.IsOnCooldown && Time.time >= MeleeAttackState.StartTime + _meleeAttackStateData.AttackCooldown)
-            MeleeAttackState.IsOnCooldown = false;
-
-        if (RangedAttackState.IsOnCooldown && Time.time >= RangedAttackState.StartTime + _rangedAttackStateData.AttackCooldown)
-            RangedAttackState.IsOnCooldown = false;
-
-        if (DodgeState.IsOnCooldown && Time.time >= DodgeState.StartTime + _dodgeStateData.DodgeCooldown)
-            DodgeState.IsOnCooldown = false;
-    }
-
     public override void OnDrawGizmos()
     {
         base.OnDrawGizmos();

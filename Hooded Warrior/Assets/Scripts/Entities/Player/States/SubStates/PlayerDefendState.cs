@@ -29,7 +29,7 @@ public class PlayerDefendState : PlayerAbilityState
 
         IsHolding = _player.InputHandler.SecondaryDefendInput;
 
-        if (!IsHolding || Shield.IsBroken)
+        if (!IsHolding || Shield.IsBroken)      // exit shield if broken or stop holding
             Shield.LowerShield();
     }
 
