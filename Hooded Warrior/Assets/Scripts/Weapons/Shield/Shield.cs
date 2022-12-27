@@ -52,10 +52,13 @@ public class Shield : MonoBehaviour, IDamageble, ICooldown
     public void CheckCooldown()
     {
         if (IsOnCooldown && Time.time >= _cooldownStartTime + _currentCooldownTime)
-        {
-            IsOnCooldown = false;
-            CooldownManager.Instance.UnSubscribe(this);
-        }
+            ResetCooldown();
+    }
+
+    public void ResetCooldown()
+    {
+        IsOnCooldown = false;
+        CooldownManager.Instance.UnSubscribe(this);
     }
     #endregion
 

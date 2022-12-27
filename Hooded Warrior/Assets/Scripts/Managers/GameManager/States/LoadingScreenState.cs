@@ -22,6 +22,7 @@ public class LoadingScreenState : GameManagerState
         base.Enter();
 
         ObjectPoolManager.Instance.ClearScene();
+        CooldownManager.Instance.ResetCooldowns();
 
         _gameManager.IsLoadingData = true;
         _loadingScreenData.LoaderCanvas.SetActive(true);
@@ -61,26 +62,20 @@ public class LoadingScreenState : GameManagerState
 
     private IEnumerator LoadScenes(bool activateScenes)
     {
-        AsyncOperation sceneToProcess;
-
         foreach (var sceneLoader in _loadingScreenData.SceneLoaders)
         {
+            AsyncOperation sceneToProcess = null;
+
             if (sceneLoader.IsLoaded)
-            {
                 if (activateScenes)
-                {
                     sceneToProcess = SceneManager.LoadSceneAsync(sceneLoader.gameObject.name, LoadSceneMode.Additive);
-                    yield return _gameManager.StartCoroutine(LoadingProcess(sceneToProcess));
-                }
                 else
                 {
                     sceneToProcess = SceneManager.UnloadSceneAsync(sceneLoader.gameObject.name);
-                    yield return _gameManager.StartCoroutine(LoadingProcess(sceneToProcess));
                     sceneLoader.IsLoaded = false;
                 }
-            }
-            else
-                yield return _gameManager.StartCoroutine(LoadingProcess(null));
+
+            yield return _gameManager.StartCoroutine(LoadingProcess(sceneToProcess));
         }
     }
 

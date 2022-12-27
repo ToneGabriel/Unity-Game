@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
     public GameplayState GameplayState { get; private set; }
     public ResetGameState ResetGameState { get; private set; }
 
-    public bool IsGamePaused;                                       // True when game is paused
-    public bool IsLoadingData;                                      // True when loading screen is active
+    public bool IsGamePaused { get; set; }                                       // True when game is paused
+    public bool IsLoadingData { get; set; }                                      // True when loading screen is active
     #endregion
 
     #region Unity functions

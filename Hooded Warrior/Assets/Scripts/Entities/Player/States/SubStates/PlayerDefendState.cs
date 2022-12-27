@@ -1,6 +1,4 @@
 ﻿
-using UnityEngine;
-
 public class PlayerDefendState : PlayerAbilityState
 {
     public Shield Shield { get; private set; }

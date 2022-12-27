@@ -12,15 +12,16 @@ public class CooldownManager : MonoBehaviour
         if (Instance != null && Instance != this)
             Destroy(gameObject);
         else
+        {
             Instance = this;
+            _cooldowns = new List<ICooldown>();
+        }
     }
-
-    private void Start() => _cooldowns = new List<ICooldown>();
 
     private void Update()
     {
-        for (int i = 0; i < _cooldowns.Count; i++)
-            _cooldowns[i].CheckCooldown();
+        if (!GameManager.Instance.IsGamePaused)
+            UpdateCooldowns();
     }
     #endregion
 
@@ -28,5 +29,19 @@ public class CooldownManager : MonoBehaviour
     public void Subscribe(ICooldown cooldown) => _cooldowns.Add(cooldown);
 
     public void UnSubscribe(ICooldown cooldown) => _cooldowns.Remove(cooldown);
+    #endregion
+
+    #region Others
+    public void ResetCooldowns()     // reset cooldowns when loading screen is active
+    {
+        for (int i = 0; i < _cooldowns.Count; i++)
+            _cooldowns[i].ResetCooldown();
+    }
+
+    private void UpdateCooldowns()
+    {
+        for (int i = 0; i < _cooldowns.Count; i++)
+            _cooldowns[i].CheckCooldown();
+    }
     #endregion
 }

@@ -100,5 +100,3 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
-  IsGamePaused: 0
-  IsLoadingData: 0

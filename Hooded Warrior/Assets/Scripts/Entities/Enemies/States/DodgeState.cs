@@ -2,7 +2,7 @@
 
 public abstract class DodgeState : EnemyState, ICooldown
 {
-    public bool IsOnCooldown;
+    public bool IsOnCooldown { get; private set; }
 
     protected Data_Dodge _stateData;
     protected bool _isPlayerInMeleeRange;
@@ -52,9 +52,12 @@ public abstract class DodgeState : EnemyState, ICooldown
     public void CheckCooldown()
     {
         if (IsOnCooldown && Time.time >= StartTime + _stateData.DodgeCooldown)
-        {
-            IsOnCooldown = false;
-            CooldownManager.Instance.UnSubscribe(this);
-        }
+            ResetCooldown();
+    }
+
+    public void ResetCooldown()
+    {
+        IsOnCooldown = false;
+        CooldownManager.Instance.UnSubscribe(this);
     }
 }

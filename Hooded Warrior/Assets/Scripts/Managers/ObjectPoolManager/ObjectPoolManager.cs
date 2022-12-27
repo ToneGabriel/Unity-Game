@@ -8,18 +8,20 @@ public class ObjectPoolManager : MonoBehaviour
     private Dictionary<Type, Queue<GameObject>> _poolDictionary;
     [SerializeField] private Pool[] _pools;
 
+    #region Unity Functions
     private void Awake()
     {
         if (Instance != null && Instance != this)
             Destroy(gameObject);
         else
+        {
             Instance = this;
+            _poolDictionary = new Dictionary<Type, Queue<GameObject>>();
+        }
     }
     
     private void Start()
     {
-        _poolDictionary = new Dictionary<Type, Queue<GameObject>>();
-
         foreach (Pool pool in _pools)
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
@@ -35,7 +37,9 @@ public class ObjectPoolManager : MonoBehaviour
             _poolDictionary.Add(pool.Prefab.GetComponent<IPoolComponent>().GetType(), objectPool);
         }
     }
+    #endregion
 
+    #region Access Pools
     public void AddToPool(GameObject instance)
     {
         instance.SetActive(false);
@@ -59,4 +63,5 @@ public class ObjectPoolManager : MonoBehaviour
             if (child.gameObject.activeSelf)
                 AddToPool(child.gameObject);
     }
+    #endregion
 }

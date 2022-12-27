@@ -2,8 +2,8 @@
 
 public abstract class MeleeAttackState : EnemyState, ICooldown
 {
-    public bool IsOnCooldown;                // boolean for cooldown ready (cooldown counts in enemy specific update)
-    
+    public bool IsOnCooldown { get; private set; }
+
     protected Data_MeleeAttack _stateData;
     protected AttackDetails _attackDetails;
     protected bool _isPlayerInMinAgroRange;
@@ -50,9 +50,12 @@ public abstract class MeleeAttackState : EnemyState, ICooldown
     public void CheckCooldown()
     {
         if (IsOnCooldown && Time.time >= StartTime + _stateData.AttackCooldown)
-        {
-            IsOnCooldown = false;
-            CooldownManager.Instance.UnSubscribe(this);
-        }
+            ResetCooldown();
+    }
+
+    public void ResetCooldown()
+    {
+        IsOnCooldown = false;
+        CooldownManager.Instance.UnSubscribe(this);
     }
 }

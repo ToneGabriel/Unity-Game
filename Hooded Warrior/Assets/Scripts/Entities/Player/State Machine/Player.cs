@@ -232,10 +232,11 @@ public class Player : Entity
         RaycastHit2D xHit = Physics2D.Raycast(_environmentCheck.transform.position, Vector2.right * FacingDirection, _dataPlayer.EnvironmentCheckDistance, _dataPlayer.WhatIsGround);
         float xDistance = xHit.distance;
         _workspaceVector2.Set(xDistance * FacingDirection, 0f);
+
         RaycastHit2D yHit = Physics2D.Raycast(_ledgeCheck.transform.position + (Vector3)_workspaceVector2, Vector2.down, _ledgeCheck.transform.position.y - _environmentCheck.transform.position.y, _dataPlayer.WhatIsGround);
         float yDistance = yHit.distance;
-
         _workspaceVector2.Set(_environmentCheck.transform.position.x + xDistance * FacingDirection, _ledgeCheck.transform.position.y - yDistance);
+        
         return _workspaceVector2;
     }
 
