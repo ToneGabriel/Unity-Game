@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 
 public class PulsingLight : MonoBehaviour
 {
-    [SerializeField] private Light2D _lightComponent;
+    [SerializeField] private UnityEngine.Rendering.Universal.Light2D _lightComponent;
     [SerializeField] private float _pulseTime;
     [SerializeField] private float _changeAmmount;
     private float _changeTime;

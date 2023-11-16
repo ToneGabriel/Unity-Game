@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 
 public class LightOrb : MonoBehaviour
 {
     public static LightOrb Instance { get; private set; }
 
-    [SerializeField] private Light2D _innerLightComponent;
-    [SerializeField] private Light2D _outerLightComponent;
+    [SerializeField] private UnityEngine.Rendering.Universal.Light2D _innerLightComponent;
+    [SerializeField] private UnityEngine.Rendering.Universal.Light2D _outerLightComponent;
     [SerializeField] private LightOrbSpellData _lightOrbSpellData;
     private Rigidbody2D _rigidbody;
     private GameObject _target;
