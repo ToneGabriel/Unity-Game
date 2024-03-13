@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-public class EditorHelper : MonoBehaviour
+
+
+public class SpritesSlicer : Editor
 {
-    [MenuItem("EditorHelper/SliceSprites")]
-    static void SliceSprites()
+    [MenuItem("EditorHelper/Slice Sprites")]
+    public static void SliceSprites()
     {
         // Change the below for the width and height dimensions of each sprite within the spritesheets
-        int sliceWidth = 16;
+        int sliceWidth  = 16;
         int sliceHeight = 16;
 
         // Change the below for the path to the folder containing the sprite sheets (warning: not tested on folders containing anything other than just spritesheets!)
@@ -24,30 +23,31 @@ public class EditorHelper : MonoBehaviour
         {
             Debug.Log("z: " + z + " spriteSheets[z]: " + spriteSheets[z]);
 
-            string path = AssetDatabase.GetAssetPath(spriteSheets[z]);
-            TextureImporter ti = AssetImporter.GetAtPath(path) as TextureImporter;
-            ti.isReadable = true;
+            string path         = AssetDatabase.GetAssetPath(spriteSheets[z]);
+            TextureImporter ti  = AssetImporter.GetAtPath(path) as TextureImporter;
+            ti.isReadable       = true;
             ti.spriteImportMode = SpriteImportMode.Multiple;
 
-            List<SpriteMetaData> newData = new List<SpriteMetaData>();
-
-            Texture2D spriteSheet = spriteSheets[z] as Texture2D;
+            List<SpriteMetaData> newData    = new List<SpriteMetaData>();
+            Texture2D spriteSheet           = spriteSheets[z] as Texture2D;
 
             for (int i = 0; i < spriteSheet.width; i += sliceWidth)
             {
                 for (int j = spriteSheet.height; j > 0; j -= sliceHeight)
                 {
-                    SpriteMetaData smd = new SpriteMetaData();
-                    smd.pivot = new Vector2(0.5f, 0.5f);
-                    smd.alignment = 9;
-                    smd.name = (spriteSheet.height - j) / sliceHeight + ", " + i / sliceWidth;
-                    smd.rect = new Rect(i, j - sliceHeight, sliceWidth, sliceHeight);
+                    SpriteMetaData smd  = new SpriteMetaData();
+                    smd.pivot           = new Vector2(0.5f, 0.5f);
+                    smd.alignment       = 9;
+                    smd.name            = (spriteSheet.height - j) / sliceHeight + ", " + i / sliceWidth;
+                    smd.rect            = new Rect(i, j - sliceHeight, sliceWidth, sliceHeight);
 
                     newData.Add(smd);
                 }
             }
 
+#pragma warning disable
             ti.spritesheet = newData.ToArray();
+#pragma warning restore
             AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
         }
         Debug.Log("Done Slicing!");

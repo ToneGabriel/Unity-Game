@@ -82,24 +82,24 @@ public class Player : Entity
     {
         base.InitializeStates();
 
-        IdleState = new PlayerIdleState(this, StateMachine, _dataPlayer, "idle");
-        MoveState = new PlayerMoveState(this, StateMachine, _dataPlayer, "move");
-        JumpState = new PlayerJumpState(this, StateMachine, _dataPlayer, "inAir");
-        InAirState = new PlayerInAirState(this, StateMachine, _dataPlayer, "inAir");
-        LandState = new PlayerLandState(this, StateMachine, _dataPlayer, "land");
-        WallSlideState = new PlayerWallSlideState(this, StateMachine, _dataPlayer, "wallSlide");
-        WallGrabState = new PlayerWallGrabState(this, StateMachine, _dataPlayer, "wallGrab");
-        WallClimbState = new PlayerWallClimbState(this, StateMachine, _dataPlayer, "wallClimb");
-        WallJumpState = new PlayerWallJumpState(this, StateMachine, _dataPlayer, "inAir");
-        LedgeClimbState = new PlayerLedgeClimbState(this, StateMachine, _dataPlayer, "ledgeClimbState");
-        DashState = new PlayerDashState(this, StateMachine, _dataPlayer, "inAir");
-        CrouchIdleState = new PlayerCrouchIdleState(this, StateMachine, _dataPlayer, "crouchIdle");
-        CrouchMoveState = new PlayerCrouchMoveState(this, StateMachine, _dataPlayer, "crouchMove");
-        RollState = new PlayerRollState(this, StateMachine, _dataPlayer, "roll");
+        IdleState = new PlayerIdleState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Idle);
+        MoveState = new PlayerMoveState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Move);
+        JumpState = new PlayerJumpState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir);
+        InAirState = new PlayerInAirState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir);
+        LandState = new PlayerLandState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Land);
+        WallSlideState = new PlayerWallSlideState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallSlide);
+        WallGrabState = new PlayerWallGrabState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallGrab);
+        WallClimbState = new PlayerWallClimbState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallClimb);
+        WallJumpState = new PlayerWallJumpState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir);
+        LedgeClimbState = new PlayerLedgeClimbState(this, StateMachine, _dataPlayer, PlayerControllerParameters.LedgeClimbState);
+        DashState = new PlayerDashState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir);
+        CrouchIdleState = new PlayerCrouchIdleState(this, StateMachine, _dataPlayer, PlayerControllerParameters.CrouchIdle);
+        CrouchMoveState = new PlayerCrouchMoveState(this, StateMachine, _dataPlayer, PlayerControllerParameters.CrouchMove);
+        RollState = new PlayerRollState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Roll);
 
-        PrimaryAttackState = new PlayerAttackState(this, StateMachine, _dataPlayer, "combat");
-        SecondaryDefendState = new PlayerDefendState(this, StateMachine, _dataPlayer, "combat");
-        SpellCastState = new PlayerSpellState(this, StateMachine, _dataPlayer, "combat");
+        PrimaryAttackState = new PlayerAttackState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat);
+        SecondaryDefendState = new PlayerDefendState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat);
+        SpellCastState = new PlayerSpellState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat);
 
         _weaponIndex = 0;
         _spellIndex = 0;
