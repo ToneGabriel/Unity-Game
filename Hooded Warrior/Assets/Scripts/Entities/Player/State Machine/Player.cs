@@ -57,6 +57,8 @@ public class Player : Entity
     {
         base.Start();
 
+        ObjectPoolManager.Instance.RequestPool<PlayerAfterImage>();
+
         gameObject.SetActive(false);                    // Allows "Awake" on application start but prevents loading errors
     }
 

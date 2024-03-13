@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
-public class PlayerAfterImage : MonoBehaviour, IPoolComponent
+
+[PoolObject]
+public class PlayerAfterImage : MonoBehaviour
 {
     private GameObject _player;
     private SpriteRenderer _spriteRenderer;
@@ -36,7 +38,7 @@ public class PlayerAfterImage : MonoBehaviour, IPoolComponent
         _spriteRenderer.color = _color;
 
         if (Time.time >= _timeActivated + _activeTime)
-            ObjectPoolManager.Instance.AddToPool(gameObject);
+            ObjectPoolManager.Instance.ReturnToPool(this);
     }
 
 }

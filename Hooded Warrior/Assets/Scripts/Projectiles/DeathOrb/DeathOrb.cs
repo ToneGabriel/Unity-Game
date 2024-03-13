@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class DeathOrb : MonoBehaviour, IPoolComponent
+
+[PoolObject]
+public class DeathOrb : MonoBehaviour
 {
     private GameObject _target;
     private float _spellCastTime;
@@ -14,6 +16,11 @@ public class DeathOrb : MonoBehaviour, IPoolComponent
     private void Awake()
     {
         _castAngleStep = Mathf.Abs(_deathOrbData.MaxCastAngleZ - _deathOrbData.MinCastAngleZ) / (_deathOrbData.MaxNumberOfProjectiles - 1);
+    }
+
+    private void Start()
+    {
+        ObjectPoolManager.Instance.RequestPool<DeathOrbProjectile>();
     }
 
     private void OnEnable()
@@ -90,7 +97,7 @@ public class DeathOrb : MonoBehaviour, IPoolComponent
             yield return _deathOrbData.TimeToScale;
         }
 
-        ObjectPoolManager.Instance.AddToPool(gameObject);
+        ObjectPoolManager.Instance.ReturnToPool(this);
     }
 
     public void OnDrawGizmos()

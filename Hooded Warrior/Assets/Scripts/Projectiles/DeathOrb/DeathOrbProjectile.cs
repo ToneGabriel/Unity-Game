@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
+[PoolObject]
+public class DeathOrbProjectile : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
     private GameObject _target;
@@ -40,7 +41,7 @@ public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
     private void CheckOrbHit()
     {
         if (Time.time >= _spellCastTime + _deathOrbProjectileData.SpellLifeTime)
-            ObjectPoolManager.Instance.AddToPool(gameObject);
+            ObjectPoolManager.Instance.ReturnToPool(this);
         else
         {
             Collider2D damageHit = Physics2D.OverlapCircle(transform.position, _deathOrbProjectileData.DamageRadius, _deathOrbProjectileData.WhatIsPlayer);
@@ -50,10 +51,10 @@ public class DeathOrbProjectile : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(gameObject);
+                ObjectPoolManager.Instance.ReturnToPool(this);
             }
             else if (groundHit)
-                ObjectPoolManager.Instance.AddToPool(gameObject);
+                ObjectPoolManager.Instance.ReturnToPool(this);
         }
     }
     

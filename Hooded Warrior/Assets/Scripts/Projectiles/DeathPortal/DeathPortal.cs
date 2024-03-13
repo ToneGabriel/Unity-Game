@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class DeathPortal : MonoBehaviour, IPoolComponent
+[PoolObject]
+public class DeathPortal : MonoBehaviour
 {
     private BoxCollider2D _boxCollider;
     private GameObject _target;
@@ -45,6 +46,6 @@ public class DeathPortal : MonoBehaviour, IPoolComponent
 
     public void FinishPortalAttack()
     {
-        ObjectPoolManager.Instance.AddToPool(gameObject);
+        ObjectPoolManager.Instance.ReturnToPool(this);
     }
 }
