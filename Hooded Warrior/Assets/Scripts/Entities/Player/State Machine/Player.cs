@@ -82,24 +82,24 @@ public class Player : Entity
     {
         base.InitializeStates();
 
-        IdleState = new PlayerIdleState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Idle);
-        MoveState = new PlayerMoveState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Move);
-        JumpState = new PlayerJumpState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir);
-        InAirState = new PlayerInAirState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir);
-        LandState = new PlayerLandState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Land);
-        WallSlideState = new PlayerWallSlideState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallSlide);
-        WallGrabState = new PlayerWallGrabState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallGrab);
-        WallClimbState = new PlayerWallClimbState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallClimb);
-        WallJumpState = new PlayerWallJumpState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir);
-        LedgeClimbState = new PlayerLedgeClimbState(this, StateMachine, _dataPlayer, PlayerControllerParameters.LedgeClimbState);
-        DashState = new PlayerDashState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir);
-        CrouchIdleState = new PlayerCrouchIdleState(this, StateMachine, _dataPlayer, PlayerControllerParameters.CrouchIdle);
-        CrouchMoveState = new PlayerCrouchMoveState(this, StateMachine, _dataPlayer, PlayerControllerParameters.CrouchMove);
-        RollState = new PlayerRollState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Roll);
+        IdleState = new PlayerIdleState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Idle_b);
+        MoveState = new PlayerMoveState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Move_b);
+        JumpState = new PlayerJumpState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir_b);
+        InAirState = new PlayerInAirState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir_b);
+        LandState = new PlayerLandState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Land_b);
+        WallSlideState = new PlayerWallSlideState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallSlide_b);
+        WallGrabState = new PlayerWallGrabState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallGrab_b);
+        WallClimbState = new PlayerWallClimbState(this, StateMachine, _dataPlayer, PlayerControllerParameters.WallClimb_b);
+        WallJumpState = new PlayerWallJumpState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir_b);
+        LedgeClimbState = new PlayerLedgeClimbState(this, StateMachine, _dataPlayer, PlayerControllerParameters.LedgeClimbState_b);
+        DashState = new PlayerDashState(this, StateMachine, _dataPlayer, PlayerControllerParameters.InAir_b);
+        CrouchIdleState = new PlayerCrouchIdleState(this, StateMachine, _dataPlayer, PlayerControllerParameters.CrouchIdle_b);
+        CrouchMoveState = new PlayerCrouchMoveState(this, StateMachine, _dataPlayer, PlayerControllerParameters.CrouchMove_b);
+        RollState = new PlayerRollState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Roll_b);
 
-        PrimaryAttackState = new PlayerAttackState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat);
-        SecondaryDefendState = new PlayerDefendState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat);
-        SpellCastState = new PlayerSpellState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat);
+        PrimaryAttackState = new PlayerAttackState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat_b);
+        SecondaryDefendState = new PlayerDefendState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat_b);
+        SpellCastState = new PlayerSpellState(this, StateMachine, _dataPlayer, PlayerControllerParameters.Combat_b);
 
         _weaponIndex = 0;
         _spellIndex = 0;

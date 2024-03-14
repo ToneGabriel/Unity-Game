@@ -66,8 +66,8 @@ public class PlayerInAirState : PlayerState
             _workspaceVector2.Set(_player.Rigidbody.velocity.x, Mathf.Clamp(_player.Rigidbody.velocity.y, -_dataPlayer.MaxVelocityY, _dataPlayer.MaxVelocityY));
             _player.Rigidbody.velocity = _workspaceVector2;
 
-            _player.Animator.SetFloat(PlayerControllerParameters.VelocityY, _player.Rigidbody.velocity.y);
-            _player.Animator.SetFloat(PlayerControllerParameters.VelocityX, Mathf.Abs(_player.Rigidbody.velocity.x));
+            _player.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.Rigidbody.velocity.y);
+            _player.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.Rigidbody.velocity.x));
         }
     }
 
