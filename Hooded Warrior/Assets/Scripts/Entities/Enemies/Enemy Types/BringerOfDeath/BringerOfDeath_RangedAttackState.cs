@@ -7,6 +7,9 @@ public class BringerOfDeath_RangedAttackState : RangedAttackState
         : base(enemy, stateMachine, animBoolName, stateData)
     {
         _bod = (BringerOfDeath)enemy;
+
+        ObjectPoolManager.Instance.RequestPool<DeathPortal>();
+        ObjectPoolManager.Instance.RequestPool<DeathOrb>();
     }
 
     public override void LogicUpdate()

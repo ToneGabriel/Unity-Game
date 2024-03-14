@@ -72,8 +72,8 @@ public class PlayerDashState : PlayerAbilityState
             else
             {
                 _player.SetVelocity(_dataPlayer.DashVelocity, _dashDirection);
-                _player.Animator.SetFloat("velocityY", _player.Rigidbody.velocity.y);
-                _player.Animator.SetFloat("velocityX", Mathf.Abs(_player.Rigidbody.velocity.x));
+                _player.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.Rigidbody.velocity.y);
+                _player.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.Rigidbody.velocity.x));
 
                 CheckIfShouldPlaceAfterImage();
 

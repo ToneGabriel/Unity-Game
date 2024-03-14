@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class Arrow : MonoBehaviour, IPoolComponent
+[PoolObject]
+public class Arrow : MonoBehaviour
 {
     private Rigidbody2D _rigidbody2D;
     private AttackDetails _attackDetails;
@@ -41,7 +42,7 @@ public class Arrow : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(gameObject);
+                ObjectPoolManager.Instance.ReturnToPool(this);
             }
             else if (groundHit)     // if ground hit - wait before disable
             {
@@ -50,7 +51,7 @@ public class Arrow : MonoBehaviour, IPoolComponent
             }
         }
         else if (Time.time >= _groundedStartTime + _arrowData.ArrowGroundedTime)      // disable arrow after time on ground
-            ObjectPoolManager.Instance.AddToPool(gameObject);
+            ObjectPoolManager.Instance.ReturnToPool(this);
     }
 
     private void SetArrowDirection()                                                // arrow movement

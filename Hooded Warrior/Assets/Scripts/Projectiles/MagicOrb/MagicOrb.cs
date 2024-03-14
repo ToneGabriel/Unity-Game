@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class MagicOrb : MonoBehaviour, IPoolComponent
+[PoolObject]
+public class MagicOrb : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
     private GameObject _target;
@@ -68,7 +69,7 @@ public class MagicOrb : MonoBehaviour, IPoolComponent
     private void CheckOrbHit()
     {
         if (Time.time >= _spellCastTime + _orbSpellData.SpellLifeTime)
-            ObjectPoolManager.Instance.AddToPool(gameObject);
+            ObjectPoolManager.Instance.ReturnToPool(this);
         else
         {
             Collider2D damageHit = Physics2D.OverlapCircle(transform.position, _orbSpellData.DamageRadius, _orbSpellData.WhatIsEnemy);
@@ -78,10 +79,10 @@ public class MagicOrb : MonoBehaviour, IPoolComponent
             {
                 _attackDetails.Position = transform.position;
                 damageHit.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
-                ObjectPoolManager.Instance.AddToPool(gameObject);
+                ObjectPoolManager.Instance.ReturnToPool(this);
             }
             else if (groundHit)
-                ObjectPoolManager.Instance.AddToPool(gameObject);
+                ObjectPoolManager.Instance.ReturnToPool(this);
         }
     }
 

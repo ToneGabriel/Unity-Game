@@ -7,6 +7,8 @@ public class OrbSpell : Spell
 
     private void Start()
     {
+        ObjectPoolManager.Instance.RequestPool<MagicOrb>();
+
         _activeOrbs = 0;
         _castAngleStep = Mathf.Abs(_spellData.MaxCastAngleZ - _spellData.MinCastAngleZ) / (_spellData.MaxNumberOfSpells - 1);
     }

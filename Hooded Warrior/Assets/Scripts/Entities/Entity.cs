@@ -46,7 +46,10 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
         IsStuned = false;
     }
 
-    protected virtual void Start() { }
+    protected virtual void Start()
+    {
+        ObjectPoolManager.Instance.RequestPool<HitParticleController>();
+    }
 
     protected virtual void Update()
     {

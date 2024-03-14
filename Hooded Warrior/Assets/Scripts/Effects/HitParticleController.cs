@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
-public class HitParticleController : MonoBehaviour, IPoolComponent
+[PoolObject]
+public class HitParticleController : MonoBehaviour
 {
     private void FinishAnim()
     {
-        ObjectPoolManager.Instance.AddToPool(gameObject);
+        ObjectPoolManager.Instance.ReturnToPool(this);
     }
 
 }
