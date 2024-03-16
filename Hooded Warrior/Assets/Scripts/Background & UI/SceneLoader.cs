@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour, ISaveable
 {
+    public SceneNames SceneName;
     public bool IsLoaded { get; set; }
 
     private void Awake()
@@ -14,7 +15,7 @@ public class SceneLoader : MonoBehaviour, ISaveable
     {
         if (CanLoad() && ColliderIsPlayer(other))
         {
-            SceneManager.LoadSceneAsync(gameObject.name, LoadSceneMode.Additive);
+            SceneManager.LoadSceneAsync((int)SceneName, LoadSceneMode.Additive);
             IsLoaded = true;
         }
     }
@@ -23,7 +24,7 @@ public class SceneLoader : MonoBehaviour, ISaveable
     {
         if (CanUnload() && ColliderIsPlayer(other))
         {
-            SceneManager.UnloadSceneAsync(gameObject.name);
+            SceneManager.UnloadSceneAsync((int)SceneName);
             IsLoaded = false;
         }
     }

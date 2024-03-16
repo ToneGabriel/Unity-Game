@@ -6,7 +6,7 @@ using UnityEngine;
 // Select the gameobject that has an animator component
 // Then go to path shown in MenuItem
 // The file should be generated in "/Scripts/Animator Parameters/"
-public class AnimatorParameterUpdater : Editor
+public class AnimatorParameterGenerator : Editor
 {
     [MenuItem("EditorHelper/Update Animator Parameters")]
     public static void UpdateAnimatorParameters()
@@ -49,9 +49,6 @@ public class AnimatorParameterUpdater : Editor
 
         newContent += "}\n";
 
-        // Write the new content to .cs file
-        // The file is first created if does not exists
-        string path = Application.dataPath + $"/Scripts/Animator Parameters/" + newClassName + ".cs";
-        System.IO.File.WriteAllText(path, newContent);
+        Helpers.GenerateFile(newClassName, newContent);
     }
 }

@@ -1,11 +1,5 @@
 ﻿using UnityEngine;
 
-public enum Scenes
-{
-    Tutorial,
-    Forest,
-    Cave
-}
 
 public class GameManager : MonoBehaviour
 {
@@ -59,7 +53,7 @@ public class GameManager : MonoBehaviour
     #region Other
     public void LoadDataOnNewGame()
     {
-        _loadingScreenData.SceneLoaders[(int)Scenes.Tutorial].IsLoaded = true;
+        _loadingScreenData.SceneLoaders[(int)SceneNames.Scene1_TutorialScene].IsLoaded = true;
         Player.SetNewGameData();
     }
 
