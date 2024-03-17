@@ -1,34 +1,37 @@
 ﻿
-public class PlayerCrouchIdleState : PlayerGroundedState
+public sealed partial class Player
 {
-    public PlayerCrouchIdleState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName) 
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
-
-    public override void Enter()
+    private sealed partial class PlayerCrouchIdleState
     {
-        base.Enter();
+        public PlayerCrouchIdleState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+            : base(player, stateMachine, playerData, animBoolName)
+        { }
 
-        _player.SetVelocityZero();
-        _player.SetColiderHeight(_dataPlayer.CrouchColliderHeight);
-        _player.SetLightOrbPosition(_dataPlayer.CrouchLightOrbPosition);
-    }
+        public override void Enter()
+        {
+            base.Enter();
 
-    public override void Exit()
-    {
-        base.Exit();
+            _player.SetVelocityZero();
+            _player.SetColiderHeight(_dataPlayer.CrouchColliderHeight);
+            _player.SetLightOrbPosition(_dataPlayer.CrouchLightOrbPosition);
+        }
 
-        _player.SetColiderHeight(_dataPlayer.StandColliderHeight);
-        _player.SetLightOrbPosition(_dataPlayer.StandLightOrbPosition);
-    }
+        public override void Exit()
+        {
+            base.Exit();
 
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
+            _player.SetColiderHeight(_dataPlayer.StandColliderHeight);
+            _player.SetLightOrbPosition(_dataPlayer.StandLightOrbPosition);
+        }
 
-        if (_inputX != 0)
-            _stateMachine.ChangeState(_player.CrouchMoveState);
-        else if (_inputY != -1 && !_isTouchingCeiling)
-            _stateMachine.ChangeState(_player.IdleState);
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+
+            if (_inputX != 0)
+                _stateMachine.ChangeState(_player._crouchMoveState);
+            else if (_inputY != -1 && !_isTouchingCeiling)
+                _stateMachine.ChangeState(_player._idleState);
+        }
     }
 }

@@ -1,84 +1,87 @@
 ﻿
-public abstract class PlayerGroundedState : PlayerState
+public sealed partial class Player
 {
-    // Inputs
-    protected int _inputX;
-    protected int _inputY;
-    protected bool _jumpInput;
-    protected bool _grabInput;
-    protected bool _dashInput;
-    protected bool _rollInput;
-    protected bool _primaryAttackInput;
-    protected bool _secondaryDefendInput;
-    protected bool _spellCastInput;
-    // Checks
-    protected bool _isGrounded;
-    protected bool _isTouchingWall;
-    protected bool _isTouchingLedge;
-    protected bool _isTouchingCeiling;
-    protected bool _canDefend;
-    protected bool _canCastSpell;
-    
-
-    public PlayerGroundedState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName) 
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
-
-    public override void Enter()
+    private abstract partial class PlayerGroundedState
     {
-        base.Enter();
+        // Inputs
+        protected int _inputX;
+        protected int _inputY;
+        protected bool _jumpInput;
+        protected bool _grabInput;
+        protected bool _dashInput;
+        protected bool _rollInput;
+        protected bool _primaryAttackInput;
+        protected bool _secondaryDefendInput;
+        protected bool _spellCastInput;
+        // Checks
+        protected bool _isGrounded;
+        protected bool _isTouchingWall;
+        protected bool _isTouchingLedge;
+        protected bool _isTouchingCeiling;
+        protected bool _canDefend;
+        protected bool _canCastSpell;
 
-        _player.JumpState.ResetAmountOfJumpsLeft();
-        _player.DashState.ResetCanDash();
-    }
 
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
+        public PlayerGroundedState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+            : base(player, stateMachine, playerData, animBoolName)
+        { }
 
-        _inputX = _player.InputHandler.NormalizedInputX;
-        _inputY = _player.InputHandler.NormalizedInputY;
-        _jumpInput = _player.InputHandler.JumpInput;
-        _grabInput = _player.InputHandler.GrabInput;
-        _dashInput = _player.InputHandler.DashInput;
-        _rollInput = _player.InputHandler.RollInput;
-        _primaryAttackInput = _player.InputHandler.PrimaryAttackInput;
-        _secondaryDefendInput = _player.InputHandler.SecondaryDefendInput;
-        _spellCastInput = _player.InputHandler.SpellCastInput;
-
-        _player.CheckIfShouldFlip(_inputX);
-
-        if (_primaryAttackInput && !_isTouchingCeiling)
-            _stateMachine.ChangeState(_player.PrimaryAttackState);
-        else if (_secondaryDefendInput && !_isTouchingCeiling && _canDefend)
-            _stateMachine.ChangeState(_player.SecondaryDefendState);
-        else if (_spellCastInput && !_isTouchingCeiling && _canCastSpell)
-            _stateMachine.ChangeState(_player.SpellCastState);
-        else if (_jumpInput && _player.JumpState.CanJump())
+        public override void Enter()
         {
-            _player.InputHandler.UseJumpInput();
-            _stateMachine.ChangeState(_player.JumpState);
+            base.Enter();
+
+            _player._jumpState.ResetAmountOfJumpsLeft();
+            _player._dashState.ResetCanDash();
         }
-        else if (!_isGrounded)
+
+        public override void LogicUpdate()
         {
-            _player.JumpState.DecreaseAmountOfJumpsLeft();
-            _stateMachine.ChangeState(_player.InAirState);
+            base.LogicUpdate();
+
+            _inputX = _player._inputHandler.NormalizedInputX;
+            _inputY = _player._inputHandler.NormalizedInputY;
+            _jumpInput = _player._inputHandler.JumpInput;
+            _grabInput = _player._inputHandler.GrabInput;
+            _dashInput = _player._inputHandler.DashInput;
+            _rollInput = _player._inputHandler.RollInput;
+            _primaryAttackInput = _player._inputHandler.PrimaryAttackInput;
+            _secondaryDefendInput = _player._inputHandler.SecondaryDefendInput;
+            _spellCastInput = _player._inputHandler.SpellCastInput;
+
+            _player.CheckIfShouldFlip(_inputX);
+
+            if (_primaryAttackInput && !_isTouchingCeiling)
+                _stateMachine.ChangeState(_player._primaryAttackState);
+            else if (_secondaryDefendInput && !_isTouchingCeiling && _canDefend)
+                _stateMachine.ChangeState(_player._secondaryDefendState);
+            else if (_spellCastInput && !_isTouchingCeiling && _canCastSpell)
+                _stateMachine.ChangeState(_player._spellCastState);
+            else if (_jumpInput && _player._jumpState.CanJump())
+            {
+                _player._inputHandler.UseJumpInput();
+                _stateMachine.ChangeState(_player._jumpState);
+            }
+            else if (!_isGrounded)
+            {
+                _player._jumpState.DecreaseAmountOfJumpsLeft();
+                _stateMachine.ChangeState(_player._inAirState);
+            }
+            else if (_isTouchingWall && _grabInput && _isTouchingLedge)
+                _stateMachine.ChangeState(_player._wallGrabState);
+            else if (_dashInput && _player._dashState.CheckIfCanDash() && !_isTouchingCeiling)
+                _stateMachine.ChangeState(_player._dashState);
         }
-        else if (_isTouchingWall && _grabInput && _isTouchingLedge)
-            _stateMachine.ChangeState(_player.WallGrabState);
-        else if (_dashInput && _player.DashState.CheckIfCanDash() && !_isTouchingCeiling)
-            _stateMachine.ChangeState(_player.DashState);
-    }
 
-    public override void DoChecks()
-    {
-        base.DoChecks();
+        public override void DoChecks()
+        {
+            base.DoChecks();
 
-        _isGrounded = _player.CheckIfGrounded();
-        _isTouchingWall = _player.CheckIfTouchingWall();
-        _isTouchingLedge = _player.CheckIfTouchingLedge(_player.transform.right);
-        _isTouchingCeiling = _player.CheckIfTouchingCeiling();
-        _canDefend = _player.CheckIfCanDefend();
-        _canCastSpell = _player.CheckIfCanCastSpell();
+            _isGrounded = _player.CheckIfGrounded();
+            _isTouchingWall = _player.CheckIfTouchingWall();
+            _isTouchingLedge = _player.CheckIfTouchingLedge(_player.transform.right);
+            _isTouchingCeiling = _player.CheckIfTouchingCeiling();
+            _canDefend = _player.CheckIfCanDefend();
+            _canCastSpell = _player.CheckIfCanCastSpell();
+        }
     }
 }

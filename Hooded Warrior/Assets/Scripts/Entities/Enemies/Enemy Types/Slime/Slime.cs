@@ -14,11 +14,11 @@ public class Slime : Enemy
     {
         base.OnEnable();
 
-        MoveState = new Slime_MoveState(this, StateMachine, "walk", _moveStateData);
-        IdleState = new Slime_IdleState(this, StateMachine, "idle", _idleStateData);
-        PlayerDetectedState = new Slime_PlayerDetectedState(this, StateMachine, "playerDetected", _playerDetectedStateData);
+        MoveState = new Slime_MoveState(this, _stateMachine, "walk", _moveStateData);
+        IdleState = new Slime_IdleState(this, _stateMachine, "idle", _idleStateData);
+        PlayerDetectedState = new Slime_PlayerDetectedState(this, _stateMachine, "playerDetected", _playerDetectedStateData);
 
-        StateMachine.Initialize(MoveState);
+        _stateMachine.Initialize(MoveState);
     }
 
 }

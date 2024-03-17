@@ -1,39 +1,45 @@
 using UnityEngine;
 
-public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
+public abstract partial class Entity : MonoBehaviour, ISaveable, IDamageble
 {
-    #region Components & Data
-    public Rigidbody2D Rigidbody { get; private set; }
-    public Animator Animator { get; private set; }
-    public BoxCollider2D BoxCollider { get; private set; }
-    public FiniteStateMachine StateMachine { get; private set; }
+    #region State Declarations
+    protected abstract partial class EntityState : State { }
+    #endregion
 
-    [SerializeField] protected HealthBar _healthBar;
-    [SerializeField] protected GameObject _groundCheck;
-    [SerializeField] protected GameObject _environmentCheck;
-    [SerializeField] protected GameObject _ledgeCheck;
-    [SerializeField] protected Data_Entity _dataEntity;
+    #region Components & Data
+    [Header("Entity Components")]
+    [SerializeField] protected HealthBar    _healthBar;
+    [SerializeField] protected GameObject   _groundCheck;
+    [SerializeField] protected GameObject   _environmentCheck;
+    [SerializeField] protected GameObject   _ledgeCheck;
+    [SerializeField] protected Data_Entity  _dataEntity;
+
+    protected Rigidbody2D                   _rigidbody;
+    protected Animator                      _animator;
+    protected BoxCollider2D                 _boxCollider;
+    protected FiniteStateMachine            _stateMachine;
     #endregion
 
     #region Other Variables
-    public int FacingDirection { get; protected set; }
-    public int LastDamageDirection { get; protected set; }
-    public float LastDamageTime { get; protected set; }
-    public float CurrentHealth { get; protected set; }
-    public float CurrentStunResistance { get; protected set; }
-    public bool IsDead { get; protected set; }
-    public bool IsStuned { get; protected set; }
+    public int      FacingDirection         { get; protected set; }
+    public int      LastDamageDirection     { get; protected set; }
+    public float    LastDamageTime          { get; protected set; }
+    public float    CurrentHealth           { get; protected set; }
+    public float    CurrentStunResistance   { get; protected set; }
+    public bool     IsDead                  { get; protected set; }
+    public bool     IsStuned                { get; protected set; }
+
     protected Vector2 _workspaceVector2;
     #endregion
 
     #region Unity functions
     protected virtual void Awake()
     {
-        Animator = GetComponent<Animator>();
-        Rigidbody = GetComponent<Rigidbody2D>();
-        BoxCollider = GetComponent<BoxCollider2D>();
-        FacingDirection = 1;
-        CurrentHealth = _dataEntity.MaxHealth;
+        _animator           = GetComponent<Animator>();
+        _rigidbody          = GetComponent<Rigidbody2D>();
+        _boxCollider        = GetComponent<BoxCollider2D>();
+        FacingDirection     = 1;
+        CurrentHealth       = _dataEntity.MaxHealth;
         _healthBar.SetMaxHealth(_dataEntity.MaxHealth);
 
         InitializeStates();
@@ -75,43 +81,43 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #region Setters
     protected virtual void InitializeStates()
     {
-        StateMachine = new FiniteStateMachine();
+        _stateMachine = new FiniteStateMachine();
     }
 
     public void SetVelocityZero()
     {
-        Rigidbody.velocity = Vector2.zero;
+        _rigidbody.velocity = Vector2.zero;
     }
 
     public void SetVelocityX(float velocity)
     {
-        _workspaceVector2.Set(velocity, Rigidbody.velocity.y);
-        Rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(velocity, _rigidbody.velocity.y);
+        _rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocityY(float velocity)
     {
-        _workspaceVector2.Set(Rigidbody.velocity.x, velocity);
-        Rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(_rigidbody.velocity.x, velocity);
+        _rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity, Vector2 direction)
     {
         _workspaceVector2 = direction * velocity;
-        Rigidbody.velocity = _workspaceVector2;
+        _rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity, Vector2 angle, int direction)
     {
         angle.Normalize();
         _workspaceVector2.Set(angle.x * velocity * direction, angle.y * velocity);
-        Rigidbody.velocity = _workspaceVector2;
+        _rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity)                                     // Set velocity towards facing direction
     {
-        _workspaceVector2.Set(FacingDirection * velocity, Rigidbody.velocity.y);
-        Rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(FacingDirection * velocity, _rigidbody.velocity.y);
+        _rigidbody.velocity = _workspaceVector2;
     }
 
     public void Flip()
@@ -186,10 +192,10 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     public void DamageHop(Vector2 direction, float velocity)
     {
-        if (Rigidbody.bodyType == RigidbodyType2D.Dynamic)
+        if (_rigidbody.bodyType == RigidbodyType2D.Dynamic)
         {
             direction.Set(direction.x * LastDamageDirection * (-1), direction.y);
-            Rigidbody.velocity = direction * velocity;
+            _rigidbody.velocity = direction * velocity;
         }
     }
     #endregion

@@ -1,39 +1,41 @@
 ﻿
-public class PlayerJumpState : PlayerAbilityState
+public sealed partial class Player
 {
-    private int _amountOfJumpsLeft;
-
-    public PlayerJumpState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName) 
-        : base(player, stateMachine, playerData, animBoolName)
+    private sealed partial class PlayerJumpState
     {
-        _amountOfJumpsLeft = playerData.AmountOfJumps;
+        private int _amountOfJumpsLeft;
+
+        public PlayerJumpState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+            : base(player, stateMachine, playerData, animBoolName)
+        {
+            _amountOfJumpsLeft = playerData.AmountOfJumps;
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+
+            _player.SetVelocityY(_dataPlayer.JumpVelocity);
+            _isAbilityDone = true;
+            DecreaseAmountOfJumpsLeft();
+            _player._inAirState.SetIsJumping();
+        }
+
+        public bool CanJump()
+        {
+            if (_amountOfJumpsLeft > 0)
+                return true;
+            return false;
+        }
+
+        public void ResetAmountOfJumpsLeft()
+        {
+            _amountOfJumpsLeft = _dataPlayer.AmountOfJumps;
+        }
+
+        public void DecreaseAmountOfJumpsLeft()
+        {
+            _amountOfJumpsLeft--;
+        }
     }
-
-    public override void Enter()
-    {
-        base.Enter();
-
-        _player.SetVelocityY(_dataPlayer.JumpVelocity);
-        _isAbilityDone = true;
-        DecreaseAmountOfJumpsLeft();
-        _player.InAirState.SetIsJumping();
-    }
-
-    public bool CanJump()
-    {
-        if (_amountOfJumpsLeft > 0)
-            return true;
-        return false;
-    }
-
-    public void ResetAmountOfJumpsLeft()
-    {
-        _amountOfJumpsLeft = _dataPlayer.AmountOfJumps;
-    }
-
-    public void DecreaseAmountOfJumpsLeft()
-    {
-        _amountOfJumpsLeft--;
-    }
-
 }

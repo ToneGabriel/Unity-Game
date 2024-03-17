@@ -1,17 +1,20 @@
 ﻿
-public class PlayerWallClimbState : PlayerTouchingWallState
+public sealed partial class Player
 {
-    public PlayerWallClimbState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName) 
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
-
-    public override void LogicUpdate()
+    private sealed partial class PlayerWallClimbState
     {
-        base.LogicUpdate();
+        public PlayerWallClimbState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+            : base(player, stateMachine, playerData, animBoolName)
+        { }
 
-        _player.SetVelocityY(_dataPlayer.WallClimbVelocity);
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
 
-        if (_inputY != 1)
-            _stateMachine.ChangeState(_player.WallGrabState);
+            _player.SetVelocityY(_dataPlayer.WallClimbVelocity);
+
+            if (_inputY != 1)
+                _stateMachine.ChangeState(_player._wallGrabState);
+        }
     }
 }

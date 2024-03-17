@@ -1,29 +1,32 @@
 ﻿
-public class PlayerMoveState : PlayerGroundedState
+public sealed partial class Player
 {
-    public PlayerMoveState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName) 
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
-
-    public override void LogicUpdate()
+    private sealed partial class PlayerMoveState
     {
-        base.LogicUpdate();
-        
-        if (_inputX == 0)
-            _stateMachine.ChangeState(_player.IdleState);
-        else if (_inputY == -1)
-            _stateMachine.ChangeState(_player.CrouchMoveState);
-        else if (_isGrounded && _rollInput)
+        public PlayerMoveState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+            : base(player, stateMachine, playerData, animBoolName)
+        { }
+
+        public override void LogicUpdate()
         {
-            _player.InputHandler.UseRollInput();
-            _stateMachine.ChangeState(_player.RollState);
-        }    
-    }
+            base.LogicUpdate();
 
-    public override void PhysicsUpdate()
-    {
-        base.PhysicsUpdate();
+            if (_inputX == 0)
+                _stateMachine.ChangeState(_player._idleState);
+            else if (_inputY == -1)
+                _stateMachine.ChangeState(_player._crouchMoveState);
+            else if (_isGrounded && _rollInput)
+            {
+                _player._inputHandler.UseRollInput();
+                _stateMachine.ChangeState(_player._rollState);
+            }
+        }
 
-        _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
+        }
     }
 }

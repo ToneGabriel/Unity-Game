@@ -1,91 +1,95 @@
 ﻿using UnityEngine;
 
-public class PlayerInAirState : PlayerState
+public sealed partial class Player
 {
-    // Inputs
-    private int _inputX;
-    private bool _jumpInput;
-    private bool _jumpInputStop;
-    private bool _grabInput;
-    private bool _dashInput;
-    // Checks
-    private bool _isGrounded;
-    private bool _isJumping;
-    private bool _isTouchingWall;
-    private bool _isTouchingLedge;
-
-    public PlayerInAirState(Player player, FiniteStateMachine stateMachine, Data_Player dataPlayer, string animBoolName) 
-        : base(player, stateMachine, dataPlayer, animBoolName)
-    { }
-
-    public override void DoChecks()
+    private sealed partial class PlayerInAirState
     {
-        base.DoChecks();
+        // Inputs
+        private int _inputX;
+        private bool _jumpInput;
+        private bool _jumpInputStop;
+        private bool _grabInput;
+        private bool _dashInput;
+        // Checks
+        private bool _isGrounded;
+        private bool _isJumping;
+        private bool _isTouchingWall;
+        private bool _isTouchingLedge;
 
-        _isGrounded = _player.CheckIfGrounded();
-        _isTouchingWall = _player.CheckIfTouchingWall();
-        _isTouchingLedge = _player.CheckIfTouchingLedge(_player.transform.right);
+        public PlayerInAirState(Player player, FiniteStateMachine stateMachine, Data_Player dataPlayer, string animBoolName)
+            : base(player, stateMachine, dataPlayer, animBoolName)
+        { }
 
-        // Save player position as soon as it detects ledge
-        if (_isTouchingWall && !_isTouchingLedge)
-            _player.LedgeClimbState.SetDetectedPosition(_player.transform.position);
-    }
-
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
-
-        _inputX = _player.InputHandler.NormalizedInputX;
-        _jumpInput = _player.InputHandler.JumpInput;
-        _jumpInputStop = _player.InputHandler.JumpInputStop;
-        _grabInput = _player.InputHandler.GrabInput;
-        _dashInput = _player.InputHandler.DashInput;
-
-        CheckJumpMultiplier();
-
-        if (_isGrounded && _player.Rigidbody.velocity.y < 0.01f)
-            _stateMachine.ChangeState(_player.LandState);
-        else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
-            _stateMachine.ChangeState(_player.LedgeClimbState);
-        else if (_jumpInput && _player.JumpState.CanJump())
+        public override void DoChecks()
         {
-            _player.InputHandler.UseJumpInput();
-            _stateMachine.ChangeState(_player.JumpState);
+            base.DoChecks();
+
+            _isGrounded = _player.CheckIfGrounded();
+            _isTouchingWall = _player.CheckIfTouchingWall();
+            _isTouchingLedge = _player.CheckIfTouchingLedge(_player.transform.right);
+
+            // Save player position as soon as it detects ledge
+            if (_isTouchingWall && !_isTouchingLedge)
+                _player._ledgeClimbState.SetDetectedPosition(_player.transform.position);
         }
-        else if (_isTouchingWall && _grabInput && _isTouchingLedge)
-            _stateMachine.ChangeState(_player.WallGrabState);
-        else if (_isTouchingWall && !_grabInput)
-            _stateMachine.ChangeState(_player.WallSlideState);
-        else if (_dashInput && _player.DashState.CheckIfCanDash())
-            _stateMachine.ChangeState(_player.DashState);
-        else
+
+        public override void LogicUpdate()
         {
-            _player.CheckIfShouldFlip(_inputX);
-            _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
+            base.LogicUpdate();
 
-            _workspaceVector2.Set(_player.Rigidbody.velocity.x, Mathf.Clamp(_player.Rigidbody.velocity.y, -_dataPlayer.MaxVelocityY, _dataPlayer.MaxVelocityY));
-            _player.Rigidbody.velocity = _workspaceVector2;
+            _inputX = _player._inputHandler.NormalizedInputX;
+            _jumpInput = _player._inputHandler.JumpInput;
+            _jumpInputStop = _player._inputHandler.JumpInputStop;
+            _grabInput = _player._inputHandler.GrabInput;
+            _dashInput = _player._inputHandler.DashInput;
 
-            _player.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.Rigidbody.velocity.y);
-            _player.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.Rigidbody.velocity.x));
-        }
-    }
+            CheckJumpMultiplier();
 
-    public void SetIsJumping() // used for jump multiplier only
-    {
-        _isJumping = true;
-    }
-
-    private void CheckJumpMultiplier()
-    {
-        if (_isJumping)
-            if (_jumpInputStop)
+            if (_isGrounded && _player._rigidbody.velocity.y < 0.01f)
+                _stateMachine.ChangeState(_player._landState);
+            else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
+                _stateMachine.ChangeState(_player._ledgeClimbState);
+            else if (_jumpInput && _player._jumpState.CanJump())
             {
-                _player.SetVelocityY(_player.Rigidbody.velocity.y * _dataPlayer.JumpHeightMultiplier);
-                _isJumping = false;
+                _player._inputHandler.UseJumpInput();
+                _stateMachine.ChangeState(_player._jumpState);
             }
-            else if (_player.Rigidbody.velocity.y <= 0f)
-                _isJumping = false;
+            else if (_isTouchingWall && _grabInput && _isTouchingLedge)
+                _stateMachine.ChangeState(_player._wallGrabState);
+            else if (_isTouchingWall && !_grabInput)
+                _stateMachine.ChangeState(_player._wallSlideState);
+            else if (_dashInput && _player._dashState.CheckIfCanDash())
+                _stateMachine.ChangeState(_player._dashState);
+            else
+            {
+                _player.CheckIfShouldFlip(_inputX);
+                _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
+
+                _workspaceVector2.Set(_player._rigidbody.velocity.x, Mathf.Clamp(_player._rigidbody.velocity.y, -_dataPlayer.MaxVelocityY, _dataPlayer.MaxVelocityY));
+                _player._rigidbody.velocity = _workspaceVector2;
+
+                _player._animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player._rigidbody.velocity.y);
+                _player._animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player._rigidbody.velocity.x));
+            }
+        }
+
+        public void SetIsJumping() // used for jump multiplier only
+        {
+            _isJumping = true;
+        }
+
+        private void CheckJumpMultiplier()
+        {
+            if (_isJumping)
+                if (_jumpInputStop)
+                {
+                    _player.SetVelocityY(_player._rigidbody.velocity.y * _dataPlayer.JumpHeightMultiplier);
+                    _isJumping = false;
+                }
+                else if (_player._rigidbody.velocity.y <= 0f)
+                    _isJumping = false;
+        }
+
     }
 
 }

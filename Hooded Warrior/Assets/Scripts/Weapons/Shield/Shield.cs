@@ -4,7 +4,7 @@ public class Shield : MonoBehaviour, IDamageble, ICooldown
 {
     public bool IsOnCooldown { get; private set; }
 
-    private PlayerDefendState _defendState;
+    private State _defendState;
     private BoxCollider2D _shieldCollider;
     private float _shieldCurrentHealth;
     private float _cooldownStartTime;
@@ -20,7 +20,7 @@ public class Shield : MonoBehaviour, IDamageble, ICooldown
         _shieldCollider = GetComponent<BoxCollider2D>();
     }
 
-    public void InitializeShield(PlayerDefendState defendState)
+    public void InitializeShield(State defendState)
     {
         _defendState = defendState;
     }

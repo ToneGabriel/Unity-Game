@@ -2,7 +2,7 @@
 
 public class Weapon : MonoBehaviour
 {
-    private PlayerAttackState _attackState;
+    private State _attackState;
     private int _attackCounter;
     private float _attackExitTime;
     private AttackDetails _attackDetails;
@@ -13,7 +13,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private WeaponData _weaponData;
 
     #region Weapon Logic
-    public void InitializeWeapon(PlayerAttackState attackState)
+    public void InitializeWeapon(State attackState)
     {
         _attackState = attackState;
         _attackDetails.DamageAmount = _weaponData.Damage;
@@ -67,12 +67,14 @@ public class Weapon : MonoBehaviour
 
     public virtual void AnimationStartMovementTrigger()
     {
-        _attackState.SetPlayerVelocity(_weaponData.MovementSpeed[_attackCounter]);
+        // TODO
+        //_attackState.SetPlayerVelocity(_weaponData.MovementSpeed[_attackCounter]);
     }
 
     public virtual void AnimationStopMovementTrigger()
     {
-        _attackState.SetPlayerVelocity(0f);
+        // TODO
+        //_attackState.SetPlayerVelocity(0f);
     }
     #endregion
 

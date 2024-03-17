@@ -1,17 +1,20 @@
 ﻿
-public class PlayerLandState : PlayerGroundedState
+public sealed partial class Player
 {
-    public PlayerLandState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName) 
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
-
-    public override void LogicUpdate()
+    private sealed partial class PlayerLandState
     {
-        base.LogicUpdate();
+        public PlayerLandState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+            : base(player, stateMachine, playerData, animBoolName)
+        { }
 
-        if (_inputX != 0)
-            _stateMachine.ChangeState(_player.MoveState);
-        else if (_isAnimationFinished)
-            _stateMachine.ChangeState(_player.IdleState);
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+
+            if (_inputX != 0)
+                _stateMachine.ChangeState(_player._moveState);
+            else if (_isAnimationFinished)
+                _stateMachine.ChangeState(_player._idleState);
+        }
     }
 }

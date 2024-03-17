@@ -34,7 +34,7 @@ public class Archer : Enemy
     {
         base.OnEnable();
 
-        StateMachine.Initialize(MoveState);
+        _stateMachine.Initialize(MoveState);
     }
     #endregion
 
@@ -70,16 +70,16 @@ public class Archer : Enemy
     {
         base.InitializeStates();
 
-        IdleState = new Archer_IdleState(this, StateMachine, "idle", _idleStateData);
-        MoveState = new Archer_MoveState(this, StateMachine, "walk", _moveStateData);
-        PlayerDetectedState = new Archer_PlayerDetectedState(this, StateMachine, "playerDetected", _playerDetectedStateData);
-        LookForPlayerState = new Archer_LookForPlayerState(this, StateMachine, "lookForPlayer", _lookForPlayerStateData);
-        StunState = new Archer_StunState(this, StateMachine, "stun", _stunStateData);
-        DeadState = new Archer_DeadState(this, StateMachine, "dead", _deadStateData);
-        DodgeState = new Archer_DodgeState(this, StateMachine, "dodge", _dodgeStateData);
+        IdleState = new Archer_IdleState(this, _stateMachine, "idle", _idleStateData);
+        MoveState = new Archer_MoveState(this, _stateMachine, "walk", _moveStateData);
+        PlayerDetectedState = new Archer_PlayerDetectedState(this, _stateMachine, "playerDetected", _playerDetectedStateData);
+        LookForPlayerState = new Archer_LookForPlayerState(this, _stateMachine, "lookForPlayer", _lookForPlayerStateData);
+        StunState = new Archer_StunState(this, _stateMachine, "stun", _stunStateData);
+        DeadState = new Archer_DeadState(this, _stateMachine, "dead", _deadStateData);
+        DodgeState = new Archer_DodgeState(this, _stateMachine, "dodge", _dodgeStateData);
 
-        MeleeAttackState = new Archer_MeleeAttackState(this, StateMachine, "meleeAttack", _meleeAttackStateData);
-        RangedAttackState = new Archer_RangedAttackState(this, StateMachine, "rangedAttack", _rangedAttackStateData);
+        MeleeAttackState = new Archer_MeleeAttackState(this, _stateMachine, "meleeAttack", _meleeAttackStateData);
+        RangedAttackState = new Archer_RangedAttackState(this, _stateMachine, "rangedAttack", _rangedAttackStateData);
     }
 
     public override void Damage(AttackDetails attackdetails)                        // Called when taking damage (message sent from attacker)
@@ -87,13 +87,13 @@ public class Archer : Enemy
         base.Damage(attackdetails);
 
         if (IsDead)
-            StateMachine.ChangeState(DeadState);
-        else if (IsStuned && StateMachine.CurrentState != StunState)
-            StateMachine.ChangeState(StunState);
-        else if (!IsStuned && Rigidbody.velocity.x != 0)
-            StateMachine.ChangeState(LookForPlayerState);
+            _stateMachine.ChangeState(DeadState);
+        else if (IsStuned && _stateMachine.CurrentState != StunState)
+            _stateMachine.ChangeState(StunState);
+        else if (!IsStuned && _rigidbody.velocity.x != 0)
+            _stateMachine.ChangeState(LookForPlayerState);
         else if (!IsStuned && CheckPlayerInMinAgroRange())
-            StateMachine.ChangeState(RangedAttackState);
+            _stateMachine.ChangeState(RangedAttackState);
     }
 
     public override void OnDrawGizmos()

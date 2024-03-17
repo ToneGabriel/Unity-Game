@@ -24,15 +24,15 @@ public abstract class Enemy : Entity                                            
     {
         base.LogicUpdate();
 
-        StateMachine.CurrentState.LogicUpdate();
-        Animator.SetFloat("velocityY", Rigidbody.velocity.y);
+        _stateMachine.CurrentState.LogicUpdate();
+        _animator.SetFloat("velocityY", _rigidbody.velocity.y);
     }
 
     protected override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
 
-        StateMachine.CurrentState.PhysicsUpdate();                                      // FixedUpdate for current state
+        _stateMachine.CurrentState.PhysicsUpdate();                                      // FixedUpdate for current state
     }
     #endregion
 

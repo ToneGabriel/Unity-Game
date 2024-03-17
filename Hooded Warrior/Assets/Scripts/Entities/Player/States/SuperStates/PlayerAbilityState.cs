@@ -1,40 +1,44 @@
 ﻿
-public abstract class PlayerAbilityState : PlayerState
+public sealed partial class Player
 {
-    protected bool _isAbilityDone;
-    protected bool _isTouchingCeiling;
-    protected bool _isGrounded;
-
-    public PlayerAbilityState(Player player, FiniteStateMachine stateMachine, Data_Player dataPlayer, string animBoolName) 
-        : base(player, stateMachine, dataPlayer, animBoolName)
-    { }
-
-    public override void Enter()
+    private abstract partial class PlayerAbilityState
     {
-        base.Enter();
-        _isAbilityDone = false;
-    }
+        protected bool _isAbilityDone;
+        protected bool _isTouchingCeiling;
+        protected bool _isGrounded;
 
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
+        public PlayerAbilityState(Player player, FiniteStateMachine stateMachine, Data_Player dataPlayer, string animBoolName)
+            : base(player, stateMachine, dataPlayer, animBoolName)
+        { }
 
-        if (_isAbilityDone)
+        public override void Enter()
         {
-            if (_isTouchingCeiling)
-                _stateMachine.ChangeState(_player.CrouchIdleState);
-            else if (_isGrounded && _player.Rigidbody.velocity.y < 0.01f)
-                _stateMachine.ChangeState(_player.IdleState);
-            else
-                _stateMachine.ChangeState(_player.InAirState);
+            base.Enter();
+            _isAbilityDone = false;
+        }
+
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+
+            if (_isAbilityDone)
+            {
+                if (_isTouchingCeiling)
+                    _stateMachine.ChangeState(_player._crouchIdleState);
+                else if (_isGrounded && _player._rigidbody.velocity.y < 0.01f)
+                    _stateMachine.ChangeState(_player._idleState);
+                else
+                    _stateMachine.ChangeState(_player._inAirState);
+            }
+        }
+
+        public override void DoChecks()
+        {
+            base.DoChecks();
+
+            _isGrounded = _player.CheckIfGrounded();
+            _isTouchingCeiling = _player.CheckIfTouchingCeiling();
         }
     }
 
-    public override void DoChecks()
-    {
-        base.DoChecks();
-
-        _isGrounded = _player.CheckIfGrounded();
-        _isTouchingCeiling = _player.CheckIfTouchingCeiling();
-    }
 }

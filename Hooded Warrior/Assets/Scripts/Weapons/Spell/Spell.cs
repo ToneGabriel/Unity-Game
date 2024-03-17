@@ -4,7 +4,7 @@ public class Spell : MonoBehaviour, ICooldown
 {
     public bool IsOnCooldown { get; private set; }
 
-    protected PlayerSpellState _spellState;
+    protected State _spellState;
     protected float _spellHoldStartTime;
     protected float _cooldownStartTime;
 
@@ -14,7 +14,7 @@ public class Spell : MonoBehaviour, ICooldown
     [SerializeField] protected SpellData _spellData;
 
     #region Spell Logic
-    public void InitializeSpell(PlayerSpellState spellState)
+    public void InitializeSpell(State spellState)
     {
         _spellState = spellState;
     }

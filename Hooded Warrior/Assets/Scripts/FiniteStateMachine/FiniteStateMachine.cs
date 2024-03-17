@@ -1,5 +1,5 @@
 
-public class FiniteStateMachine
+public sealed class FiniteStateMachine
 {
     public State CurrentState { get; private set; }
 
@@ -9,10 +9,10 @@ public class FiniteStateMachine
         CurrentState.Enter();
     }
 
-    public void ChangeState(State newState)
+    public void ChangeState(State otherState)
     {
         CurrentState.Exit();
-        CurrentState = newState;
+        CurrentState = otherState;
         CurrentState.Enter();
     }
 }

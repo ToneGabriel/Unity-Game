@@ -1,31 +1,33 @@
 ﻿
-public class PlayerIdleState : PlayerGroundedState
+public sealed partial class Player
 {
-    public PlayerIdleState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName) 
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
-
-    public override void Enter()
+    private sealed partial class PlayerIdleState
     {
-        base.Enter();
+        public PlayerIdleState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+            : base(player, stateMachine, playerData, animBoolName) { }
 
-        _player.SetVelocityX(0f);
-    }
+        public override void Enter()
+        {
+            base.Enter();
 
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
+            _player.SetVelocityX(0f);
+        }
 
-        if (_inputX != 0)
-            _stateMachine.ChangeState(_player.MoveState);
-        else if (_inputY == -1)
-            _stateMachine.ChangeState(_player.CrouchIdleState);
-    }
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
 
-    public override void PhysicsUpdate()
-    {
-        base.PhysicsUpdate();
+            if (_inputX != 0)
+                _stateMachine.ChangeState(_player._moveState);
+            else if (_inputY == -1)
+                _stateMachine.ChangeState(_player._crouchIdleState);
+        }
 
-        _player.SetVelocityX(0f);
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            _player.SetVelocityX(0f);
+        }
     }
 }

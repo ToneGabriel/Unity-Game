@@ -1,58 +1,61 @@
 ﻿
-public class PlayerSpellState : PlayerAbilityState
+public sealed partial class Player
 {
-    public Spell Spell { get; private set; }
-    public bool IsHolding { get; private set; }
-
-    public PlayerSpellState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName) 
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
-
-    public override void Enter()
+    private sealed partial class PlayerSpellState
     {
-        base.Enter();
+        public Spell Spell { get; private set; }
+        public bool IsHolding { get; private set; }
 
-        Spell.EnterSpell();
-    }
+        public PlayerSpellState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+            : base(player, stateMachine, playerData, animBoolName)
+        { }
 
-    public override void Exit()
-    {
-        base.Exit();
+        public override void Enter()
+        {
+            base.Enter();
 
-        Spell.ExitSpell();
-    }
+            Spell.EnterSpell();
+        }
 
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
+        public override void Exit()
+        {
+            base.Exit();
 
-        IsHolding = _player.InputHandler.SpellCastInput;
+            Spell.ExitSpell();
+        }
 
-        if (!IsHolding && !Spell.IsOnCooldown)
-            Spell.CastSpell();
-    }
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
 
-    public void SetSpell(Spell spell)
-    {
-        if (Spell != null)
-            Spell.gameObject.SetActive(false);
+            IsHolding = _player._inputHandler.SpellCastInput;
 
-        Spell = spell;
-        spell.InitializeSpell(this);
-        Spell.gameObject.SetActive(true);
-    }
+            if (!IsHolding && !Spell.IsOnCooldown)
+                Spell.CastSpell();
+        }
 
-    public override void AnimationTrigger()
-    {
-        base.AnimationTrigger();
+        public void SetSpell(Spell spell)
+        {
+            if (Spell != null)
+                Spell.gameObject.SetActive(false);
 
-        _player.SetVelocityZero();
-    }
+            Spell = spell;
+            spell.InitializeSpell(this);
+            Spell.gameObject.SetActive(true);
+        }
 
-    public override void AnimationFinishTrigger()
-    {
-        base.AnimationFinishTrigger();
+        public override void AnimationTrigger()
+        {
+            base.AnimationTrigger();
 
-        _isAbilityDone = true;
+            _player.SetVelocityZero();
+        }
+
+        public override void AnimationFinishTrigger()
+        {
+            base.AnimationFinishTrigger();
+
+            _isAbilityDone = true;
+        }
     }
 }
