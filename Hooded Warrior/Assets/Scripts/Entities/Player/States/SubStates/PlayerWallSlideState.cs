@@ -1,25 +1,22 @@
 ﻿
-public sealed partial class Player
+public sealed class PlayerWallSlideState : PlayerTouchingWallState
 {
-    private sealed partial class PlayerWallSlideState
+    public PlayerWallSlideState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+        : base(player, stateMachine, playerData, animBoolName)
+    { }
+
+    public override void LogicUpdate()
     {
-        public PlayerWallSlideState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-            : base(player, stateMachine, playerData, animBoolName)
-        { }
+        base.LogicUpdate();
 
-        public override void LogicUpdate()
-        {
-            base.LogicUpdate();
+        _player.SetVelocityY(-_dataPlayer.WallSlideVelocity);
+        _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
 
-            _player.SetVelocityY(-_dataPlayer.WallSlideVelocity);
-            _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
-
-            if (_grabInput && _inputY == 0)
-                _stateMachine.ChangeState(_player._wallGrabState);
-            else if (_jumpInput && _isTouchingWall)
-                _stateMachine.ChangeState(_player._wallJumpState);
-            else if (!_grabInput && _inputX != 0 && _inputX != _player.FacingDirection)
-                _stateMachine.ChangeState(_player._inAirState);
-        }
+        if (_grabInput && _inputY == 0)
+            _stateMachine.ChangeState(_player._wallGrabState);
+        else if (_jumpInput && _isTouchingWall)
+            _stateMachine.ChangeState(_player._wallJumpState);
+        else if (!_grabInput && _inputX != 0 && _inputX != _player.FacingDirection)
+            _stateMachine.ChangeState(_player._inAirState);
     }
 }

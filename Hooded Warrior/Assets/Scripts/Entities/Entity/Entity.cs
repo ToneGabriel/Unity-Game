@@ -1,55 +1,35 @@
 using UnityEngine;
 
-public abstract partial class Entity : MonoBehaviour, ISaveable, IDamageble
+public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 {
-    #region State Declarations
-    protected abstract partial class EntityState : State { }
-    #endregion
-
     #region Components & Data
-    [Header("Entity Components")]
-    [SerializeField] protected HealthBar    _healthBar;
-    [SerializeField] protected GameObject   _groundCheck;
-    [SerializeField] protected GameObject   _environmentCheck;
-    [SerializeField] protected GameObject   _ledgeCheck;
-    [SerializeField] protected Data_Entity  _dataEntity;
-
-    protected Rigidbody2D                   _rigidbody;
-    protected Animator                      _animator;
-    protected BoxCollider2D                 _boxCollider;
-    protected FiniteStateMachine            _stateMachine;
+    [SerializeField] protected EntityObjectComponents   _objectComponents;
+    protected EntityStatusComponents                    _statusComponents;
+    protected FiniteStateMachine                        _stateMachine;
+    protected Vector2                                   _workspaceVector2;
     #endregion
 
-    #region Other Variables
-    public int      FacingDirection         { get; protected set; }
-    public int      LastDamageDirection     { get; protected set; }
-    public float    LastDamageTime          { get; protected set; }
-    public float    CurrentHealth           { get; protected set; }
-    public float    CurrentStunResistance   { get; protected set; }
-    public bool     IsDead                  { get; protected set; }
-    public bool     IsStuned                { get; protected set; }
-
-    protected Vector2 _workspaceVector2;
+    #region Getters
+    public EntityObjectComponents ObjectComponents { get { return _objectComponents; } }
+    public EntityStatusComponents StatusComponents { get { return _statusComponents; } }
     #endregion
 
     #region Unity functions
     protected virtual void Awake()
     {
-        _animator           = GetComponent<Animator>();
-        _rigidbody          = GetComponent<Rigidbody2D>();
-        _boxCollider        = GetComponent<BoxCollider2D>();
-        FacingDirection     = 1;
-        CurrentHealth       = _dataEntity.MaxHealth;
-        _healthBar.SetMaxHealth(_dataEntity.MaxHealth);
-
-        InitializeStates();
+        _objectComponents.Animator          = GetComponent<Animator>();
+        _objectComponents.Rigidbody         = GetComponent<Rigidbody2D>();
+        _objectComponents.BoxCollider       = GetComponent<BoxCollider2D>();
+        _objectComponents.HealthBar.SetMaxHealth(_objectComponents.DataEntity.MaxHealth);
+        _statusComponents.FacingDirection   = 1;
+        _statusComponents.CurrentHealth     = _objectComponents.DataEntity.MaxHealth;
     }
 
     protected virtual void OnEnable()
     {
-        _healthBar.SetHealthBar(CurrentHealth);
-        IsDead = false;
-        IsStuned = false;
+        _objectComponents.HealthBar.SetHealthBar(_statusComponents.CurrentHealth);
+        _statusComponents.IsDead    = false;
+        _statusComponents.IsStuned  = false;
     }
 
     protected virtual void Start()
@@ -71,7 +51,7 @@ public abstract partial class Entity : MonoBehaviour, ISaveable, IDamageble
 
     protected virtual void LogicUpdate() 
     {
-        if (Time.time >= LastDamageTime + _dataEntity.StunRecoveryTime)
+        if (Time.time >= _statusComponents.LastDamageTime + _objectComponents.DataEntity.StunRecoveryTime)
             ResetStunResistnce();
     }
 
@@ -79,50 +59,50 @@ public abstract partial class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Setters
-    protected virtual void InitializeStates()
+    public void ChangeState(int stateID)
     {
-        _stateMachine = new FiniteStateMachine();
+        _stateMachine.ChangeState(stateID);
     }
 
     public void SetVelocityZero()
     {
-        _rigidbody.velocity = Vector2.zero;
+        _objectComponents.Rigidbody.velocity = Vector2.zero;
     }
 
     public void SetVelocityX(float velocity)
     {
-        _workspaceVector2.Set(velocity, _rigidbody.velocity.y);
-        _rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(velocity, _objectComponents.Rigidbody.velocity.y);
+        _objectComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocityY(float velocity)
     {
-        _workspaceVector2.Set(_rigidbody.velocity.x, velocity);
-        _rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(_objectComponents.Rigidbody.velocity.x, velocity);
+        _objectComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity, Vector2 direction)
     {
         _workspaceVector2 = direction * velocity;
-        _rigidbody.velocity = _workspaceVector2;
+        _objectComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity, Vector2 angle, int direction)
     {
         angle.Normalize();
         _workspaceVector2.Set(angle.x * velocity * direction, angle.y * velocity);
-        _rigidbody.velocity = _workspaceVector2;
+        _objectComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity)                                     // Set velocity towards facing direction
     {
-        _workspaceVector2.Set(FacingDirection * velocity, _rigidbody.velocity.y);
-        _rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(_statusComponents.FacingDirection * velocity, _objectComponents.Rigidbody.velocity.y);
+        _objectComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void Flip()
     {
-        FacingDirection *= -1;
+        _statusComponents.FacingDirection *= -1;
         transform.Rotate(0f, -180f, 0f);
     }
     #endregion
@@ -130,22 +110,22 @@ public abstract partial class Entity : MonoBehaviour, ISaveable, IDamageble
     #region Checkers
     public bool CheckIfGrounded()
     {
-        return Physics2D.OverlapCircle(_groundCheck.transform.position, _dataEntity.GroundCheckRadius, _dataEntity.WhatIsGround);
+        return Physics2D.OverlapCircle(_objectComponents.GroundCheck.transform.position, _objectComponents.DataEntity.GroundCheckRadius, _objectComponents.DataEntity.WhatIsGround);
     }
 
     public bool CheckIfTouchingWall()
     {
-        return Physics2D.Raycast(_environmentCheck.transform.position, transform.right, _dataEntity.EnvironmentCheckDistance, _dataEntity.WhatIsGround);
+        return Physics2D.Raycast(_objectComponents.EnvironmentCheck.transform.position, transform.right, _objectComponents.DataEntity.EnvironmentCheckDistance, _objectComponents.DataEntity.WhatIsGround);
     }
 
     public bool CheckIfTouchingLedge(Vector3 direction)
     {
-        return Physics2D.Raycast(_ledgeCheck.transform.position, direction, _dataEntity.EnvironmentCheckDistance, _dataEntity.WhatIsGround);
+        return Physics2D.Raycast(_objectComponents.LedgeCheck.transform.position, direction, _objectComponents.DataEntity.EnvironmentCheckDistance, _objectComponents.DataEntity.WhatIsGround);
     }
 
     public bool CheckIfTouchingCeiling()
     {
-        return Physics2D.OverlapCircle(_ledgeCheck.transform.position, _dataEntity.GroundCheckRadius, _dataEntity.WhatIsGround);
+        return Physics2D.OverlapCircle(_objectComponents.LedgeCheck.transform.position, _objectComponents.DataEntity.GroundCheckRadius, _objectComponents.DataEntity.WhatIsGround);
     }
     #endregion
 
@@ -153,16 +133,16 @@ public abstract partial class Entity : MonoBehaviour, ISaveable, IDamageble
     public virtual void Damage(AttackDetails attackDetails) 
     {
         if (attackDetails.Position.x < transform.position.x)
-            LastDamageDirection = -1;
+            _statusComponents.LastDamageDirection = -1;
         else
-            LastDamageDirection = 1;
+            _statusComponents.LastDamageDirection = 1;
 
         if(CanTakeDamage())
         {
             AdditionalDamageActions(attackDetails);
 
-            CurrentHealth -= attackDetails.DamageAmount;
-            _healthBar.SetHealthBar(CurrentHealth);
+            _statusComponents.CurrentHealth -= attackDetails.DamageAmount;
+            _objectComponents.HealthBar.SetHealthBar(_statusComponents.CurrentHealth);
             ObjectPoolManager.Instance.GetFromPool<HitParticleController>(transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
 
             CheckStatus();
@@ -174,28 +154,28 @@ public abstract partial class Entity : MonoBehaviour, ISaveable, IDamageble
     public virtual void AdditionalDamageActions(AttackDetails attackDetails)
     {
         //DamageHop(_dataEntity.DamageHopDirection, _dataEntity.DamageHopSpeed);
-        if (LastDamageDirection != FacingDirection)
+        if (_statusComponents.LastDamageDirection != _statusComponents.FacingDirection)
             Flip();
     }
 
     public virtual void CheckStatus()
     {
-        if (CurrentHealth <= 0)
-            IsDead = true;
+        if (_statusComponents.CurrentHealth <= 0)
+            _statusComponents.IsDead = true;
     }
 
     public virtual void ResetStunResistnce()
     {
-        IsStuned = false;
-        CurrentStunResistance = _dataEntity.StunResistance;
+        _statusComponents.IsStuned = false;
+        _statusComponents.CurrentStunResistance = _objectComponents.DataEntity.StunResistance;
     }
 
     public void DamageHop(Vector2 direction, float velocity)
     {
-        if (_rigidbody.bodyType == RigidbodyType2D.Dynamic)
+        if (_objectComponents.Rigidbody.bodyType == RigidbodyType2D.Dynamic)
         {
-            direction.Set(direction.x * LastDamageDirection * (-1), direction.y);
-            _rigidbody.velocity = direction * velocity;
+            direction.Set(direction.x * _statusComponents.LastDamageDirection * (-1), direction.y);
+            _objectComponents.Rigidbody.velocity = direction * velocity;
         }
     }
     #endregion

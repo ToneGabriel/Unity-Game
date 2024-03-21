@@ -1,34 +1,7 @@
 ﻿using UnityEngine;
 
-public sealed partial class Player : Entity
+public sealed class Player : Entity
 {
-    #region State Declarations
-    private abstract partial class PlayerState              : EntityState { }
-
-    private abstract partial class PlayerAbilityState       : PlayerState { }
-    private abstract partial class PlayerGroundedState      : PlayerState { }
-    private abstract partial class PlayerTouchingWallState  : PlayerState { }
-
-    private sealed partial class PlayerIdleState            : PlayerGroundedState { }
-    private sealed partial class PlayerMoveState            : PlayerGroundedState { }
-    private sealed partial class PlayerJumpState            : PlayerAbilityState { }
-    private sealed partial class PlayerInAirState           : PlayerState { }
-    private sealed partial class PlayerLandState            : PlayerGroundedState { }
-    private sealed partial class PlayerWallGrabState        : PlayerTouchingWallState { }
-    private sealed partial class PlayerWallSlideState       : PlayerTouchingWallState { }
-    private sealed partial class PlayerWallClimbState       : PlayerTouchingWallState { }
-    private sealed partial class PlayerWallJumpState        : PlayerAbilityState { }
-    private sealed partial class PlayerLedgeClimbState      : PlayerState { }
-    private sealed partial class PlayerDashState            : PlayerAbilityState { }
-    private sealed partial class PlayerCrouchIdleState      : PlayerGroundedState { }
-    private sealed partial class PlayerCrouchMoveState      : PlayerGroundedState { }
-    private sealed partial class PlayerRollState            : PlayerAbilityState { }
-
-    private sealed partial class PlayerAttackState          : PlayerAbilityState { }
-    private sealed partial class PlayerDefendState          : PlayerAbilityState { }
-    private sealed partial class PlayerSpellState           : PlayerAbilityState { }
-    #endregion State Declarations
-
     #region Components & Data
     [SerializeField] private PlayerInputHandler _inputHandler;
     [SerializeField] private PlayerInventory    _inventory;
@@ -37,26 +10,26 @@ public sealed partial class Player : Entity
     [SerializeField] private Data_Player        _dataPlayer;
     #endregion
 
-    #region States
-    private PlayerIdleState         _idleState;
-    private PlayerMoveState         _moveState;
-    private PlayerJumpState         _jumpState;
-    private PlayerInAirState        _inAirState;
-    private PlayerLandState         _landState;
-    private PlayerWallGrabState     _wallGrabState;
-    private PlayerWallSlideState    _wallSlideState;
-    private PlayerWallClimbState    _wallClimbState;
-    private PlayerWallJumpState     _wallJumpState;
-    private PlayerLedgeClimbState   _ledgeClimbState;
-    private PlayerDashState         _dashState;
-    private PlayerCrouchIdleState   _crouchIdleState;
-    private PlayerCrouchMoveState   _crouchMoveState;
-    private PlayerRollState         _rollState;
+    //#region States
+    //private PlayerIdleState         _idleState;
+    //private PlayerMoveState         _moveState;
+    //private PlayerJumpState         _jumpState;
+    //private PlayerInAirState        _inAirState;
+    //private PlayerLandState         _landState;
+    //private PlayerWallGrabState     _wallGrabState;
+    //private PlayerWallSlideState    _wallSlideState;
+    //private PlayerWallClimbState    _wallClimbState;
+    //private PlayerWallJumpState     _wallJumpState;
+    //private PlayerLedgeClimbState   _ledgeClimbState;
+    //private PlayerDashState         _dashState;
+    //private PlayerCrouchIdleState   _crouchIdleState;
+    //private PlayerCrouchMoveState   _crouchMoveState;
+    //private PlayerRollState         _rollState;
 
-    private PlayerAttackState       _primaryAttackState;
-    private PlayerDefendState       _secondaryDefendState;
-    private PlayerSpellState        _spellCastState;
-    #endregion
+    //private PlayerAttackState       _primaryAttackState;
+    //private PlayerDefendState       _secondaryDefendState;
+    //private PlayerSpellState        _spellCastState;
+    //#endregion
 
     #region Others
     private int _weaponIndex;
@@ -69,6 +42,8 @@ public sealed partial class Player : Entity
         _inputHandler    = GetComponent<PlayerInputHandler>();
         _inventory       = GetComponent<PlayerInventory>();
 
+        InitializeStates();
+
         base.Awake();
     }
 
@@ -76,7 +51,7 @@ public sealed partial class Player : Entity
     {
         base.OnEnable();
 
-        _stateMachine.Initialize(_idleState);
+        _stateMachine.InitializeState((int)PlayerStateID.Idle);
     }
 
     protected override void Start()
@@ -104,31 +79,30 @@ public sealed partial class Player : Entity
     #endregion
 
     #region Setters
-    protected override void InitializeStates()
+    private void InitializeStates()
     {
-        base.InitializeStates();
+        _stateMachine   = new FiniteStateMachine((int)PlayerStateID.Count);
 
-        _idleState              = new PlayerIdleState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Idle_b);
-        _moveState              = new PlayerMoveState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Move_b);
-        _jumpState              = new PlayerJumpState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b);
-        _inAirState             = new PlayerInAirState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b);
-        _landState              = new PlayerLandState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Land_b);
-        _wallSlideState         = new PlayerWallSlideState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallSlide_b);
-        _wallGrabState          = new PlayerWallGrabState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallGrab_b);
-        _wallClimbState         = new PlayerWallClimbState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallClimb_b);
-        _wallJumpState          = new PlayerWallJumpState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b);
-        _ledgeClimbState        = new PlayerLedgeClimbState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.LedgeClimbState_b);
-        _dashState              = new PlayerDashState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b);
-        _crouchIdleState        = new PlayerCrouchIdleState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.CrouchIdle_b);
-        _crouchMoveState        = new PlayerCrouchMoveState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.CrouchMove_b);
-        _rollState              = new PlayerRollState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Roll_b);
+        _stateMachine.AddNewState((int)PlayerStateID.Idle,             new PlayerIdleState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Idle_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Move,             new PlayerMoveState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Move_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Jump,             new PlayerJumpState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b));
+        _stateMachine.AddNewState((int)PlayerStateID.InAir,            new PlayerInAirState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Land,             new PlayerLandState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Land_b));
+        _stateMachine.AddNewState((int)PlayerStateID.WallSlide,        new PlayerWallSlideState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallSlide_b));
+        _stateMachine.AddNewState((int)PlayerStateID.WallGrab,         new PlayerWallGrabState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallGrab_b));
+        _stateMachine.AddNewState((int)PlayerStateID.WallClimb,        new PlayerWallClimbState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallClimb_b));
+        _stateMachine.AddNewState((int)PlayerStateID.WallJump,         new PlayerWallJumpState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b));
+        _stateMachine.AddNewState((int)PlayerStateID.LedgeClimb,       new PlayerLedgeClimbState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.LedgeClimbState_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Dash,             new PlayerDashState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b));
+        _stateMachine.AddNewState((int)PlayerStateID.CrouchIdle,       new PlayerCrouchIdleState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.CrouchIdle_b));
+        _stateMachine.AddNewState((int)PlayerStateID.CrouchMove,       new PlayerCrouchMoveState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.CrouchMove_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Roll,             new PlayerRollState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Roll_b));
+        _stateMachine.AddNewState((int)PlayerStateID.PrimaryAttack,    new PlayerAttackState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b));
+        _stateMachine.AddNewState((int)PlayerStateID.SecondaryDefend,  new PlayerDefendState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b));
+        _stateMachine.AddNewState((int)PlayerStateID.SpellCast,        new PlayerSpellState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b));
 
-        _primaryAttackState     = new PlayerAttackState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b);
-        _secondaryDefendState   = new PlayerDefendState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b);
-        _spellCastState         = new PlayerSpellState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b);
-
-        _weaponIndex            = 0;
-        _spellIndex             = 0;
+        _weaponIndex    = 0;
+        _spellIndex     = 0;
 
         _primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
         _secondaryDefendState.SetShield(_inventory.Shield);
@@ -137,13 +111,13 @@ public sealed partial class Player : Entity
 
     public void SetColiderHeight(float height)
     {
-        Vector2 center = _boxCollider.offset;
-        _workspaceVector2.Set(_boxCollider.size.x, height);
+        Vector2 center = _objectComponents.BoxCollider.offset;
+        _workspaceVector2.Set(_objectComponents.BoxCollider.size.x, height);
 
-        center.y += (height - _boxCollider.size.y) / 2;
+        center.y += (height - _objectComponents.BoxCollider.size.y) / 2;
 
-        _boxCollider.size   = _workspaceVector2;
-        _boxCollider.offset = center;
+        _objectComponents.BoxCollider.size   = _workspaceVector2;
+        _objectComponents.BoxCollider.offset = center;
     }
 
     public void SetLightOrbPosition(Vector2 position)
@@ -155,7 +129,7 @@ public sealed partial class Player : Entity
     #region Checkers
     public void CheckIfShouldFlip(int inputX)
     {
-        if (inputX != 0 && inputX != FacingDirection)
+        if (inputX != 0 && inputX != _statusComponents.FacingDirection)
             Flip();
     }
 
@@ -175,7 +149,7 @@ public sealed partial class Player : Entity
     {
         base.Damage(attackDetails);
 
-        if (IsDead)
+        if (_statusComponents.IsDead)
         {
             gameObject.SetActive(false);
             Instantiate(_dataPlayer.DeathBloodParticle, transform.position, _dataPlayer.DeathBloodParticle.transform.rotation);
@@ -185,13 +159,13 @@ public sealed partial class Player : Entity
 
     public override bool CanTakeDamage()
     {
-        return (!_secondaryDefendState.IsHolding || LastDamageDirection != FacingDirection);
+        return (!_secondaryDefendState.IsHolding || _statusComponents.LastDamageDirection != _statusComponents.FacingDirection);
     }
 
     public override void AdditionalDamageActions(AttackDetails attackDetails)
     {
         InterruptActions();
-        DamageHop(_dataEntity.DamageHopDirection, _dataEntity.DamageHopSpeed);
+        DamageHop(_objectComponents.DataEntity.DamageHopDirection, _objectComponents.DataEntity.DamageHopSpeed);
 
         base.AdditionalDamageActions(attackDetails);
     }
@@ -209,8 +183,8 @@ public sealed partial class Player : Entity
     {
         var data = (PlayerSaveData)state;
 
-        CurrentHealth = data.PlayerHealth;
-        FacingDirection = data.PlayerFacingDirection;
+        _statusComponents.CurrentHealth = data.PlayerHealth;
+        _statusComponents.FacingDirection = data.PlayerFacingDirection;
         transform.position = data.PlayerPosition.GetValues();
         transform.rotation = data.PlayerRotation.GetValues();
     }
@@ -219,8 +193,8 @@ public sealed partial class Player : Entity
     #region Other Functions
     public void SetNewGameData()
     {
-        FacingDirection = 1;
-        CurrentHealth = _dataEntity.MaxHealth;
+        _statusComponents.FacingDirection = 1;
+        _statusComponents.CurrentHealth = _objectComponents.DataEntity.MaxHealth;
         transform.position = GameManager.Instance.GameStartPlayerPosition.position;
         transform.rotation = GameManager.Instance.GameStartPlayerPosition.rotation;
     }
@@ -258,13 +232,22 @@ public sealed partial class Player : Entity
 
     public Vector2 DetermineCornerPosition()
     {
-        RaycastHit2D xHit = Physics2D.Raycast(_environmentCheck.transform.position, Vector2.right * FacingDirection, _dataEntity.EnvironmentCheckDistance, _dataEntity.WhatIsGround);
-        float xDistance = xHit.distance;
-        _workspaceVector2.Set(xDistance * FacingDirection, 0f);
+        RaycastHit2D xHit = Physics2D.Raycast(  _objectComponents.EnvironmentCheck.transform.position,
+                                                Vector2.right * _statusComponents.FacingDirection,
+                                                _objectComponents.DataEntity.EnvironmentCheckDistance,
+                                                _objectComponents.DataEntity.WhatIsGround);
 
-        RaycastHit2D yHit = Physics2D.Raycast(_ledgeCheck.transform.position + (Vector3)_workspaceVector2, Vector2.down, _ledgeCheck.transform.position.y - _environmentCheck.transform.position.y, _dataEntity.WhatIsGround);
+        float xDistance = xHit.distance;
+        _workspaceVector2.Set(xDistance * _statusComponents.FacingDirection, 0f);
+
+        RaycastHit2D yHit = Physics2D.Raycast(  _objectComponents.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
+                                                Vector2.down,
+                                                _objectComponents.LedgeCheck.transform.position.y - _objectComponents.EnvironmentCheck.transform.position.y,
+                                                _objectComponents.DataEntity.WhatIsGround);
+
         float yDistance = yHit.distance;
-        _workspaceVector2.Set(_environmentCheck.transform.position.x + xDistance * FacingDirection, _ledgeCheck.transform.position.y - yDistance);
+        _workspaceVector2.Set(  _objectComponents.EnvironmentCheck.transform.position.x + xDistance * _statusComponents.FacingDirection,
+                                _objectComponents.LedgeCheck.transform.position.y - yDistance);
         
         return _workspaceVector2;
     }

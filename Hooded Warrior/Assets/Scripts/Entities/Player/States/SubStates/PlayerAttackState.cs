@@ -1,61 +1,58 @@
 ﻿
-public sealed partial class Player
+public sealed class PlayerAttackState : PlayerAbilityState
 {
-    private sealed partial class PlayerAttackState
+    private Weapon _weapon;
+    private float _velocityToSet;
+    private bool _setVelocity;
+
+    public PlayerAttackState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
+        : base(player, stateMachine, playerData, animBoolName)
+    { }
+
+    public override void Enter()
     {
-        private Weapon _weapon;
-        private float _velocityToSet;
-        private bool _setVelocity;
+        base.Enter();
 
-        public PlayerAttackState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-            : base(player, stateMachine, playerData, animBoolName)
-        { }
+        _setVelocity = false;
+        _weapon.EnterWeapon();
+    }
 
-        public override void Enter()
-        {
-            base.Enter();
+    public override void Exit()
+    {
+        base.Exit();
 
-            _setVelocity = false;
-            _weapon.EnterWeapon();
-        }
+        _weapon.ExitWeapon();
+    }
 
-        public override void Exit()
-        {
-            base.Exit();
+    public override void LogicUpdate()
+    {
+        base.LogicUpdate();
 
-            _weapon.ExitWeapon();
-        }
+        if (_setVelocity)
+            _player.SetVelocityX(_velocityToSet * _player.FacingDirection);
+    }
 
-        public override void LogicUpdate()
-        {
-            base.LogicUpdate();
+    public void SetWeapon(Weapon weapon)
+    {
+        if (_weapon != null)
+            _weapon.gameObject.SetActive(false);
 
-            if (_setVelocity)
-                _player.SetVelocityX(_velocityToSet * _player.FacingDirection);
-        }
+        _weapon = weapon;
+        weapon.InitializeWeapon(this);
+        _weapon.gameObject.SetActive(true);
+    }
 
-        public void SetWeapon(Weapon weapon)
-        {
-            if (_weapon != null)
-                _weapon.gameObject.SetActive(false);
+    public override void AnimationFinishTrigger()
+    {
+        base.AnimationFinishTrigger();
 
-            _weapon = weapon;
-            weapon.InitializeWeapon(this);
-            _weapon.gameObject.SetActive(true);
-        }
+        _isAbilityDone = true;
+    }
 
-        public override void AnimationFinishTrigger()
-        {
-            base.AnimationFinishTrigger();
-
-            _isAbilityDone = true;
-        }
-
-        public void SetPlayerVelocity(float velocity)
-        {
-            _player.SetVelocityX(velocity * _player.FacingDirection);
-            _velocityToSet = velocity;
-            _setVelocity = true;
-        }
+    public void SetPlayerVelocity(float velocity)
+    {
+        _player.SetVelocityX(velocity * _player.FacingDirection);
+        _velocityToSet = velocity;
+        _setVelocity = true;
     }
 }
