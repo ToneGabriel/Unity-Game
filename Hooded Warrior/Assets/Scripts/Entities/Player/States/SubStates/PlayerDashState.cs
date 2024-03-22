@@ -11,9 +11,8 @@ public sealed class PlayerDashState : PlayerAbilityState
     private Vector3 _lastAIPosition;
     private float _lastDashTime;
 
-    public PlayerDashState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerDashState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -25,7 +24,7 @@ public sealed class PlayerDashState : PlayerAbilityState
         _dashDirection = Vector2.right * _player.FacingDirection;
 
         Time.timeScale = _dataPlayer.HoldTimeScale;
-        StartTime = Time.unscaledTime;
+        _player.StatusComponents.StateStartTime = Time.unscaledTime;
 
         _player._dashDirectionIndicator.gameObject.SetActive(true);
     }
@@ -34,8 +33,8 @@ public sealed class PlayerDashState : PlayerAbilityState
     {
         base.Exit();
 
-        if (_player._rigidbody.velocity.y > 0f)
-            _player.SetVelocityY(_player._rigidbody.velocity.y * _dataPlayer.DashEndYMultiplier);
+        if (_player.ObjectComponents.Rigidbody.velocity.y > 0f)
+            _player.SetVelocityY(_player.ObjectComponents.Rigidbody.velocity.y * _dataPlayer.DashEndYMultiplier);
     }
 
     public override void LogicUpdate()
@@ -57,14 +56,14 @@ public sealed class PlayerDashState : PlayerAbilityState
                 float angle = Vector2.SignedAngle(Vector2.right, _dashDirection);
                 _player._dashDirectionIndicator.transform.rotation = Quaternion.Euler(0f, 0f, angle - 45);
 
-                if (_dashInputStop || Time.unscaledTime >= StartTime + _dataPlayer.MaxHoldTime)
+                if (_dashInputStop || Time.unscaledTime >= _player.StatusComponents.StateStartTime + _dataPlayer.MaxHoldTime)
                 {
                     _isHolding = false;
                     Time.timeScale = 1f;
-                    StartTime = Time.time;
+                    _player.StatusComponents.StateStartTime = Time.time;
                     _player.CheckIfShouldFlip(Mathf.RoundToInt(_dashDirection.x));
                     _player.SetVelocity(_dataPlayer.DashVelocity, _dashDirection);
-                    _player._rigidbody.drag = _dataPlayer.Drag;
+                    _player.ObjectComponents.Rigidbody.drag = _dataPlayer.Drag;
                     _player._dashDirectionIndicator.gameObject.SetActive(false);
                     PlaceAfterImage();
                 }
@@ -72,14 +71,14 @@ public sealed class PlayerDashState : PlayerAbilityState
             else
             {
                 _player.SetVelocity(_dataPlayer.DashVelocity, _dashDirection);
-                _player._animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player._rigidbody.velocity.y);
-                _player._animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player._rigidbody.velocity.x));
+                _player.ObjectComponents.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.ObjectComponents.Rigidbody.velocity.y);
+                _player.ObjectComponents.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.ObjectComponents.Rigidbody.velocity.x));
 
                 CheckIfShouldPlaceAfterImage();
 
-                if (Time.time >= StartTime + _dataPlayer.DashTime)
+                if (Time.time >= _player.StatusComponents.StateStartTime + _dataPlayer.DashTime)
                 {
-                    _player._rigidbody.drag = 0f;
+                    _player.ObjectComponents.Rigidbody.drag = 0f;
                     _isAbilityDone = true;
                     _lastDashTime = Time.time;
                 }

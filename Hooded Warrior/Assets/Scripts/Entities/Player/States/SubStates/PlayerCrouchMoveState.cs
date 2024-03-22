@@ -1,9 +1,8 @@
 ﻿
 public sealed class PlayerCrouchMoveState : PlayerGroundedState
 {
-    public PlayerCrouchMoveState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerCrouchMoveState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -26,9 +25,9 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
         base.LogicUpdate();
 
         if (_inputX == 0)
-            _stateMachine.ChangeState(_player._crouchIdleState);
+            _player.ChangeState((int)PlayerStateID.CrouchIdle);
         else if (_inputY != -1 && !_isTouchingCeiling)
-            _stateMachine.ChangeState(_player._moveState);
+            _player.ChangeState((int)PlayerStateID.Move);
     }
 
     public override void PhysicsUpdate()

@@ -4,9 +4,8 @@ public sealed class PlayerSpellState : PlayerAbilityState
     public Spell Spell { get; private set; }
     public bool IsHolding { get; private set; }
 
-    public PlayerSpellState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerSpellState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {

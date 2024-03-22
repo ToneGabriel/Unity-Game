@@ -1,9 +1,8 @@
 ﻿
 public sealed class PlayerWallSlideState : PlayerTouchingWallState
 {
-    public PlayerWallSlideState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerWallSlideState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void LogicUpdate()
     {
@@ -13,10 +12,10 @@ public sealed class PlayerWallSlideState : PlayerTouchingWallState
         _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
 
         if (_grabInput && _inputY == 0)
-            _stateMachine.ChangeState(_player._wallGrabState);
+            _player.ChangeState((int)PlayerStateID.WallGrab);
         else if (_jumpInput && _isTouchingWall)
-            _stateMachine.ChangeState(_player._wallJumpState);
-        else if (!_grabInput && _inputX != 0 && _inputX != _player.FacingDirection)
-            _stateMachine.ChangeState(_player._inAirState);
+            _player.ChangeState((int)PlayerStateID.WallJump);
+        else if (!_grabInput && _inputX != 0 && _inputX != _player.StatusComponents.FacingDirection)
+            _player.ChangeState((int)PlayerStateID.InAir);
     }
 }

@@ -20,9 +20,8 @@ public abstract class PlayerGroundedState : PlayerState
     protected bool _canCastSpell;
 
 
-    public PlayerGroundedState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerGroundedState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -49,25 +48,25 @@ public abstract class PlayerGroundedState : PlayerState
         _player.CheckIfShouldFlip(_inputX);
 
         if (_primaryAttackInput && !_isTouchingCeiling)
-            _stateMachine.ChangeState((int)PlayerStateID.PrimaryAttack);
+            _player.ChangeState((int)PlayerStateID.PrimaryAttack);
         else if (_secondaryDefendInput && !_isTouchingCeiling && _canDefend)
-            _stateMachine.ChangeState((int)PlayerStateID.SecondaryDefend);
+            _player.ChangeState((int)PlayerStateID.SecondaryDefend);
         else if (_spellCastInput && !_isTouchingCeiling && _canCastSpell)
-            _stateMachine.ChangeState((int)PlayerStateID.SpellCast);
+            _player.ChangeState((int)PlayerStateID.SpellCast);
         else if (_jumpInput && _player._jumpState.CanJump())
         {
             _player._inputHandler.UseJumpInput();
-            _stateMachine.ChangeState((int)PlayerStateID.Jump);
+            _player.ChangeState((int)PlayerStateID.Jump);
         }
         else if (!_isGrounded)
         {
             _player._jumpState.DecreaseAmountOfJumpsLeft();
-            _stateMachine.ChangeState((int)PlayerStateID.InAir);
+            _player.ChangeState((int)PlayerStateID.InAir);
         }
         else if (_isTouchingWall && _grabInput && _isTouchingLedge)
-            _stateMachine.ChangeState((int)PlayerStateID.WallGrab);
+            _player.ChangeState((int)PlayerStateID.WallGrab);
         else if (_dashInput && _player._dashState.CheckIfCanDash() && !_isTouchingCeiling)
-            _stateMachine.ChangeState((int)PlayerStateID.Dash);
+            _player.ChangeState((int)PlayerStateID.Dash);
     }
 
     public override void DoChecks()

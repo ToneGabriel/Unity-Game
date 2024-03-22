@@ -3,8 +3,8 @@ public sealed class PlayerJumpState : PlayerAbilityState
 {
     private int _amountOfJumpsLeft;
 
-    public PlayerJumpState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
+    public PlayerJumpState(Player player, string animBoolName)
+        : base(player, animBoolName)
     {
         _amountOfJumpsLeft = playerData.AmountOfJumps;
     }

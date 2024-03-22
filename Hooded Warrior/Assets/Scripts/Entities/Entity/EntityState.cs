@@ -1,41 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
 public abstract class EntityState : State
 {
-    public float StartTime { get; protected set; }
+    protected Entity _entity;
+    protected string _animBoolName;     // Animation bool name for each state
 
-    protected FiniteStateMachine _stateMachine;                                              // Reference to state change engine
-    protected string _animBoolName;                                                          // Animation bool name for each state
-    protected bool _isAnimationFinished;
-    protected Vector2 _workspaceVector2;
-
-    public EntityState(FiniteStateMachine stateMachine, string animBoolName)
+    public EntityState(Entity entity, string animBoolName)
     {
-        _stateMachine = stateMachine;
-        _animBoolName = animBoolName;
+        _entity         = entity;
+        _animBoolName   = animBoolName;
     }
 
-    public override void Enter()                                                             // Called when enter state
+    public override void Enter()
     {
-        StartTime = Time.time;
+        _entity.StatusComponents.StateStartTime             = Time.time;
+        _entity.StatusComponents.IsStateAnimationFinished   = false;
+        _entity.ObjectComponents.Animator.SetBool(_animBoolName, true);
+
         DoChecks();
     }
 
-    public override void Exit() { }                                                          // Called when exit state
+    public override void Exit()
+    {
+        _entity.ObjectComponents.Animator.SetBool(_animBoolName, false);
+    }
 
-    public override void LogicUpdate() { }                                                   // Update (only while current state is active)
+    public override void LogicUpdate() { }
 
-    public override void PhysicsUpdate() => DoChecks();                                      // FixedUpdate (only while current state is active)
+    public override void PhysicsUpdate() => DoChecks();
 
-    public override void DoChecks() { }                                                      // Checks for position/attack
+    public override void DoChecks() { }
 
     public override void AnimationTrigger() { }
 
     public override void AnimationFinishTrigger()
     {
-        _isAnimationFinished = true;
+        _entity.StatusComponents.IsStateAnimationFinished = true;
     }
 }

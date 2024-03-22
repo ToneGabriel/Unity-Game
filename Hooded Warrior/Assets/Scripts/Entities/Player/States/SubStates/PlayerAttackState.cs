@@ -5,9 +5,8 @@ public sealed class PlayerAttackState : PlayerAbilityState
     private float _velocityToSet;
     private bool _setVelocity;
 
-    public PlayerAttackState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerAttackState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {

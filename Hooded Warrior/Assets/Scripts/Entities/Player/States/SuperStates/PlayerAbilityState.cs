@@ -5,9 +5,8 @@ public abstract class PlayerAbilityState : PlayerState
     protected bool _isTouchingCeiling;
     protected bool _isGrounded;
 
-    public PlayerAbilityState(Player player, FiniteStateMachine stateMachine, Data_Player dataPlayer, string animBoolName)
-        : base(player, stateMachine, dataPlayer, animBoolName)
-    { }
+    public PlayerAbilityState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -22,11 +21,11 @@ public abstract class PlayerAbilityState : PlayerState
         if (_isAbilityDone)
         {
             if (_isTouchingCeiling)
-                _stateMachine.ChangeState(_player._crouchIdleState);
+                _player.ChangeState(_player._crouchIdleState);
             else if (_isGrounded && _player._rigidbody.velocity.y < 0.01f)
-                _stateMachine.ChangeState(_player._idleState);
+                _player.ChangeState(_player._idleState);
             else
-                _stateMachine.ChangeState(_player._inAirState);
+                _player.ChangeState(_player._inAirState);
         }
     }
 

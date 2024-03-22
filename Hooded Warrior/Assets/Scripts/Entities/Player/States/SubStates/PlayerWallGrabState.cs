@@ -1,15 +1,17 @@
-﻿
+﻿using UnityEngine;
+
 public sealed class PlayerWallGrabState : PlayerTouchingWallState
 {
-    public PlayerWallGrabState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    private Vector3 _workspaceVector3;
+
+    public PlayerWallGrabState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
         base.Enter();
 
-        _workspaceVector2 = _player.transform.position;
+        _workspaceVector3 = _player.transform.position;
         HoldPosition();
     }
 
@@ -20,14 +22,14 @@ public sealed class PlayerWallGrabState : PlayerTouchingWallState
         HoldPosition();
 
         if (_inputY > 0)
-            _stateMachine.ChangeState(_player._wallClimbState);
+            _player.ChangeState((int)PlayerStateID.WallClimb);
         else if (_inputY < 0 || !_grabInput)
-            _stateMachine.ChangeState(_player._wallSlideState);
+            _player.ChangeState((int)PlayerStateID.WallSlide);
     }
 
     private void HoldPosition()
     {
-        _player.transform.position = _workspaceVector2;
+        _player.transform.position = _workspaceVector3;
         _player.SetVelocityZero();
     }
 

@@ -81,32 +81,31 @@ public sealed class Player : Entity
     #region Setters
     private void InitializeStates()
     {
-        _stateMachine   = new FiniteStateMachine((int)PlayerStateID.Count);
-
-        _stateMachine.AddNewState((int)PlayerStateID.Idle,             new PlayerIdleState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Idle_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Move,             new PlayerMoveState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Move_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Jump,             new PlayerJumpState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b));
-        _stateMachine.AddNewState((int)PlayerStateID.InAir,            new PlayerInAirState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Land,             new PlayerLandState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Land_b));
-        _stateMachine.AddNewState((int)PlayerStateID.WallSlide,        new PlayerWallSlideState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallSlide_b));
-        _stateMachine.AddNewState((int)PlayerStateID.WallGrab,         new PlayerWallGrabState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallGrab_b));
-        _stateMachine.AddNewState((int)PlayerStateID.WallClimb,        new PlayerWallClimbState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.WallClimb_b));
-        _stateMachine.AddNewState((int)PlayerStateID.WallJump,         new PlayerWallJumpState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b));
-        _stateMachine.AddNewState((int)PlayerStateID.LedgeClimb,       new PlayerLedgeClimbState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.LedgeClimbState_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Dash,             new PlayerDashState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.InAir_b));
-        _stateMachine.AddNewState((int)PlayerStateID.CrouchIdle,       new PlayerCrouchIdleState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.CrouchIdle_b));
-        _stateMachine.AddNewState((int)PlayerStateID.CrouchMove,       new PlayerCrouchMoveState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.CrouchMove_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Roll,             new PlayerRollState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Roll_b));
-        _stateMachine.AddNewState((int)PlayerStateID.PrimaryAttack,    new PlayerAttackState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b));
-        _stateMachine.AddNewState((int)PlayerStateID.SecondaryDefend,  new PlayerDefendState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b));
-        _stateMachine.AddNewState((int)PlayerStateID.SpellCast,        new PlayerSpellState(this, _stateMachine, _dataPlayer, PlayerControllerParameters.Combat_b));
-
         _weaponIndex    = 0;
         _spellIndex     = 0;
+        _stateMachine   = new FiniteStateMachine((int)PlayerStateID.Count);
 
-        _primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
-        _secondaryDefendState.SetShield(_inventory.Shield);
-        _spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
+        _stateMachine.AddNewState((int)PlayerStateID.Idle,             new PlayerIdleState(this, PlayerControllerParameters.Idle_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Move,             new PlayerMoveState(this, PlayerControllerParameters.Move_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Jump,             new PlayerJumpState(this, PlayerControllerParameters.InAir_b));
+        _stateMachine.AddNewState((int)PlayerStateID.InAir,            new PlayerInAirState(this, PlayerControllerParameters.InAir_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Land,             new PlayerLandState(this, PlayerControllerParameters.Land_b));
+        _stateMachine.AddNewState((int)PlayerStateID.WallSlide,        new PlayerWallSlideState(this, PlayerControllerParameters.WallSlide_b));
+        _stateMachine.AddNewState((int)PlayerStateID.WallGrab,         new PlayerWallGrabState(this, PlayerControllerParameters.WallGrab_b));
+        _stateMachine.AddNewState((int)PlayerStateID.WallClimb,        new PlayerWallClimbState(this, PlayerControllerParameters.WallClimb_b));
+        _stateMachine.AddNewState((int)PlayerStateID.WallJump,         new PlayerWallJumpState(this, PlayerControllerParameters.InAir_b));
+        _stateMachine.AddNewState((int)PlayerStateID.LedgeClimb,       new PlayerLedgeClimbState(this, PlayerControllerParameters.LedgeClimbState_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Dash,             new PlayerDashState(this, PlayerControllerParameters.InAir_b));
+        _stateMachine.AddNewState((int)PlayerStateID.CrouchIdle,       new PlayerCrouchIdleState(this, PlayerControllerParameters.CrouchIdle_b));
+        _stateMachine.AddNewState((int)PlayerStateID.CrouchMove,       new PlayerCrouchMoveState(this, PlayerControllerParameters.CrouchMove_b));
+        _stateMachine.AddNewState((int)PlayerStateID.Roll,             new PlayerRollState(this, PlayerControllerParameters.Roll_b));
+        _stateMachine.AddNewState((int)PlayerStateID.PrimaryAttack,    new PlayerAttackState(this, PlayerControllerParameters.Combat_b));
+        _stateMachine.AddNewState((int)PlayerStateID.SecondaryDefend,  new PlayerDefendState(this, PlayerControllerParameters.Combat_b));
+        _stateMachine.AddNewState((int)PlayerStateID.SpellCast,        new PlayerSpellState(this, PlayerControllerParameters.Combat_b));
+
+        //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
+        //_secondaryDefendState.SetShield(_inventory.Shield);
+        //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
     }
 
     public void SetColiderHeight(float height)
@@ -135,12 +134,12 @@ public sealed class Player : Entity
 
     public bool CheckIfCanDefend()
     {
-        return !_secondaryDefendState.Shield.IsOnCooldown;
+        return false;// !_secondaryDefendState.Shield.IsOnCooldown;
     }
 
     public bool CheckIfCanCastSpell()
     {
-        return !_spellCastState.Spell.IsOnCooldown;
+        return false;// !_spellCastState.Spell.IsOnCooldown;
     }
     #endregion
 
@@ -159,7 +158,7 @@ public sealed class Player : Entity
 
     public override bool CanTakeDamage()
     {
-        return (!_secondaryDefendState.IsHolding || _statusComponents.LastDamageDirection != _statusComponents.FacingDirection);
+        return true;// (!_secondaryDefendState.IsHolding || _statusComponents.LastDamageDirection != _statusComponents.FacingDirection);
     }
 
     public override void AdditionalDamageActions(AttackDetails attackDetails)
@@ -201,33 +200,33 @@ public sealed class Player : Entity
 
     public void ChangeWeapon()
     {
-        if (_weaponIndex < _inventory.Weapons.Length - 1)
-            _weaponIndex++;
-        else
-            _weaponIndex = 0;
-        _primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
+        //if (_weaponIndex < _inventory.Weapons.Length - 1)
+        //    _weaponIndex++;
+        //else
+        //    _weaponIndex = 0;
+        //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
     }
 
     public void ChangeSpell()
     {
-        if (_spellIndex < _inventory.Spells.Length - 1)
-            _spellIndex++;
-        else
-            _spellIndex = 0;
-        _spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
+        //if (_spellIndex < _inventory.Spells.Length - 1)
+        //    _spellIndex++;
+        //else
+        //    _spellIndex = 0;
+        //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
     }
 
     private void InterruptActions()
     {
-        // cancel spell
-        if (_stateMachine.CurrentState == _spellCastState)
-            _inventory.Spells[_spellIndex].AnimationFinishTrigger();
-        // cancel attack
-        else if (_stateMachine.CurrentState == _primaryAttackState)
-            _inventory.Weapons[_weaponIndex].AnimationFinishTrigger();
-        // cancel defend
-        else if (_stateMachine.CurrentState == _secondaryDefendState)
-            _inventory.Shield.AnimationFinishTrigger(); 
+        //// cancel spell
+        //if (_stateMachine.CurrentState == _spellCastState)
+        //    _inventory.Spells[_spellIndex].AnimationFinishTrigger();
+        //// cancel attack
+        //else if (_stateMachine.CurrentState == _primaryAttackState)
+        //    _inventory.Weapons[_weaponIndex].AnimationFinishTrigger();
+        //// cancel defend
+        //else if (_stateMachine.CurrentState == _secondaryDefendState)
+        //    _inventory.Shield.AnimationFinishTrigger(); 
     }
 
     public Vector2 DetermineCornerPosition()

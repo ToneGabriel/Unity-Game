@@ -9,7 +9,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     protected Vector2                                   _workspaceVector2;
     #endregion
 
-    #region Getters
+    #region Component Getters
     public EntityObjectComponents ObjectComponents { get { return _objectComponents; } }
     public EntityStatusComponents StatusComponents { get { return _statusComponents; } }
     #endregion

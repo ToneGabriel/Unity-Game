@@ -1,8 +1,8 @@
 ﻿
 public sealed class PlayerIdleState : PlayerGroundedState
 {
-    public PlayerIdleState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName) { }
+    public PlayerIdleState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -16,9 +16,9 @@ public sealed class PlayerIdleState : PlayerGroundedState
         base.LogicUpdate();
 
         if (_inputX != 0)
-            _stateMachine.ChangeState(_player._moveState);
+            _player.ChangeState((int)PlayerStateID.Move);
         else if (_inputY == -1)
-            _stateMachine.ChangeState(_player._crouchIdleState);
+            _player.ChangeState((int)PlayerStateID.CrouchIdle);
     }
 
     public override void PhysicsUpdate()

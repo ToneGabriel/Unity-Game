@@ -9,9 +9,8 @@ public abstract class PlayerTouchingWallState : PlayerState
     protected int _inputX;
     protected int _inputY;
 
-    public PlayerTouchingWallState(Player player, FiniteStateMachine stateMachine, Data_Player dataPlayer, string animBoolName)
-        : base(player, stateMachine, dataPlayer, animBoolName)
-    { }
+    public PlayerTouchingWallState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -32,11 +31,11 @@ public abstract class PlayerTouchingWallState : PlayerState
         _jumpInput = _player._inputHandler.JumpInput;
 
         if (_isGrounded && !_grabInput)
-            _stateMachine.ChangeState(_player._idleState);
+            _player.ChangeState((int)PlayerStateID.Idle);
         else if (!_isTouchingWall)
-            _stateMachine.ChangeState(_player._inAirState);
+            _player.ChangeState((int)PlayerStateID.InAir);
         else if (_isTouchingWall && !_isTouchingLedge)
-            _stateMachine.ChangeState(_player._ledgeClimbState);
+            _player.ChangeState((int)PlayerStateID.LedgeClimb);
     }
 
     public override void DoChecks()

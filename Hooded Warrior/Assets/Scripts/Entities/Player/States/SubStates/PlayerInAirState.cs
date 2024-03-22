@@ -14,9 +14,10 @@ public sealed class PlayerInAirState : PlayerState
     private bool _isTouchingWall;
     private bool _isTouchingLedge;
 
-    public PlayerInAirState(Player player, FiniteStateMachine stateMachine, Data_Player dataPlayer, string animBoolName)
-        : base(player, stateMachine, dataPlayer, animBoolName)
-    { }
+    private Vector2 _workspaceVector2;
+
+    public PlayerInAirState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void DoChecks()
     {
@@ -43,31 +44,34 @@ public sealed class PlayerInAirState : PlayerState
 
         CheckJumpMultiplier();
 
-        if (_isGrounded && _player._rigidbody.velocity.y < 0.01f)
-            _stateMachine.ChangeState(_player._landState);
+        if (_isGrounded && _player.ObjectComponents.Rigidbody.velocity.y < 0.01f)
+            _player.ChangeState((int)PlayerStateID.Land);
         else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
-            _stateMachine.ChangeState(_player._ledgeClimbState);
+            _player.ChangeState((int)PlayerStateID.LedgeClimb);
         else if (_jumpInput && _player._jumpState.CanJump())
         {
             _player._inputHandler.UseJumpInput();
-            _stateMachine.ChangeState(_player._jumpState);
+            _player.ChangeState((int)PlayerStateID.Jump);
         }
         else if (_isTouchingWall && _grabInput && _isTouchingLedge)
-            _stateMachine.ChangeState(_player._wallGrabState);
+            _player.ChangeState((int)PlayerStateID.WallGrab);
         else if (_isTouchingWall && !_grabInput)
-            _stateMachine.ChangeState(_player._wallSlideState);
+            _player.ChangeState((int)PlayerStateID.WallSlide);
         else if (_dashInput && _player._dashState.CheckIfCanDash())
-            _stateMachine.ChangeState(_player._dashState);
+            _player.ChangeState((int)PlayerStateID.Dash);
         else
         {
             _player.CheckIfShouldFlip(_inputX);
             _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
 
-            _workspaceVector2.Set(_player._rigidbody.velocity.x, Mathf.Clamp(_player._rigidbody.velocity.y, -_dataPlayer.MaxVelocityY, _dataPlayer.MaxVelocityY));
-            _player._rigidbody.velocity = _workspaceVector2;
+            _workspaceVector2.Set(  _player.ObjectComponents.Rigidbody.velocity.x,
+                                    Mathf.Clamp(_player.ObjectComponents.Rigidbody.velocity.y,
+                                                -_dataPlayer.MaxVelocityY,
+                                                _dataPlayer.MaxVelocityY));
+            _player.ObjectComponents.Rigidbody.velocity = _workspaceVector2;
 
-            _player._animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player._rigidbody.velocity.y);
-            _player._animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player._rigidbody.velocity.x));
+            _player.ObjectComponents.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.ObjectComponents.Rigidbody.velocity.y);
+            _player.ObjectComponents.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.ObjectComponents.Rigidbody.velocity.x));
         }
     }
 
@@ -81,10 +85,10 @@ public sealed class PlayerInAirState : PlayerState
         if (_isJumping)
             if (_jumpInputStop)
             {
-                _player.SetVelocityY(_player._rigidbody.velocity.y * _dataPlayer.JumpHeightMultiplier);
+                _player.SetVelocityY(_player.ObjectComponents.Rigidbody.velocity.y * _dataPlayer.JumpHeightMultiplier);
                 _isJumping = false;
             }
-            else if (_player._rigidbody.velocity.y <= 0f)
+            else if (_player.ObjectComponents.Rigidbody.velocity.y <= 0f)
                 _isJumping = false;
     }
 

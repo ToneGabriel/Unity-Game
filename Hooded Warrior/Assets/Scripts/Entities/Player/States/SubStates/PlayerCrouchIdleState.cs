@@ -1,9 +1,8 @@
 ﻿
 public sealed class PlayerCrouchIdleState : PlayerGroundedState
 {
-    public PlayerCrouchIdleState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerCrouchIdleState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -27,8 +26,8 @@ public sealed class PlayerCrouchIdleState : PlayerGroundedState
         base.LogicUpdate();
 
         if (_inputX != 0)
-            _stateMachine.ChangeState(_player._crouchMoveState);
+            _player.ChangeState((int)PlayerStateID.CrouchMove);
         else if (_inputY != -1 && !_isTouchingCeiling)
-            _stateMachine.ChangeState(_player._idleState);
+            _player.ChangeState((int)PlayerStateID.Idle);
     }
 }

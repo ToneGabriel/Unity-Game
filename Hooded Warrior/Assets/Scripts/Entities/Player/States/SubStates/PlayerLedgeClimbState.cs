@@ -13,8 +13,8 @@ public sealed class PlayerLedgeClimbState : PlayerState
     private int _inputX;
     private int _inputY;
 
-    public PlayerLedgeClimbState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
+    public PlayerLedgeClimbState(Player player, string animBoolName)
+        : base(player, animBoolName)
     { }
 
     public override void Enter()
@@ -28,8 +28,10 @@ public sealed class PlayerLedgeClimbState : PlayerState
         _player.SetVelocityZero();
         _player.transform.position = _detectedPosition;
         _cornerPosition = _player.DetermineCornerPosition();
-        _startPosition.Set(_cornerPosition.x - (_player.FacingDirection * _dataPlayer.StartOffset.x), _cornerPosition.y - _dataPlayer.StartOffset.y);
-        _stopPosition.Set(_cornerPosition.x + (_player.FacingDirection * _dataPlayer.StopOffset.x), _cornerPosition.y + _dataPlayer.StopOffset.y);
+        _startPosition.Set( _cornerPosition.x - (_player.StatusComponents.FacingDirection * _dataPlayer.StartOffset.x),
+                            _cornerPosition.y - _dataPlayer.StartOffset.y);
+        _stopPosition.Set(  _cornerPosition.x + (_player.StatusComponents.FacingDirection * _dataPlayer.StopOffset.x),
+                            _cornerPosition.y + _dataPlayer.StopOffset.y);
 
         _player.transform.position = _startPosition;
     }
@@ -51,8 +53,8 @@ public sealed class PlayerLedgeClimbState : PlayerState
     {
         base.LogicUpdate();
 
-        if (_isAnimationFinished)
-            _stateMachine.ChangeState(_player._idleState);
+        if (_player.StatusComponents.IsStateAnimationFinished)
+            _player.ChangeState((int)PlayerStateID.Idle);
         else
         {
             _inputX = _player._inputHandler.NormalizedInputX;
@@ -65,12 +67,12 @@ public sealed class PlayerLedgeClimbState : PlayerState
             if (_inputX == _player.FacingDirection && _isHanging && !_isClimbing)
             {
                 _isClimbing = true;
-                _player._animator.SetBool(PlayerControllerParameters.ClimbLedge_b, true);
+                _player.ObjectComponents.Animator.SetBool(PlayerControllerParameters.ClimbLedge_b, true);
             }
             else if (_inputY == -1 && _isHanging && !_isClimbing)
-                _stateMachine.ChangeState(_player._wallSlideState);
+                _player.ChangeState((int)PlayerStateID.WallSlide);
             else if (_jumpInput && !_isClimbing)
-                _stateMachine.ChangeState(_player._wallJumpState);
+                _player.ChangeState((int)PlayerStateID.WallJump);
         }
     }
 
@@ -78,7 +80,7 @@ public sealed class PlayerLedgeClimbState : PlayerState
     {
         base.AnimationFinishTrigger();
 
-        _player._animator.SetBool(PlayerControllerParameters.ClimbLedge_b, false);
+        _player.ObjectComponents.Animator.SetBool(PlayerControllerParameters.ClimbLedge_b, false);
     }
 
     public override void AnimationTrigger()

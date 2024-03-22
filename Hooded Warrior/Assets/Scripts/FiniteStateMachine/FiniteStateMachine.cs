@@ -12,7 +12,7 @@ public sealed class FiniteStateMachine
 
     public void InitializeState(int stateID)
     {
-        ValidateState(stateID);
+        CheckRegisteredState(stateID);
 
         CurrentState = _states[stateID];
         CurrentState.Enter();
@@ -20,7 +20,7 @@ public sealed class FiniteStateMachine
 
     public void ChangeState(int stateID)
     {
-        ValidateState(stateID);
+        CheckRegisteredState(stateID);
 
         CurrentState.Exit();
         CurrentState = _states[stateID];
@@ -29,22 +29,30 @@ public sealed class FiniteStateMachine
 
     public void AddNewState(int stateID, State newState)
     {
-        ValidateID(stateID);
+        CheckUnregisteredState(stateID);
 
         _states[stateID] = newState;
     }
 
-    private void ValidateID(int stateID)
+    private void CheckID(int stateID)
     {
         if (stateID < 0 || stateID >= _states.Length)
             throw new System.Exception("Invalid ID");
     }
 
-    private void ValidateState(int stateID)
+    private void CheckRegisteredState(int stateID)
     {
-        ValidateID(stateID);
+        CheckID(stateID);
 
-        if (_states[stateID] == null)
+        if (null == _states[stateID])
             throw new System.Exception("Unregistered State!");
+    }
+
+    private void CheckUnregisteredState(int stateID)
+    {
+        CheckID(stateID);
+
+        if (null != _states[stateID])
+            throw new System.Exception("State Overwrite!");
     }
 }

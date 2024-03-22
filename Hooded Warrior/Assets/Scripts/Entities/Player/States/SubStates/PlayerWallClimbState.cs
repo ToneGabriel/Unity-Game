@@ -1,8 +1,8 @@
 ﻿
 public sealed class PlayerWallClimbState : PlayerTouchingWallState
 {
-    public PlayerWallClimbState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
+    public PlayerWallClimbState(Player player, string animBoolName)
+        : base(player, animBoolName)
     { }
 
     public override void LogicUpdate()
@@ -12,6 +12,6 @@ public sealed class PlayerWallClimbState : PlayerTouchingWallState
         _player.SetVelocityY(_dataPlayer.WallClimbVelocity);
 
         if (_inputY != 1)
-            _stateMachine.ChangeState(_player._wallGrabState);
+            _player.ChangeState((int)PlayerStateID.WallGrab);
     }
 }

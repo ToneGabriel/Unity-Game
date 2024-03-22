@@ -1,9 +1,8 @@
 ﻿
 public sealed class PlayerRollState : PlayerAbilityState
 {
-    public PlayerRollState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerRollState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {

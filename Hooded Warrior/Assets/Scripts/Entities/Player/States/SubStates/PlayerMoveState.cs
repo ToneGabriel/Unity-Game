@@ -1,22 +1,21 @@
 ﻿
 public sealed class PlayerMoveState : PlayerGroundedState
 {
-    public PlayerMoveState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerMoveState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
 
         if (_inputX == 0)
-            _stateMachine.ChangeState(_player._idleState);
+            _player.ChangeState((int)PlayerStateID.Idle);
         else if (_inputY == -1)
-            _stateMachine.ChangeState(_player._crouchMoveState);
+            _player.ChangeState((int)PlayerStateID.CrouchMove);
         else if (_isGrounded && _rollInput)
         {
             _player._inputHandler.UseRollInput();
-            _stateMachine.ChangeState(_player._rollState);
+            _player.ChangeState((int)PlayerStateID.Roll);
         }
     }
 

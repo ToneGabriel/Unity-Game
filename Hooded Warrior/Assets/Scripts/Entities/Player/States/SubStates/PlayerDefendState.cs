@@ -4,9 +4,8 @@ public sealed class PlayerDefendState : PlayerAbilityState
     public Shield Shield { get; private set; }
     public bool IsHolding { get; private set; }
 
-    public PlayerDefendState(Player player, FiniteStateMachine stateMachine, Data_Player playerData, string animBoolName)
-        : base(player, stateMachine, playerData, animBoolName)
-    { }
+    public PlayerDefendState(Player player, string animBoolName)
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
