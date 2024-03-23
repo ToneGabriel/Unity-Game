@@ -20,8 +20,8 @@ public sealed class PlayerDashState : PlayerAbilityState
 
         CanDash = false;
         _isHolding = true;
-        _player._inputHandler.UseDashInput();
-        _dashDirection = Vector2.right * _player.FacingDirection;
+        InputManager.Instance.UseDashInput();
+        _dashDirection = Vector2.right * _player.StatusComponents.FacingDirection;
 
         Time.timeScale = _dataPlayer.HoldTimeScale;
         _player.StatusComponents.StateStartTime = Time.unscaledTime;
@@ -44,7 +44,7 @@ public sealed class PlayerDashState : PlayerAbilityState
         if (!_isAbilityDone)
             if (_isHolding)
             {
-                _dashDirectionInput = _player._inputHandler.RawDashDirectionInput;
+                _dashDirectionInput = InputManager.Instance.DashDirectionInput;
                 _dashInputStop = _player._inputHandler.DashInputStop;
 
                 if (_dashDirection != Vector2.zero)

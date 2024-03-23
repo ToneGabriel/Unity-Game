@@ -87,10 +87,8 @@ public class BringerOfDeath : Enemy
     #endregion
 
     #region Other Functions
-    protected override void InitializeStates()
+    protected void InitializeStates()
     {
-        base.InitializeStates();
-
         IdleState = new BringerOfDeath_IdleState(this, _stateMachine, "idle", _idleStateData);
         MoveState = new BringerOfDeath_MoveState(this, _stateMachine, "walk", _moveStateData);
         ChargeState = new BringerOfDeath_ChargeState(this, _stateMachine, "charge", _chargeStateData);

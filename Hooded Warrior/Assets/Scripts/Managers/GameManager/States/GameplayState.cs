@@ -28,9 +28,10 @@ public class GameplayState : GameManagerState
     {
         base.LogicUpdate();
 
-        _pauseGameInput = _gameManager.Player._inputHandler.PauseGameInput;    // check "ESC" input for pause/resume game
+        _pauseGameInput = InputManager.Instance.PauseGameInput;
+        //_pauseGameInput = _gameManager.Player._inputHandler.PauseGameInput;    // check "ESC" input for pause/resume game
 
-        if(_gameManager.Player.IsDead)
+        if(_gameManager.Player.StatusComponents.IsDead)
             _stateMachine.ChangeState(_gameManager.ResetGameState);
         else if(_pauseGameInput)
         {
@@ -39,7 +40,8 @@ public class GameplayState : GameManagerState
             else
                 ResumeGame();
 
-            _gameManager.Player._inputHandler.UsePauseGameInput();
+            InputManager.Instance.UsePauseGameInput();
+            //_gameManager.Player._inputHandler.UsePauseGameInput();
         }        
     }
 

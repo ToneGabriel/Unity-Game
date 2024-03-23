@@ -53,7 +53,7 @@ public sealed class InputManager : MonoBehaviour
     public bool     SpellCastInput          { get; private set; }
     public bool     ChangeWeaponInput       { get; private set; }
     public bool     ChangeSpellInput        { get; private set; }
-    public bool     PauseResumeGameInput    { get; private set; }
+    public bool     PauseGameInput          { get; private set; }
     #endregion Inputs
 
     #region Helper Inputs
@@ -92,6 +92,11 @@ public sealed class InputManager : MonoBehaviour
             JumpInput = false;
     }
 
+    public void UseJumpInput()
+    {
+        JumpInput = false;
+    }
+
     public void OnGrabInput(InputAction.CallbackContext context)        // Normal Button (can hold without restriction)
     {
         if (context.started)
@@ -108,6 +113,11 @@ public sealed class InputManager : MonoBehaviour
             DashInput = false;
     }
 
+    public void UseDashInput()
+    {
+        DashInput = false;
+    }
+
     public void OnDashDirectionInput(InputAction.CallbackContext context)   // Vector2 Composite
     {
         _rawDashDirectionInput = context.ReadValue<Vector2>();
@@ -122,6 +132,11 @@ public sealed class InputManager : MonoBehaviour
             RollInput = true;
         else if (context.performed || context.canceled)
             RollInput = false;
+    }
+
+    public void UseRollInput()
+    {
+        RollInput = false;
     }
 
     public void OnPrimaryAttackInput(InputAction.CallbackContext context)   // TODO
@@ -163,17 +178,14 @@ public sealed class InputManager : MonoBehaviour
     public void OnPauseGameInput(InputAction.CallbackContext context)       // Tap
     {
         if (context.started)
-            PauseResumeGameInput = true;
+            PauseGameInput = true;
         else if (context.performed || context.canceled)
-            PauseResumeGameInput = false;
+            PauseGameInput = false;
+    }
+
+    public void UsePauseGameInput()
+    {
+        PauseGameInput = false;
     }
     #endregion OnInput Functions
-
-    #region Helpers
-    public void ForceInputStop(ref bool input)
-    {
-        // helper - can be used for input read interruptions
-        input = false;
-    }
-    #endregion Helpers
 }

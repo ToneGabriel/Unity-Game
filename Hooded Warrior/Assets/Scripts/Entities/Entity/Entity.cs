@@ -5,7 +5,8 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #region Components & Data
     [SerializeField] protected EntityObjectComponents   _objectComponents;
     protected EntityStatusComponents                    _statusComponents;
-    protected FiniteStateMachine                        _stateMachine;
+    protected FiniteStateMachine                        _stateMachine;      // initialized in derived classes
+    protected State[]                                   _states;            // initialized in derived classes
     protected Vector2                                   _workspaceVector2;
     #endregion
 
@@ -39,29 +40,28 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     protected virtual void Update()
     {
-        if (!GameManager.Instance.IsGamePaused)
-            LogicUpdate();
+        if (GameManager.Instance.IsGamePaused)
+            return;
+
+        if (Time.time >= _statusComponents.LastDamageTime + _objectComponents.DataEntity.StunRecoveryTime)
+            ResetStunResistnce();
+
+        _stateMachine.CurrentState.LogicUpdate();
     }
 
     protected virtual void FixedUpdate()
     {
-        if (!GameManager.Instance.IsGamePaused)
-            PhysicsUpdate();
-    }
+        if (GameManager.Instance.IsGamePaused)
+            return;
 
-    protected virtual void LogicUpdate() 
-    {
-        if (Time.time >= _statusComponents.LastDamageTime + _objectComponents.DataEntity.StunRecoveryTime)
-            ResetStunResistnce();
+        _stateMachine.CurrentState.PhysicsUpdate();
     }
-
-    protected virtual void PhysicsUpdate() { }
     #endregion
 
     #region Setters
     public void ChangeState(int stateID)
     {
-        _stateMachine.ChangeState(stateID);
+        _stateMachine.ChangeState(_states[stateID]);
     }
 
     public void SetVelocityZero()
@@ -110,22 +110,32 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #region Checkers
     public bool CheckIfGrounded()
     {
-        return Physics2D.OverlapCircle(_objectComponents.GroundCheck.transform.position, _objectComponents.DataEntity.GroundCheckRadius, _objectComponents.DataEntity.WhatIsGround);
-    }
-
-    public bool CheckIfTouchingWall()
-    {
-        return Physics2D.Raycast(_objectComponents.EnvironmentCheck.transform.position, transform.right, _objectComponents.DataEntity.EnvironmentCheckDistance, _objectComponents.DataEntity.WhatIsGround);
-    }
-
-    public bool CheckIfTouchingLedge(Vector3 direction)
-    {
-        return Physics2D.Raycast(_objectComponents.LedgeCheck.transform.position, direction, _objectComponents.DataEntity.EnvironmentCheckDistance, _objectComponents.DataEntity.WhatIsGround);
+        return Physics2D.OverlapCircle( _objectComponents.GroundCheck.transform.position,
+                                        _objectComponents.DataEntity.GroundCheckRadius,
+                                        _objectComponents.DataEntity.WhatIsGround);
     }
 
     public bool CheckIfTouchingCeiling()
     {
-        return Physics2D.OverlapCircle(_objectComponents.LedgeCheck.transform.position, _objectComponents.DataEntity.GroundCheckRadius, _objectComponents.DataEntity.WhatIsGround);
+        return Physics2D.OverlapCircle( _objectComponents.LedgeCheck.transform.position,
+                                        _objectComponents.DataEntity.GroundCheckRadius,
+                                        _objectComponents.DataEntity.WhatIsGround);
+    }
+
+    public bool CheckIfTouchingWall()
+    {
+        return Physics2D.Raycast(   _objectComponents.EnvironmentCheck.transform.position,
+                                    transform.right,
+                                    _objectComponents.DataEntity.EnvironmentCheckDistance,
+                                    _objectComponents.DataEntity.WhatIsGround);
+    }
+
+    public bool CheckIfTouchingLedge(Vector3 direction)
+    {
+        return Physics2D.Raycast(   _objectComponents.LedgeCheck.transform.position,
+                                    direction,
+                                    _objectComponents.DataEntity.EnvironmentCheckDistance,
+                                    _objectComponents.DataEntity.WhatIsGround);
     }
     #endregion
 

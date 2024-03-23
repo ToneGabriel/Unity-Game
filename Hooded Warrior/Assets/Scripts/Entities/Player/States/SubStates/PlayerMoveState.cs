@@ -14,7 +14,7 @@ public sealed class PlayerMoveState : PlayerGroundedState
             _player.ChangeState((int)PlayerStateID.CrouchMove);
         else if (_isGrounded && _rollInput)
         {
-            _player._inputHandler.UseRollInput();
+            InputManager.Instance.UseRollInput();
             _player.ChangeState((int)PlayerStateID.Roll);
         }
     }

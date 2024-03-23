@@ -66,10 +66,8 @@ public class Archer : Enemy
     #endregion
 
     #region Other Functions
-    protected override void InitializeStates()
+    protected void InitializeStates()
     {
-        base.InitializeStates();
-
         IdleState = new Archer_IdleState(this, _stateMachine, "idle", _idleStateData);
         MoveState = new Archer_MoveState(this, _stateMachine, "walk", _moveStateData);
         PlayerDetectedState = new Archer_PlayerDetectedState(this, _stateMachine, "playerDetected", _playerDetectedStateData);

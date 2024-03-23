@@ -35,15 +35,15 @@ public abstract class PlayerGroundedState : PlayerState
     {
         base.LogicUpdate();
 
-        _inputX = _player._inputHandler.NormalizedInputX;
-        _inputY = _player._inputHandler.NormalizedInputY;
-        _jumpInput = _player._inputHandler.JumpInput;
-        _grabInput = _player._inputHandler.GrabInput;
-        _dashInput = _player._inputHandler.DashInput;
-        _rollInput = _player._inputHandler.RollInput;
-        _primaryAttackInput = _player._inputHandler.PrimaryAttackInput;
-        _secondaryDefendInput = _player._inputHandler.SecondaryDefendInput;
-        _spellCastInput = _player._inputHandler.SpellCastInput;
+        _inputX                 = InputManager.Instance.NormalizedInputX;
+        _inputY                 = InputManager.Instance.NormalizedInputY;
+        _jumpInput              = InputManager.Instance.JumpInput;
+        _grabInput              = InputManager.Instance.GrabInput;
+        _dashInput              = InputManager.Instance.DashInput;
+        _rollInput              = InputManager.Instance.RollInput;
+        _primaryAttackInput     = InputManager.Instance.PrimaryAttackInput;
+        _secondaryDefendInput   = InputManager.Instance.SecondaryDefendInput;
+        _spellCastInput         = InputManager.Instance.SpellCastInput;
 
         _player.CheckIfShouldFlip(_inputX);
 
@@ -55,7 +55,7 @@ public abstract class PlayerGroundedState : PlayerState
             _player.ChangeState((int)PlayerStateID.SpellCast);
         else if (_jumpInput && _player._jumpState.CanJump())
         {
-            _player._inputHandler.UseJumpInput();
+            InputManager.Instance.UseJumpInput();
             _player.ChangeState((int)PlayerStateID.Jump);
         }
         else if (!_isGrounded)

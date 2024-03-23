@@ -36,11 +36,11 @@ public sealed class PlayerInAirState : PlayerState
     {
         base.LogicUpdate();
 
-        _inputX = _player._inputHandler.NormalizedInputX;
-        _jumpInput = _player._inputHandler.JumpInput;
-        _jumpInputStop = _player._inputHandler.JumpInputStop;
-        _grabInput = _player._inputHandler.GrabInput;
-        _dashInput = _player._inputHandler.DashInput;
+        _inputX         = InputManager.Instance.NormalizedInputX;
+        _jumpInput      = InputManager.Instance.JumpInput;
+        _jumpInputStop  = InputManager.Instance.JumpInputStop;
+        _grabInput      = InputManager.Instance.GrabInput;
+        _dashInput      = InputManager.Instance.DashInput;
 
         CheckJumpMultiplier();
 
@@ -50,7 +50,7 @@ public sealed class PlayerInAirState : PlayerState
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
         else if (_jumpInput && _player._jumpState.CanJump())
         {
-            _player._inputHandler.UseJumpInput();
+            InputManager.Instance.UseJumpInput();
             _player.ChangeState((int)PlayerStateID.Jump);
         }
         else if (_isTouchingWall && _grabInput && _isTouchingLedge)

@@ -55,10 +55,8 @@ public class Bull : Enemy
     #endregion
 
     #region Other functions
-    protected override void InitializeStates()
+    protected void InitializeStates()
     {
-        base.InitializeStates();
-
         IdleState = new Bull_IdleState(this, _stateMachine, "idle", _idleStateData);
         MoveState = new Bull_MoveState(this, _stateMachine, "walk", _moveStateData);
         PlayerDetectedState = new Bull_PlayerDetectedState(this, _stateMachine, "playerDetected", _playerDetectedStateData);

@@ -39,19 +39,21 @@ public sealed class Player : Entity
     #region Unity Functions
     protected override void Awake()
     {
-        _inputHandler    = GetComponent<PlayerInputHandler>();
-        _inventory       = GetComponent<PlayerInventory>();
+        base.Awake();
+
+        _inputHandler   = GetComponent<PlayerInputHandler>();
+        _inventory      = GetComponent<PlayerInventory>();
+        _weaponIndex    = 0;
+        _spellIndex     = 0;
 
         InitializeStates();
-
-        base.Awake();
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        _stateMachine.InitializeState((int)PlayerStateID.Idle);
+        _stateMachine.InitializeState(_states[(int)PlayerStateID.Idle]);
     }
 
     protected override void Start()
@@ -62,46 +64,31 @@ public sealed class Player : Entity
 
         gameObject.SetActive(false);                    // Allows "Awake" on application start but prevents loading errors
     }
-
-    protected override void LogicUpdate()
-    {
-        base.LogicUpdate();
-
-        _stateMachine.CurrentState.LogicUpdate();
-    }
-
-    protected override void PhysicsUpdate()
-    {
-        base.PhysicsUpdate();
-
-        _stateMachine.CurrentState.PhysicsUpdate();
-    }
     #endregion
 
     #region Setters
     private void InitializeStates()
     {
-        _weaponIndex    = 0;
-        _spellIndex     = 0;
-        _stateMachine   = new FiniteStateMachine((int)PlayerStateID.Count);
+        _stateMachine   = new FiniteStateMachine();
+        _states         = new State[(int)PlayerStateID.Count];
 
-        _stateMachine.AddNewState((int)PlayerStateID.Idle,             new PlayerIdleState(this, PlayerControllerParameters.Idle_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Move,             new PlayerMoveState(this, PlayerControllerParameters.Move_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Jump,             new PlayerJumpState(this, PlayerControllerParameters.InAir_b));
-        _stateMachine.AddNewState((int)PlayerStateID.InAir,            new PlayerInAirState(this, PlayerControllerParameters.InAir_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Land,             new PlayerLandState(this, PlayerControllerParameters.Land_b));
-        _stateMachine.AddNewState((int)PlayerStateID.WallSlide,        new PlayerWallSlideState(this, PlayerControllerParameters.WallSlide_b));
-        _stateMachine.AddNewState((int)PlayerStateID.WallGrab,         new PlayerWallGrabState(this, PlayerControllerParameters.WallGrab_b));
-        _stateMachine.AddNewState((int)PlayerStateID.WallClimb,        new PlayerWallClimbState(this, PlayerControllerParameters.WallClimb_b));
-        _stateMachine.AddNewState((int)PlayerStateID.WallJump,         new PlayerWallJumpState(this, PlayerControllerParameters.InAir_b));
-        _stateMachine.AddNewState((int)PlayerStateID.LedgeClimb,       new PlayerLedgeClimbState(this, PlayerControllerParameters.LedgeClimbState_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Dash,             new PlayerDashState(this, PlayerControllerParameters.InAir_b));
-        _stateMachine.AddNewState((int)PlayerStateID.CrouchIdle,       new PlayerCrouchIdleState(this, PlayerControllerParameters.CrouchIdle_b));
-        _stateMachine.AddNewState((int)PlayerStateID.CrouchMove,       new PlayerCrouchMoveState(this, PlayerControllerParameters.CrouchMove_b));
-        _stateMachine.AddNewState((int)PlayerStateID.Roll,             new PlayerRollState(this, PlayerControllerParameters.Roll_b));
-        _stateMachine.AddNewState((int)PlayerStateID.PrimaryAttack,    new PlayerAttackState(this, PlayerControllerParameters.Combat_b));
-        _stateMachine.AddNewState((int)PlayerStateID.SecondaryDefend,  new PlayerDefendState(this, PlayerControllerParameters.Combat_b));
-        _stateMachine.AddNewState((int)PlayerStateID.SpellCast,        new PlayerSpellState(this, PlayerControllerParameters.Combat_b));
+        _states[(int)PlayerStateID.Idle]            = new PlayerIdleState(this, PlayerControllerParameters.Idle_b);
+        _states[(int)PlayerStateID.Move]            = new PlayerIdleState(this, PlayerControllerParameters.Move_b);
+        _states[(int)PlayerStateID.Jump]            = new PlayerIdleState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.InAir]           = new PlayerIdleState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.Land]            = new PlayerIdleState(this, PlayerControllerParameters.Land_b);
+        _states[(int)PlayerStateID.WallSlide]       = new PlayerIdleState(this, PlayerControllerParameters.WallSlide_b);
+        _states[(int)PlayerStateID.WallGrab]        = new PlayerIdleState(this, PlayerControllerParameters.WallGrab_b);
+        _states[(int)PlayerStateID.WallClimb]       = new PlayerIdleState(this, PlayerControllerParameters.WallClimb_b);
+        _states[(int)PlayerStateID.WallJump]        = new PlayerIdleState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.LedgeClimb]      = new PlayerIdleState(this, PlayerControllerParameters.LedgeClimbState_b);
+        _states[(int)PlayerStateID.Dash]            = new PlayerIdleState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.CrouchIdle]      = new PlayerIdleState(this, PlayerControllerParameters.CrouchIdle_b);
+        _states[(int)PlayerStateID.CrouchMove]      = new PlayerIdleState(this, PlayerControllerParameters.CrouchMove_b);
+        _states[(int)PlayerStateID.Roll]            = new PlayerIdleState(this, PlayerControllerParameters.Roll_b);
+        _states[(int)PlayerStateID.PrimaryAttack]   = new PlayerIdleState(this, PlayerControllerParameters.Combat_b);
+        _states[(int)PlayerStateID.SecondaryDefend] = new PlayerIdleState(this, PlayerControllerParameters.Combat_b);
+        _states[(int)PlayerStateID.SpellCast]       = new PlayerIdleState(this, PlayerControllerParameters.Combat_b);
 
         //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
         //_secondaryDefendState.SetShield(_inventory.Shield);

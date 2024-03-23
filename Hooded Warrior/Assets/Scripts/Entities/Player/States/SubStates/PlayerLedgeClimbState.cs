@@ -57,14 +57,14 @@ public sealed class PlayerLedgeClimbState : PlayerState
             _player.ChangeState((int)PlayerStateID.Idle);
         else
         {
-            _inputX = _player._inputHandler.NormalizedInputX;
-            _inputY = _player._inputHandler.NormalizedInputY;
-            _jumpInput = _player._inputHandler.JumpInput;
+            _inputX     = InputManager.Instance.NormalizedInputX;
+            _inputY     = InputManager.Instance.NormalizedInputY;
+            _jumpInput  = InputManager.Instance.JumpInput;
 
             _player.SetVelocityZero();
             _player.transform.position = _startPosition;
 
-            if (_inputX == _player.FacingDirection && _isHanging && !_isClimbing)
+            if (_inputX == _player.StatusComponents.FacingDirection && _isHanging && !_isClimbing)
             {
                 _isClimbing = true;
                 _player.ObjectComponents.Animator.SetBool(PlayerControllerParameters.ClimbLedge_b, true);

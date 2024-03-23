@@ -25,10 +25,10 @@ public abstract class PlayerTouchingWallState : PlayerState
     {
         base.LogicUpdate();
 
-        _inputX = _player._inputHandler.NormalizedInputX;
-        _inputY = _player._inputHandler.NormalizedInputY;
-        _grabInput = _player._inputHandler.GrabInput;
-        _jumpInput = _player._inputHandler.JumpInput;
+        _inputX     = InputManager.Instance.NormalizedInputX;
+        _inputY     = InputManager.Instance.NormalizedInputY;
+        _grabInput  = InputManager.Instance.GrabInput;
+        _jumpInput  = InputManager.Instance.JumpInput;
 
         if (_isGrounded && !_grabInput)
             _player.ChangeState((int)PlayerStateID.Idle);

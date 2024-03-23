@@ -25,7 +25,7 @@ public sealed class PlayerSpellState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        IsHolding = _player._inputHandler.SpellCastInput;
+        IsHolding = InputManager.Instance.SpellCastInput;
 
         if (!IsHolding && !Spell.IsOnCooldown)
             Spell.CastSpell();

@@ -26,7 +26,7 @@ public sealed class PlayerDefendState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        IsHolding = _player._inputHandler.SecondaryDefendInput;
+        IsHolding = InputManager.Instance.SecondaryDefendInput;
 
         if (!IsHolding && !Shield.IsOnCooldown)      // exit if stop holding
             Shield.LowerShield();
