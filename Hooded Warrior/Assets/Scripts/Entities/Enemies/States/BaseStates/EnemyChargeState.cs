@@ -27,7 +27,7 @@ public abstract class EnemyChargeState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _enemy.StatusComponents.StateStartTime + _stateData.ChargeTime)                              // Counts charge time
+        if (Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.ChargeTime)                              // Counts charge time
             _isChargeTimeOver = true;
     }
 

@@ -24,7 +24,19 @@ public class Archer : Enemy
     {
         base.Awake();
 
-        InitializeStates();
+        // Initialize States
+        _stateMachine   = new FiniteStateMachine();
+        _states         = new State[(int)ArcherStateID.Count];
+
+        _states[(int)ArcherStateID.Idle]            = new ArcherIdleState(this, "idle", _idleStateData);
+        _states[(int)ArcherStateID.Move]            = new ArcherMoveState(this, "walk", _moveStateData);
+        _states[(int)ArcherStateID.PlayerDetected]  = new ArcherPlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
+        _states[(int)ArcherStateID.LookForPlayer]   = new ArcherLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData);
+        _states[(int)ArcherStateID.Stun]            = new ArcherStunState(this, "stun", _stunStateData);
+        _states[(int)ArcherStateID.Dead]            = new ArcherDeadState(this, "dead", _deadStateData);
+        _states[(int)ArcherStateID.Dodge]           = new ArcherDodgeState(this, "dodge", _dodgeStateData);
+        _states[(int)ArcherStateID.MeleeAttack]     = new ArcherMeleeAttackState(this, "meleeAttack", _meleeAttackStateData);
+        _states[(int)ArcherStateID.RangedAttack]    = new ArcherRangedAttackState(this, "rangedAttack", _rangedAttackStateData);
     }
 
     protected override void OnEnable()
@@ -63,33 +75,17 @@ public class Archer : Enemy
     #endregion
 
     #region Other Functions
-    protected void InitializeStates()
-    {
-        _stateMachine   = new FiniteStateMachine();
-        _states         = new State[(int)ArcherStateID.Count];
-
-        _states[(int)ArcherStateID.Idle]            = new ArcherIdleState(this, "idle", _idleStateData);
-        _states[(int)ArcherStateID.Move]            = new ArcherMoveState(this, "walk", _moveStateData);
-        _states[(int)ArcherStateID.PlayerDetected]  = new ArcherPlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
-        _states[(int)ArcherStateID.LookForPlayer]   = new ArcherLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData);
-        _states[(int)ArcherStateID.Stun]            = new ArcherStunState(this, "stun", _stunStateData);
-        _states[(int)ArcherStateID.Dead]            = new ArcherDeadState(this, "dead", _deadStateData);
-        _states[(int)ArcherStateID.Dodge]           = new ArcherDodgeState(this, "dodge", _dodgeStateData);
-        _states[(int)ArcherStateID.MeleeAttack]     = new ArcherMeleeAttackState(this, "meleeAttack", _meleeAttackStateData);
-        _states[(int)ArcherStateID.RangedAttack]    = new ArcherRangedAttackState(this, "rangedAttack", _rangedAttackStateData);
-    }
-
     public override void Damage(AttackDetails attackdetails)    // Called when taking damage (message sent from attacker)
     {
         base.Damage(attackdetails);
 
-        if (_statusComponents.IsDead)
+        if (_entityIntStatusComponents.IsDead)
             ChangeState((int)ArcherStateID.Dead);
-        else if (_statusComponents.IsStuned && _stateMachine.CurrentState != _states[(int)ArcherStateID.Stun])
+        else if (_entityIntStatusComponents.IsStuned && _stateMachine.CurrentState != _states[(int)ArcherStateID.Stun])
             ChangeState((int)ArcherStateID.Stun);
-        else if (!_statusComponents.IsStuned && _objectComponents.Rigidbody.velocity.x != 0)
+        else if (!_entityIntStatusComponents.IsStuned && _entityIntObjComponents.Rigidbody.velocity.x != 0)
             ChangeState((int)ArcherStateID.LookForPlayer);
-        else if (!_statusComponents.IsStuned && CheckPlayerInMinAgroRange())
+        else if (!_entityIntStatusComponents.IsStuned && CheckPlayerInMinAgroRange())
             ChangeState((int)ArcherStateID.RangedAttack);
     }
 

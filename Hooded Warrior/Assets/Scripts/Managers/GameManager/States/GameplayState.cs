@@ -31,7 +31,7 @@ public class GameplayState : GameManagerState
         _pauseGameInput = InputManager.Instance.PauseGameInput;
         //_pauseGameInput = _gameManager.Player._inputHandler.PauseGameInput;    // check "ESC" input for pause/resume game
 
-        if(_gameManager.Player.StatusComponents.IsDead)
+        if(_gameManager.Player.EntityIntStatusComponents.IsDead)
             _stateMachine.ChangeState(_gameManager.ResetGameState);
         else if(_pauseGameInput)
         {

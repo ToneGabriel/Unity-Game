@@ -10,18 +10,7 @@ public class Slime : Enemy
     {
         base.Awake();
 
-        InitializeStates();
-    }
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-
-        _stateMachine.InitializeState(_states[(int)SlimeStateID.Move]);
-    }
-
-    private void InitializeStates()
-    {
+        // Initialize States
         _stateMachine   = new FiniteStateMachine();
         _states         = new State[(int)SlimeStateID.Count];
 
@@ -30,4 +19,10 @@ public class Slime : Enemy
         _states[(int)SlimeStateID.PlayerDetected]   = new SlimePlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        _stateMachine.InitializeState(_states[(int)SlimeStateID.Move]);
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "newEnemyData", menuName = "Data/Enemy Data/Base Data")]
-public class Data_Enemy : Data_Entity
+public class Data_Enemy : DataEntity
 {
     [Header("Enemy Basics")]
     public float MaxAgroDistance = 4f;

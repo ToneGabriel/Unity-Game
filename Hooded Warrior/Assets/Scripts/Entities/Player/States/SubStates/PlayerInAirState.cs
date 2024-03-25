@@ -44,7 +44,7 @@ public sealed class PlayerInAirState : PlayerState
 
         CheckJumpMultiplier();
 
-        if (_isGrounded && _player.ObjectComponents.Rigidbody.velocity.y < 0.01f)
+        if (_isGrounded && _player.EntityExtObjComponents.Rigidbody.velocity.y < 0.01f)
             _player.ChangeState((int)PlayerStateID.Land);
         else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
@@ -64,14 +64,14 @@ public sealed class PlayerInAirState : PlayerState
             _player.CheckIfShouldFlip(_inputX);
             _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
 
-            _workspaceVector2.Set(  _player.ObjectComponents.Rigidbody.velocity.x,
-                                    Mathf.Clamp(_player.ObjectComponents.Rigidbody.velocity.y,
+            _workspaceVector2.Set(  _player.EntityExtObjComponents.Rigidbody.velocity.x,
+                                    Mathf.Clamp(_player.EntityExtObjComponents.Rigidbody.velocity.y,
                                                 -_dataPlayer.MaxVelocityY,
                                                 _dataPlayer.MaxVelocityY));
-            _player.ObjectComponents.Rigidbody.velocity = _workspaceVector2;
+            _player.EntityExtObjComponents.Rigidbody.velocity = _workspaceVector2;
 
-            _player.ObjectComponents.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.ObjectComponents.Rigidbody.velocity.y);
-            _player.ObjectComponents.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.ObjectComponents.Rigidbody.velocity.x));
+            _player.EntityExtObjComponents.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.EntityExtObjComponents.Rigidbody.velocity.y);
+            _player.EntityExtObjComponents.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.EntityExtObjComponents.Rigidbody.velocity.x));
         }
     }
 
@@ -85,10 +85,10 @@ public sealed class PlayerInAirState : PlayerState
         if (_isJumping)
             if (_jumpInputStop)
             {
-                _player.SetVelocityY(_player.ObjectComponents.Rigidbody.velocity.y * _dataPlayer.JumpHeightMultiplier);
+                _player.SetVelocityY(_player.EntityExtObjComponents.Rigidbody.velocity.y * _dataPlayer.JumpHeightMultiplier);
                 _isJumping = false;
             }
-            else if (_player.ObjectComponents.Rigidbody.velocity.y <= 0f)
+            else if (_player.EntityExtObjComponents.Rigidbody.velocity.y <= 0f)
                 _isJumping = false;
     }
 

@@ -15,7 +15,7 @@ public class ArcherRangedAttackState : EnemyRangedAttackState
     {
         base.LogicUpdate();
 
-        if(_archer.StatusComponents.IsStateAnimationFinished)
+        if(_archer.EntityIntStatusComponents.IsStateAnimationFinished)
         {
             if (_isPlayerInMinAgroRange)
                 _archer.ChangeState((int)ArcherStateID.PlayerDetected);

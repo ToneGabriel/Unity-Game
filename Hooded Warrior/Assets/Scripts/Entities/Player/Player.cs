@@ -3,32 +3,13 @@
 public sealed class Player : Entity
 {
     #region Components & Data
-    [SerializeField] private PlayerInventory    _inventory;
-    [SerializeField] private GameObject         _dashDirectionIndicator;
-    [SerializeField] private GameObject         _lightOrbPosition;
-    [SerializeField] private Data_Player        _dataPlayer;
+    [SerializeField]
+    private PlayerExternalObjectComponents _playerExtObjComponents;
     #endregion
 
-    //#region States
-    //private PlayerIdleState         _idleState;
-    //private PlayerMoveState         _moveState;
-    //private PlayerJumpState         _jumpState;
-    //private PlayerInAirState        _inAirState;
-    //private PlayerLandState         _landState;
-    //private PlayerWallGrabState     _wallGrabState;
-    //private PlayerWallSlideState    _wallSlideState;
-    //private PlayerWallClimbState    _wallClimbState;
-    //private PlayerWallJumpState     _wallJumpState;
-    //private PlayerLedgeClimbState   _ledgeClimbState;
-    //private PlayerDashState         _dashState;
-    //private PlayerCrouchIdleState   _crouchIdleState;
-    //private PlayerCrouchMoveState   _crouchMoveState;
-    //private PlayerRollState         _rollState;
-
-    //private PlayerAttackState       _primaryAttackState;
-    //private PlayerDefendState       _secondaryDefendState;
-    //private PlayerSpellState        _spellCastState;
-    //#endregion
+    #region Component Getters
+    public PlayerExternalObjectComponents PlayerExtObjComponents { get { return _playerExtObjComponents; } }
+    #endregion
 
     #region Others
     private int _weaponIndex;
@@ -40,11 +21,35 @@ public sealed class Player : Entity
     {
         base.Awake();
 
-        _inventory      = GetComponent<PlayerInventory>();
+        _playerExtObjComponents._inventory = GetComponent<PlayerInventory>();
         _weaponIndex    = 0;
         _spellIndex     = 0;
 
-        InitializeStates();
+        // Initialize States
+        _stateMachine   = new FiniteStateMachine();
+        _states         = new State[(int)PlayerStateID.Count];
+
+        _states[(int)PlayerStateID.Idle]            = new PlayerIdleState(this, PlayerControllerParameters.Idle_b);
+        _states[(int)PlayerStateID.Move]            = new PlayerMoveState(this, PlayerControllerParameters.Move_b);
+        _states[(int)PlayerStateID.Jump]            = new PlayerJumpState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.InAir]           = new PlayerInAirState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.Land]            = new PlayerLandState(this, PlayerControllerParameters.Land_b);
+        _states[(int)PlayerStateID.WallSlide]       = new PlayerWallSlideState(this, PlayerControllerParameters.WallSlide_b);
+        _states[(int)PlayerStateID.WallGrab]        = new PlayerWallGrabState(this, PlayerControllerParameters.WallGrab_b);
+        _states[(int)PlayerStateID.WallClimb]       = new PlayerWallClimbState(this, PlayerControllerParameters.WallClimb_b);
+        _states[(int)PlayerStateID.WallJump]        = new PlayerWallJumpState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.LedgeClimb]      = new PlayerLedgeClimbState(this, PlayerControllerParameters.LedgeClimbState_b);
+        _states[(int)PlayerStateID.Dash]            = new PlayerDashState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.CrouchIdle]      = new PlayerCrouchIdleState(this, PlayerControllerParameters.CrouchIdle_b);
+        _states[(int)PlayerStateID.CrouchMove]      = new PlayerCrouchMoveState(this, PlayerControllerParameters.CrouchMove_b);
+        _states[(int)PlayerStateID.Roll]            = new PlayerRollState(this, PlayerControllerParameters.Roll_b);
+        _states[(int)PlayerStateID.PrimaryAttack]   = new PlayerAttackState(this, PlayerControllerParameters.Combat_b);
+        _states[(int)PlayerStateID.SecondaryDefend] = new PlayerDefendState(this, PlayerControllerParameters.Combat_b);
+        _states[(int)PlayerStateID.SpellCast]       = new PlayerSpellState(this, PlayerControllerParameters.Combat_b);
+
+        //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
+        //_secondaryDefendState.SetShield(_inventory.Shield);
+        //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
     }
 
     protected override void OnEnable()
@@ -65,55 +70,27 @@ public sealed class Player : Entity
     #endregion
 
     #region Setters
-    private void InitializeStates()
-    {
-        _stateMachine   = new FiniteStateMachine();
-        _states         = new State[(int)PlayerStateID.Count];
-
-        _states[(int)PlayerStateID.Idle]            = new PlayerIdleState(this, PlayerControllerParameters.Idle_b);
-        _states[(int)PlayerStateID.Move]            = new PlayerIdleState(this, PlayerControllerParameters.Move_b);
-        _states[(int)PlayerStateID.Jump]            = new PlayerIdleState(this, PlayerControllerParameters.InAir_b);
-        _states[(int)PlayerStateID.InAir]           = new PlayerIdleState(this, PlayerControllerParameters.InAir_b);
-        _states[(int)PlayerStateID.Land]            = new PlayerIdleState(this, PlayerControllerParameters.Land_b);
-        _states[(int)PlayerStateID.WallSlide]       = new PlayerIdleState(this, PlayerControllerParameters.WallSlide_b);
-        _states[(int)PlayerStateID.WallGrab]        = new PlayerIdleState(this, PlayerControllerParameters.WallGrab_b);
-        _states[(int)PlayerStateID.WallClimb]       = new PlayerIdleState(this, PlayerControllerParameters.WallClimb_b);
-        _states[(int)PlayerStateID.WallJump]        = new PlayerIdleState(this, PlayerControllerParameters.InAir_b);
-        _states[(int)PlayerStateID.LedgeClimb]      = new PlayerIdleState(this, PlayerControllerParameters.LedgeClimbState_b);
-        _states[(int)PlayerStateID.Dash]            = new PlayerIdleState(this, PlayerControllerParameters.InAir_b);
-        _states[(int)PlayerStateID.CrouchIdle]      = new PlayerIdleState(this, PlayerControllerParameters.CrouchIdle_b);
-        _states[(int)PlayerStateID.CrouchMove]      = new PlayerIdleState(this, PlayerControllerParameters.CrouchMove_b);
-        _states[(int)PlayerStateID.Roll]            = new PlayerIdleState(this, PlayerControllerParameters.Roll_b);
-        _states[(int)PlayerStateID.PrimaryAttack]   = new PlayerIdleState(this, PlayerControllerParameters.Combat_b);
-        _states[(int)PlayerStateID.SecondaryDefend] = new PlayerIdleState(this, PlayerControllerParameters.Combat_b);
-        _states[(int)PlayerStateID.SpellCast]       = new PlayerIdleState(this, PlayerControllerParameters.Combat_b);
-
-        //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
-        //_secondaryDefendState.SetShield(_inventory.Shield);
-        //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
-    }
-
     public void SetColiderHeight(float height)
     {
-        Vector2 center = _objectComponents.BoxCollider.offset;
-        _workspaceVector2.Set(_objectComponents.BoxCollider.size.x, height);
+        Vector2 center = _entityIntObjComponents.BoxCollider.offset;
+        _workspaceVector2.Set(_entityIntObjComponents.BoxCollider.size.x, height);
 
-        center.y += (height - _objectComponents.BoxCollider.size.y) / 2;
+        center.y += (height - _entityIntObjComponents.BoxCollider.size.y) / 2;
 
-        _objectComponents.BoxCollider.size   = _workspaceVector2;
-        _objectComponents.BoxCollider.offset = center;
+        _entityIntObjComponents.BoxCollider.size   = _workspaceVector2;
+        _entityIntObjComponents.BoxCollider.offset = center;
     }
 
     public void SetLightOrbPosition(Vector2 position)
     {
-        _lightOrbPosition.transform.localPosition = position;
+        _playerExtObjComponents._lightOrbPosition.transform.localPosition = position;
     }
     #endregion
 
     #region Checkers
     public void CheckIfShouldFlip(int inputX)
     {
-        if (inputX != 0 && inputX != _statusComponents.FacingDirection)
+        if (inputX != 0 && inputX != _entityIntStatusComponents.FacingDirection)
             Flip();
     }
 
@@ -133,11 +110,17 @@ public sealed class Player : Entity
     {
         base.Damage(attackDetails);
 
-        if (_statusComponents.IsDead)
+        if (_entityIntStatusComponents.IsDead)
         {
             gameObject.SetActive(false);
-            Instantiate(_dataPlayer.DeathBloodParticle, transform.position, _dataPlayer.DeathBloodParticle.transform.rotation);
-            Instantiate(_dataPlayer.DeathChunkParticle, transform.position, _dataPlayer.DeathChunkParticle.transform.rotation);
+
+            Instantiate(_playerExtObjComponents._dataPlayer.DeathBloodParticle,
+                        transform.position,
+                        _playerExtObjComponents._dataPlayer.DeathBloodParticle.transform.rotation);
+
+            Instantiate(_playerExtObjComponents._dataPlayer.DeathChunkParticle,
+                        transform.position,
+                        _playerExtObjComponents._dataPlayer.DeathChunkParticle.transform.rotation);
         }
     }
 
@@ -149,7 +132,7 @@ public sealed class Player : Entity
     public override void AdditionalDamageActions(AttackDetails attackDetails)
     {
         InterruptActions();
-        DamageHop(_objectComponents.DataEntity.DamageHopDirection, _objectComponents.DataEntity.DamageHopSpeed);
+        DamageHop(_entityExtObjComponents.Data.DamageHopDirection, _entityExtObjComponents.Data.DamageHopSpeed);
 
         base.AdditionalDamageActions(attackDetails);
     }
@@ -167,8 +150,8 @@ public sealed class Player : Entity
     {
         var data = (PlayerSaveData)state;
 
-        _statusComponents.CurrentHealth = data.PlayerHealth;
-        _statusComponents.FacingDirection = data.PlayerFacingDirection;
+        _entityIntStatusComponents.CurrentHealth = data.PlayerHealth;
+        _entityIntStatusComponents.FacingDirection = data.PlayerFacingDirection;
         transform.position = data.PlayerPosition.GetValues();
         transform.rotation = data.PlayerRotation.GetValues();
     }
@@ -177,8 +160,8 @@ public sealed class Player : Entity
     #region Other Functions
     public void SetNewGameData()
     {
-        _statusComponents.FacingDirection = 1;
-        _statusComponents.CurrentHealth = _objectComponents.DataEntity.MaxHealth;
+        _entityIntStatusComponents.FacingDirection = 1;
+        _entityIntStatusComponents.CurrentHealth = _entityExtObjComponents.Data.MaxHealth;
         transform.position = GameManager.Instance.GameStartPlayerPosition.position;
         transform.rotation = GameManager.Instance.GameStartPlayerPosition.rotation;
     }
@@ -216,22 +199,22 @@ public sealed class Player : Entity
 
     public Vector2 DetermineCornerPosition()
     {
-        RaycastHit2D xHit = Physics2D.Raycast(  _objectComponents.EnvironmentCheck.transform.position,
-                                                Vector2.right * _statusComponents.FacingDirection,
-                                                _objectComponents.DataEntity.EnvironmentCheckDistance,
-                                                _objectComponents.DataEntity.WhatIsGround);
+        RaycastHit2D xHit = Physics2D.Raycast(  _entityExtObjComponents.EnvironmentCheck.transform.position,
+                                                Vector2.right * _entityIntStatusComponents.FacingDirection,
+                                                _entityExtObjComponents.Data.EnvironmentCheckDistance,
+                                                _entityExtObjComponents.Data.WhatIsGround);
 
         float xDistance = xHit.distance;
-        _workspaceVector2.Set(xDistance * _statusComponents.FacingDirection, 0f);
+        _workspaceVector2.Set(xDistance * _entityIntStatusComponents.FacingDirection, 0f);
 
-        RaycastHit2D yHit = Physics2D.Raycast(  _objectComponents.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
+        RaycastHit2D yHit = Physics2D.Raycast(  _entityExtObjComponents.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
                                                 Vector2.down,
-                                                _objectComponents.LedgeCheck.transform.position.y - _objectComponents.EnvironmentCheck.transform.position.y,
-                                                _objectComponents.DataEntity.WhatIsGround);
+                                                _entityExtObjComponents.LedgeCheck.transform.position.y - _entityExtObjComponents.EnvironmentCheck.transform.position.y,
+                                                _entityExtObjComponents.Data.WhatIsGround);
 
         float yDistance = yHit.distance;
-        _workspaceVector2.Set(  _objectComponents.EnvironmentCheck.transform.position.x + xDistance * _statusComponents.FacingDirection,
-                                _objectComponents.LedgeCheck.transform.position.y - yDistance);
+        _workspaceVector2.Set(  _entityExtObjComponents.EnvironmentCheck.transform.position.x + xDistance * _entityIntStatusComponents.FacingDirection,
+                                _entityExtObjComponents.LedgeCheck.transform.position.y - yDistance);
         
         return _workspaceVector2;
     }

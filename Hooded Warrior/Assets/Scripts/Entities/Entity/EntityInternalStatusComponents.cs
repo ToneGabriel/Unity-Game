@@ -1,5 +1,5 @@
 
-public sealed class EntityStatusComponents
+public sealed class EntityInternalStatusComponents
 {
     public int      FacingDirection;
     public int      LastDamageDirection;

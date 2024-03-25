@@ -29,20 +29,20 @@ public abstract class EnemyStunState : EnemyState
         base.Exit();
 
         _enemy.ResetStunResistnce();
-        _enemy.ObjectComponents.Rigidbody.bodyType = RigidbodyType2D.Dynamic;
+        _enemy.EntityIntObjComponents.Rigidbody.bodyType = RigidbodyType2D.Dynamic;
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
 
-        if (Time.time >= _enemy.StatusComponents.StateStartTime + _stateData.StunTime)                                                        // Counts stun time
+        if (Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.StunTime)                                                        // Counts stun time
             _isStunTimeOver = true;
 
-        if (_isGrounded && Time.time >= _enemy.StatusComponents.StateStartTime + _stateData.StunKnockBackTime && !_isMovementStopped)         // sets velocity to 0 while stunned
+        if (_isGrounded && Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.StunKnockBackTime && !_isMovementStopped)         // sets velocity to 0 while stunned
         {
             _isMovementStopped = true;
-            _enemy.ObjectComponents.Rigidbody.bodyType = RigidbodyType2D.Static;
+            _enemy.EntityExtObjComponents.Rigidbody.bodyType = RigidbodyType2D.Static;
         }
     }
 

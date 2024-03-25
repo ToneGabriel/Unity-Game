@@ -6,14 +6,14 @@ public sealed class PlayerJumpState : PlayerAbilityState
     public PlayerJumpState(Player player, string animBoolName)
         : base(player, animBoolName)
     {
-        _amountOfJumpsLeft = playerData.AmountOfJumps;
+        _amountOfJumpsLeft = _player.PlayerExtObjComponents._dataPlayer.AmountOfJumps;
     }
 
     public override void Enter()
     {
         base.Enter();
 
-        _player.SetVelocityY(_dataPlayer.JumpVelocity);
+        _player.SetVelocityY(_player.PlayerExtObjComponents._dataPlayer.JumpVelocity);
         _isAbilityDone = true;
         DecreaseAmountOfJumpsLeft();
         _player._inAirState.SetIsJumping();
@@ -28,7 +28,7 @@ public sealed class PlayerJumpState : PlayerAbilityState
 
     public void ResetAmountOfJumpsLeft()
     {
-        _amountOfJumpsLeft = _dataPlayer.AmountOfJumps;
+        _amountOfJumpsLeft = _player.PlayerExtObjComponents._dataPlayer.AmountOfJumps;
     }
 
     public void DecreaseAmountOfJumpsLeft()

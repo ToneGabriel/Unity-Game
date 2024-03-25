@@ -18,7 +18,7 @@ public abstract class EnemyMeleeAttackState : EnemyState, ICooldown
     {
         base.Enter();
 
-        _enemy.StatusComponents.IsStateAnimationFinished = false;
+        _enemy.EntityIntStatusComponents.IsStateAnimationFinished = false;
         _enemy.SetVelocityZero();
 
         _attackDetails.DamageAmount = _stateData.AttackDamage;
@@ -44,12 +44,12 @@ public abstract class EnemyMeleeAttackState : EnemyState, ICooldown
 
     public virtual void FinishMeleeAttack()
     {
-        _enemy.StatusComponents.IsStateAnimationFinished = true;
+        _enemy.EntityIntStatusComponents.IsStateAnimationFinished = true;
     }
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _enemy.StatusComponents.StateStartTime + _stateData.AttackCooldown)
+        if (IsOnCooldown && Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.AttackCooldown)
             ResetCooldown();
     }
 

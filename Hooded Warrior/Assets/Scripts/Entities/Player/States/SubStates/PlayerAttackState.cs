@@ -28,7 +28,7 @@ public sealed class PlayerAttackState : PlayerAbilityState
         base.LogicUpdate();
 
         if (_setVelocity)
-            _player.SetVelocityX(_velocityToSet * _player.StatusComponents.FacingDirection);
+            _player.SetVelocityX(_velocityToSet * _player.EntityIntStatusComponents.FacingDirection);
     }
 
     public void SetWeapon(Weapon weapon)
@@ -50,7 +50,7 @@ public sealed class PlayerAttackState : PlayerAbilityState
 
     public void SetPlayerVelocity(float velocity)
     {
-        _player.SetVelocityX(velocity * _player.StatusComponents.FacingDirection);
+        _player.SetVelocityX(velocity * _player.EntityIntStatusComponents.FacingDirection);
         _velocityToSet = velocity;
         _setVelocity = true;
     }

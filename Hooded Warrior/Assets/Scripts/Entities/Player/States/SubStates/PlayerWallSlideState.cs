@@ -15,7 +15,7 @@ public sealed class PlayerWallSlideState : PlayerTouchingWallState
             _player.ChangeState((int)PlayerStateID.WallGrab);
         else if (_jumpInput && _isTouchingWall)
             _player.ChangeState((int)PlayerStateID.WallJump);
-        else if (!_grabInput && _inputX != 0 && _inputX != _player.StatusComponents.FacingDirection)
+        else if (!_grabInput && _inputX != 0 && _inputX != _player.EntityIntStatusComponents.FacingDirection)
             _player.ChangeState((int)PlayerStateID.InAir);
     }
 }

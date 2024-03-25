@@ -22,7 +22,18 @@ public class Bull : Enemy
     {
         base.Awake();
 
-        InitializeStates();
+        // Initialize States
+        _stateMachine   = new FiniteStateMachine();
+        _states         = new State[(int)BullStateID.Count];
+
+        _states[(int)BullStateID.Idle]              = new BullIdleState(this, "idle", _idleStateData);
+        _states[(int)BullStateID.Move]              = new BullMoveState(this, "walk", _moveStateData);
+        _states[(int)BullStateID.PlayerDetected]    = new BullPlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
+        _states[(int)BullStateID.LookForPlayer]     = new BullLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData);
+        _states[(int)BullStateID.Charge]            = new BullChargeState(this, "charge", _chargeStateData);
+        _states[(int)BullStateID.MeleeAttack]       = new BullMeleeAttackState(this, "meleeAttack", _meleeAttackStateData);
+        _states[(int)BullStateID.Stun]              = new BullStunState(this, "stun", _stunStateData);
+        _states[(int)BullStateID.Dead]              = new BullDeadState(this, "dead", _deadStateData);
     }
 
     protected override void OnEnable()
@@ -53,30 +64,15 @@ public class Bull : Enemy
     #endregion
 
     #region Other functions
-    protected void InitializeStates()
-    {
-        _stateMachine   = new FiniteStateMachine();
-        _states         = new State[(int)BullStateID.Count];
-
-        _states[(int)BullStateID.Idle]              = new BullIdleState(this, "idle", _idleStateData);
-        _states[(int)BullStateID.Move]              = new BullMoveState(this, "walk", _moveStateData);
-        _states[(int)BullStateID.PlayerDetected]    = new BullPlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
-        _states[(int)BullStateID.LookForPlayer]     = new BullLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData);
-        _states[(int)BullStateID.Charge]            = new BullChargeState(this, "charge", _chargeStateData);
-        _states[(int)BullStateID.MeleeAttack]       = new BullMeleeAttackState(this, "meleeAttack", _meleeAttackStateData);
-        _states[(int)BullStateID.Stun]              = new BullStunState(this, "stun", _stunStateData);
-        _states[(int)BullStateID.Dead]              = new BullDeadState(this, "dead", _deadStateData);
-    }
-
     public override void Damage(AttackDetails attackdetails)
     {
         base.Damage(attackdetails);
 
-        if (_statusComponents.IsDead)
+        if (_entityIntStatusComponents.IsDead)
             ChangeState((int)BullStateID.Dead);
-        else if (_statusComponents.IsStuned && _stateMachine.CurrentState != _states[(int)BullStateID.Stun])
+        else if (_entityIntStatusComponents.IsStuned && _stateMachine.CurrentState != _states[(int)BullStateID.Stun])
             ChangeState((int)BullStateID.Stun);
-        else if (!_statusComponents.IsStuned && _objectComponents.Rigidbody.velocity.x != 0)
+        else if (!_entityIntStatusComponents.IsStuned && _entityExtObjComponents.Rigidbody.velocity.x != 0)
             ChangeState((int)BullStateID.LookForPlayer);
     }
 

@@ -26,7 +26,7 @@ public abstract class EnemyPlayerDetectedState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _enemy.StatusComponents.StateStartTime + _stateData.LookTime)                        // Counts time before taking action
+        if (Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.LookTime)                        // Counts time before taking action
             _canMove = true;
     }
 

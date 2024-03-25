@@ -14,7 +14,7 @@ public class BullMeleeAttackState : EnemyMeleeAttackState
     {
         base.LogicUpdate();
 
-        if (_bull.StatusComponents.IsStateAnimationFinished)
+        if (_bull.EntityIntStatusComponents.IsStateAnimationFinished)
         {
             if (_isPlayerInMinAgroRange)
                 _bull.ChangeState((int)BullStateID.PlayerDetected);

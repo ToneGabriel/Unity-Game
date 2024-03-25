@@ -16,7 +16,7 @@ public class BringerOfDeathRangedAttackState : EnemyRangedAttackState
     {
         base.LogicUpdate();
 
-        if (_bod.StatusComponents.IsStateAnimationFinished)
+        if (_bod.EntityIntStatusComponents.IsStateAnimationFinished)
         {
             if (_isPlayerInMinAgroRange)
                 _bod.ChangeState((int)BringerOfDeathStateID.PlayerDetected);

@@ -14,7 +14,7 @@ public class BringerOfDeathMeleeAttackState : EnemyMeleeAttackState
     {
         base.LogicUpdate();
 
-        if (_bod.StatusComponents.IsStateAnimationFinished)
+        if (_bod.EntityIntStatusComponents.IsStateAnimationFinished)
         {
             if (_isPlayerInMinAgroRange)
                 _bod.ChangeState((int)BringerOfDeathStateID.PlayerDetected);

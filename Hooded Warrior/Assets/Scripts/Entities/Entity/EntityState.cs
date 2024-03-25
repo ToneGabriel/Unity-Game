@@ -14,16 +14,16 @@ public abstract class EntityState : State
 
     public override void Enter()
     {
-        _entity.StatusComponents.StateStartTime             = Time.time;
-        _entity.StatusComponents.IsStateAnimationFinished   = false;
-        _entity.ObjectComponents.Animator.SetBool(_animBoolName, true);
+        _entity.EntityIntStatusComponents.StateStartTime             = Time.time;
+        _entity.EntityIntStatusComponents.IsStateAnimationFinished   = false;
+        _entity.EntityExtObjComponents.Animator.SetBool(_animBoolName, true);
 
         DoChecks();
     }
 
     public override void Exit()
     {
-        _entity.ObjectComponents.Animator.SetBool(_animBoolName, false);
+        _entity.EntityExtObjComponents.Animator.SetBool(_animBoolName, false);
     }
 
     public override void LogicUpdate() { }
@@ -36,6 +36,6 @@ public abstract class EntityState : State
 
     public override void AnimationFinishTrigger()
     {
-        _entity.StatusComponents.IsStateAnimationFinished = true;
+        _entity.EntityIntStatusComponents.IsStateAnimationFinished = true;
     }
 }
