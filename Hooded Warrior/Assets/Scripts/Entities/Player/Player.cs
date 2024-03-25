@@ -3,7 +3,6 @@
 public sealed class Player : Entity
 {
     #region Components & Data
-    [SerializeField] private PlayerInputHandler _inputHandler;
     [SerializeField] private PlayerInventory    _inventory;
     [SerializeField] private GameObject         _dashDirectionIndicator;
     [SerializeField] private GameObject         _lightOrbPosition;
@@ -41,7 +40,6 @@ public sealed class Player : Entity
     {
         base.Awake();
 
-        _inputHandler   = GetComponent<PlayerInputHandler>();
         _inventory      = GetComponent<PlayerInventory>();
         _weaponIndex    = 0;
         _spellIndex     = 0;

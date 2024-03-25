@@ -3,15 +3,6 @@
 public class Bull : Enemy
 {
     #region States and Data
-    public Bull_IdleState IdleState { get; private set; }
-    public Bull_MoveState MoveState { get; private set; }
-    public Bull_PlayerDetectedState PlayerDetectedState { get; private set; }
-    public Bull_ChargeState ChargeState { get; private set; }
-    public Bull_LookForPlayerState LookForPlayerState { get; private set; }
-    public Bull_MeleeAttackState MeleeAttackState { get; private set; }
-    public Bull_StunState StunState { get; private set; }
-    public Bull_DeadState DeadState { get; private set; }
-
     [SerializeField] private Data_Idle _idleStateData;
     [SerializeField] private Data_Move _moveStateData;
     [SerializeField] private Data_PlayerDetected _playerDetectedStateData;
@@ -27,11 +18,18 @@ public class Bull : Enemy
     #endregion
 
     #region Unity functions
+    protected override void Awake()
+    {
+        base.Awake();
+
+        InitializeStates();
+    }
+
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        _stateMachine.Initialize(MoveState);
+        _stateMachine.InitializeState(_states[(int)BullStateID.Move]);
     }
     #endregion
 
@@ -40,43 +38,46 @@ public class Bull : Enemy
     // set on attack animation
     public void TriggerAttack()
     {
-        MeleeAttackState.TriggerMeleeAttack();
+        //MeleeAttackState.TriggerMeleeAttack();
     }
 
     public void FinishAttack()
     {
-        MeleeAttackState.FinishMeleeAttack();
+        //MeleeAttackState.FinishMeleeAttack();
     }
 
     public void FinishDeathAnimation()
     {
-        DeadState.FinishDeathAnimation();
+        //DeadState.FinishDeathAnimation();
     }
     #endregion
 
     #region Other functions
     protected void InitializeStates()
     {
-        IdleState = new Bull_IdleState(this, _stateMachine, "idle", _idleStateData);
-        MoveState = new Bull_MoveState(this, _stateMachine, "walk", _moveStateData);
-        PlayerDetectedState = new Bull_PlayerDetectedState(this, _stateMachine, "playerDetected", _playerDetectedStateData);
-        ChargeState = new Bull_ChargeState(this, _stateMachine, "charge", _chargeStateData);
-        LookForPlayerState = new Bull_LookForPlayerState(this, _stateMachine, "lookForPlayer", _lookForPlayerStateData);
-        MeleeAttackState = new Bull_MeleeAttackState(this, _stateMachine, "meleeAttack", _meleeAttackStateData);
-        StunState = new Bull_StunState(this, _stateMachine, "stun", _stunStateData);
-        DeadState = new Bull_DeadState(this, _stateMachine, "dead", _deadStateData);
+        _stateMachine   = new FiniteStateMachine();
+        _states         = new State[(int)BullStateID.Count];
+
+        _states[(int)BullStateID.Idle]              = new BullIdleState(this, "idle", _idleStateData);
+        _states[(int)BullStateID.Move]              = new BullMoveState(this, "walk", _moveStateData);
+        _states[(int)BullStateID.PlayerDetected]    = new BullPlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
+        _states[(int)BullStateID.LookForPlayer]     = new BullLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData);
+        _states[(int)BullStateID.Charge]            = new BullChargeState(this, "charge", _chargeStateData);
+        _states[(int)BullStateID.MeleeAttack]       = new BullMeleeAttackState(this, "meleeAttack", _meleeAttackStateData);
+        _states[(int)BullStateID.Stun]              = new BullStunState(this, "stun", _stunStateData);
+        _states[(int)BullStateID.Dead]              = new BullDeadState(this, "dead", _deadStateData);
     }
 
     public override void Damage(AttackDetails attackdetails)
     {
         base.Damage(attackdetails);
 
-        if (IsDead)
-            _stateMachine.ChangeState(DeadState);
-        else if (IsStuned && _stateMachine.CurrentState != StunState)
-            _stateMachine.ChangeState(StunState);
-        else if (!IsStuned && _rigidbody.velocity.x != 0)
-            _stateMachine.ChangeState(LookForPlayerState);
+        if (_statusComponents.IsDead)
+            ChangeState((int)BullStateID.Dead);
+        else if (_statusComponents.IsStuned && _stateMachine.CurrentState != _states[(int)BullStateID.Stun])
+            ChangeState((int)BullStateID.Stun);
+        else if (!_statusComponents.IsStuned && _objectComponents.Rigidbody.velocity.x != 0)
+            ChangeState((int)BullStateID.LookForPlayer);
     }
 
     public override void OnDrawGizmos()

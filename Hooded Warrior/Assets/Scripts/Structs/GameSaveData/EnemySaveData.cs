@@ -7,6 +7,6 @@ public struct EnemySaveData
 
     public EnemySaveData(Enemy enemy)
     {
-        IsDead = enemy.IsDead;
+        IsDead = enemy.StatusComponents.IsDead;
     }
 }

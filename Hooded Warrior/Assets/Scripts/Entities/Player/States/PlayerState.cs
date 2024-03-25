@@ -20,13 +20,13 @@ public abstract class PlayerState : EntityState
         // independent weapon change action
         if (_changeWeaponInput)
         {
-            InputManager.Instance.ForceInputStop(ref InputManager.Instance.ChangeWeaponInput);
+            InputManager.Instance.UseChangeWeaponInput();
             _player.ChangeWeapon();
         }
         // independent spell change action
         if (_changeSpellInput)
         {
-            InputManager.Instance.ForceInputStop(ref InputManager.Instance.ChangeSpellInput);
+            InputManager.Instance.UseChangeSpellInput();
             _player.ChangeSpell();
         }
     }

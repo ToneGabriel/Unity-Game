@@ -169,10 +169,20 @@ public sealed class InputManager : MonoBehaviour
             ChangeWeaponInput = true;
     }
 
+    public void UseChangeWeaponInput()
+    {
+        ChangeWeaponInput = false;
+    }
+
     public void OnChangeSpellInput(InputAction.CallbackContext context)     // TODO
     {
         if (context.started)
             ChangeSpellInput = true;
+    }
+
+    public void UseChangeSpellInput()
+    {
+        ChangeSpellInput = false;
     }
 
     public void OnPauseGameInput(InputAction.CallbackContext context)       // Tap
