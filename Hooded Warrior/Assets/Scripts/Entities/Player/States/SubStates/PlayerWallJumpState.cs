@@ -19,9 +19,6 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        _player.EntityIntObjComponents.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.EntityIntObjComponents.Rigidbody.velocity.y);
-        _player.EntityIntObjComponents.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.EntityIntObjComponents.Rigidbody.velocity.x));
-
         if (Time.time >= _player.EntityIntStatusComponents.StateStartTime + _dataPlayer.WallJumpTime)
             _isAbilityDone = true;
     }

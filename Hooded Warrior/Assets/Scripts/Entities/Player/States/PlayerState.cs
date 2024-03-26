@@ -14,6 +14,8 @@ public abstract class PlayerState : EntityState
 
     public override void LogicUpdate()
     {
+        base.LogicUpdate();
+
         _changeWeaponInput  = InputManager.Instance.ChangeWeaponInput;
         _changeSpellInput   = InputManager.Instance.ChangeSpellInput;
 
@@ -29,5 +31,7 @@ public abstract class PlayerState : EntityState
             InputManager.Instance.UseChangeSpellInput();
             _player.ChangeSpell();
         }
+
+        _player.UpdateAnimatorVelocityParams();
     }
 }

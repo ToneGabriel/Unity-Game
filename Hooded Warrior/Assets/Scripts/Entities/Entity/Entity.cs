@@ -4,18 +4,37 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 {
     #region Components & Data
     [SerializeField]
-    protected EntityExternalObjectComponents                    _entityExtObjComponents;
+    protected EntityExternalObjectComponents    _entityExtObjComponents;
 
-    protected EntityInternalObjectComponents                    _entityIntObjComponents;
-    protected EntityInternalStatusComponents                    _entityIntStatusComponents;
-    protected FiniteStateMachine                                _stateMachine;      // initialized in derived classes
-    protected State[]                                           _states;            // initialized in derived classes
-    protected Vector2                                           _workspaceVector2;
+    protected EntityInternalObjectComponents    _entityIntObjComponents;
+    protected EntityInternalStatusComponents    _entityIntStatusComponents;
+    protected FiniteStateMachine                _stateMachine;      // initialized in derived classes
+    protected State[]                           _states;            // initialized in derived classes
+    protected Vector2                           _workspaceVector2;
     #endregion
 
     #region Component Getters
-    public EntityInternalObjectComponents EntityIntObjComponents    { get { return _entityIntObjComponents; } }
     public EntityInternalStatusComponents EntityIntStatusComponents { get { return _entityIntStatusComponents; } }
+    #endregion
+
+    #region Getters
+    public Vector2 RBVelocity
+    {
+        get { return _entityIntObjComponents.Rigidbody.velocity; }
+        set { _entityIntObjComponents.Rigidbody.velocity = value; }
+    }
+
+    public RigidbodyType2D RBBodyType
+    {
+        get { return _entityIntObjComponents.Rigidbody.bodyType; }
+        set { _entityIntObjComponents.Rigidbody.bodyType = value; }
+    }
+
+    public float RBDrag
+    {
+        get { return _entityIntObjComponents.Rigidbody.drag; }
+        set { _entityIntObjComponents.Rigidbody.drag = value; }
+    }
     #endregion
 
     #region Unity functions
@@ -70,40 +89,45 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
         _stateMachine.ChangeState(_states[stateID]);
     }
 
+    public void SetAnimatorBoolParam(string animBoolName, bool value)
+    {
+        _entityIntObjComponents.Animator.SetBool(animBoolName, value);
+    }
+
     public void SetVelocityZero()
     {
-        _entityIntObjComponents.Rigidbody.velocity = Vector2.zero;
+        RBVelocity = Vector2.zero;
     }
 
     public void SetVelocityX(float velocity)
     {
-        _workspaceVector2.Set(velocity, _entityIntObjComponents.Rigidbody.velocity.y);
-        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(velocity, RBVelocity.y);
+        RBVelocity = _workspaceVector2;
     }
 
     public void SetVelocityY(float velocity)
     {
-        _workspaceVector2.Set(_entityIntObjComponents.Rigidbody.velocity.x, velocity);
-        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(RBVelocity.x, velocity);
+        RBVelocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity, Vector2 direction)
     {
         _workspaceVector2 = direction * velocity;
-        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
+        RBVelocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity, Vector2 angle, int direction)
     {
         angle.Normalize();
         _workspaceVector2.Set(angle.x * velocity * direction, angle.y * velocity);
-        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
+        RBVelocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity)                                     // Set velocity towards facing direction
     {
-        _workspaceVector2.Set(_entityIntStatusComponents.FacingDirection * velocity, _entityIntObjComponents.Rigidbody.velocity.y);
-        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
+        _workspaceVector2.Set(_entityIntStatusComponents.FacingDirection * velocity, RBVelocity.y);
+        RBVelocity = _workspaceVector2;
     }
 
     public void Flip()
@@ -191,7 +215,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
         if (_entityIntObjComponents.Rigidbody.bodyType == RigidbodyType2D.Dynamic)
         {
             direction.Set(direction.x * _entityIntStatusComponents.LastDamageDirection * (-1), direction.y);
-            _entityIntObjComponents.Rigidbody.velocity = direction * velocity;
+            RBVelocity = direction * velocity;
         }
     }
     #endregion

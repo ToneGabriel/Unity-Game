@@ -44,7 +44,7 @@ public sealed class PlayerInAirState : PlayerState
 
         CheckJumpMultiplier();
 
-        if (_isGrounded && _player.EntityIntObjComponents.Rigidbody.velocity.y < 0.01f)
+        if (_isGrounded && _player.RBVelocity.y < 0.01f)
             _player.ChangeState((int)PlayerStateID.Land);
         else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
@@ -64,14 +64,11 @@ public sealed class PlayerInAirState : PlayerState
             _player.CheckIfShouldFlip(_inputX);
             _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
 
-            _workspaceVector2.Set(  _player.EntityIntObjComponents.Rigidbody.velocity.x,
-                                    Mathf.Clamp(_player.EntityIntObjComponents.Rigidbody.velocity.y,
+            _workspaceVector2.Set(  _player.RBVelocity.x,
+                                    Mathf.Clamp(_player.RBVelocity.y,
                                                 -_dataPlayer.MaxVelocityY,
                                                 _dataPlayer.MaxVelocityY));
-            _player.EntityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
-
-            _player.EntityIntObjComponents.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.EntityIntObjComponents.Rigidbody.velocity.y);
-            _player.EntityIntObjComponents.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.EntityIntObjComponents.Rigidbody.velocity.x));
+            _player.RBVelocity = _workspaceVector2;
         }
     }
 
@@ -85,10 +82,10 @@ public sealed class PlayerInAirState : PlayerState
         if (_isJumping)
             if (_jumpInputStop)
             {
-                _player.SetVelocityY(_player.EntityIntObjComponents.Rigidbody.velocity.y * _dataPlayer.JumpHeightMultiplier);
+                _player.SetVelocityY(_player.RBVelocity.y * _dataPlayer.JumpHeightMultiplier);
                 _isJumping = false;
             }
-            else if (_player.EntityIntObjComponents.Rigidbody.velocity.y <= 0f)
+            else if (_player.RBVelocity.y <= 0f)
                 _isJumping = false;
     }
 

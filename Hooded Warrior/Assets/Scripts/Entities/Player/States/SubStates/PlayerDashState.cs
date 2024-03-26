@@ -33,8 +33,8 @@ public sealed class PlayerDashState : PlayerAbilityState
     {
         base.Exit();
 
-        if (_player.EntityIntObjComponents.Rigidbody.velocity.y > 0f)
-            _player.SetVelocityY(_player.EntityIntObjComponents.Rigidbody.velocity.y * _dataPlayer.DashEndYMultiplier);
+        if (_player.RBVelocity.y > 0f)
+            _player.SetVelocityY(_player.RBVelocity.y * _dataPlayer.DashEndYMultiplier);
     }
 
     public override void LogicUpdate()
@@ -63,7 +63,7 @@ public sealed class PlayerDashState : PlayerAbilityState
                     _player.EntityIntStatusComponents.StateStartTime = Time.time;
                     _player.CheckIfShouldFlip(Mathf.RoundToInt(_dashDirection.x));
                     _player.SetVelocity(_dataPlayer.DashVelocity, _dashDirection);
-                    _player.EntityIntObjComponents.Rigidbody.drag = _dataPlayer.Drag;
+                    _player.RBDrag = _dataPlayer.Drag;
                     _player.SetDashArrowActive(false);
                     PlaceAfterImage();
                 }
@@ -71,14 +71,12 @@ public sealed class PlayerDashState : PlayerAbilityState
             else
             {
                 _player.SetVelocity(_dataPlayer.DashVelocity, _dashDirection);
-                _player.EntityIntObjComponents.Animator.SetFloat(PlayerControllerParameters.VelocityY_f, _player.EntityIntObjComponents.Rigidbody.velocity.y);
-                _player.EntityIntObjComponents.Animator.SetFloat(PlayerControllerParameters.VelocityX_f, Mathf.Abs(_player.EntityIntObjComponents.Rigidbody.velocity.x));
 
                 CheckIfShouldPlaceAfterImage();
 
                 if (Time.time >= _player.EntityIntStatusComponents.StateStartTime + _dataPlayer.DashTime)
                 {
-                    _player.EntityIntObjComponents.Rigidbody.drag = 0f;
+                    _player.RBDrag = 0f;
                     _isAbilityDone = true;
                     _lastDashTime = Time.time;
                 }

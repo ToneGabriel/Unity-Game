@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public sealed class Player : Entity
 {
@@ -70,6 +71,15 @@ public sealed class Player : Entity
     #endregion
 
     #region Setters
+    public void UpdateAnimatorVelocityParams()
+    {
+        _entityIntObjComponents.Animator.SetFloat(  PlayerControllerParameters.VelocityY_f,
+                                                    _entityIntObjComponents.Rigidbody.velocity.y);
+
+        _entityIntObjComponents.Animator.SetFloat(  PlayerControllerParameters.VelocityX_f,
+                                                    Mathf.Abs(_entityIntObjComponents.Rigidbody.velocity.x));
+    }
+
     public void SetDashArrowActive(bool value)
     {
         _playerExtObjComponents._dashDirectionIndicator.gameObject.SetActive(value);
