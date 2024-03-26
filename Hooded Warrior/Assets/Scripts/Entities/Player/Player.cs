@@ -70,6 +70,16 @@ public sealed class Player : Entity
     #endregion
 
     #region Setters
+    public void SetDashArrowActive(bool value)
+    {
+        _playerExtObjComponents._dashDirectionIndicator.gameObject.SetActive(value);
+    }
+
+    public void SetDashArrowRotation(Quaternion rotation)
+    {
+        _playerExtObjComponents._dashDirectionIndicator.transform.rotation = rotation;
+    }
+
     public void SetColiderHeight(float height)
     {
         Vector2 center = _entityIntObjComponents.BoxCollider.offset;

@@ -21,11 +21,11 @@ public abstract class PlayerAbilityState : PlayerState
         if (_isAbilityDone)
         {
             if (_isTouchingCeiling)
-                _player.ChangeState(_player._crouchIdleState);
-            else if (_isGrounded && _player._rigidbody.velocity.y < 0.01f)
-                _player.ChangeState(_player._idleState);
+                _player.ChangeState((int)PlayerStateID.CrouchIdle);
+            else if (_isGrounded && _player.EntityIntObjComponents.Rigidbody.velocity.y < 0.01f)
+                _player.ChangeState((int)PlayerStateID.Idle);
             else
-                _player.ChangeState(_player._inAirState);
+                _player.ChangeState((int)PlayerStateID.InAir);
         }
     }
 

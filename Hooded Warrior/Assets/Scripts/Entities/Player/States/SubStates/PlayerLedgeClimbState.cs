@@ -67,7 +67,7 @@ public sealed class PlayerLedgeClimbState : PlayerState
             if (_inputX == _player.EntityIntStatusComponents.FacingDirection && _isHanging && !_isClimbing)
             {
                 _isClimbing = true;
-                _player.EntityExtObjComponents.Animator.SetBool(PlayerControllerParameters.ClimbLedge_b, true);
+                _player.EntityIntObjComponents.Animator.SetBool(PlayerControllerParameters.ClimbLedge_b, true);
             }
             else if (_inputY == -1 && _isHanging && !_isClimbing)
                 _player.ChangeState((int)PlayerStateID.WallSlide);
@@ -80,7 +80,7 @@ public sealed class PlayerLedgeClimbState : PlayerState
     {
         base.AnimationFinishTrigger();
 
-        _player.EntityExtObjComponents.Animator.SetBool(PlayerControllerParameters.ClimbLedge_b, false);
+        _player.EntityIntObjComponents.Animator.SetBool(PlayerControllerParameters.ClimbLedge_b, false);
     }
 
     public override void AnimationTrigger()

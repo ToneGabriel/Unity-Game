@@ -16,14 +16,14 @@ public abstract class EntityState : State
     {
         _entity.EntityIntStatusComponents.StateStartTime             = Time.time;
         _entity.EntityIntStatusComponents.IsStateAnimationFinished   = false;
-        _entity.EntityExtObjComponents.Animator.SetBool(_animBoolName, true);
+        _entity.EntityIntObjComponents.Animator.SetBool(_animBoolName, true);
 
         DoChecks();
     }
 
     public override void Exit()
     {
-        _entity.EntityExtObjComponents.Animator.SetBool(_animBoolName, false);
+        _entity.EntityIntObjComponents.Animator.SetBool(_animBoolName, false);
     }
 
     public override void LogicUpdate() { }

@@ -14,7 +14,6 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Component Getters
-    public EntityExternalObjectComponents EntityExtObjComponents    { get { return _entityExtObjComponents; } }
     public EntityInternalObjectComponents EntityIntObjComponents    { get { return _entityIntObjComponents; } }
     public EntityInternalStatusComponents EntityIntStatusComponents { get { return _entityIntStatusComponents; } }
     #endregion
