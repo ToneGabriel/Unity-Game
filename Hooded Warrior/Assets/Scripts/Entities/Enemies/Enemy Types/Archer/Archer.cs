@@ -45,6 +45,13 @@ public class Archer : Enemy
 
         _stateMachine.InitializeState(_states[(int)ArcherStateID.Move]);
     }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        ObjectPoolManager.Instance.RequestPool<Arrow>();
+    }
     #endregion
 
     #region Triggers

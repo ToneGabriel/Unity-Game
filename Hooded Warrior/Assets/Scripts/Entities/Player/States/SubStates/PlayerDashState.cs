@@ -33,8 +33,8 @@ public sealed class PlayerDashState : PlayerAbilityState
     {
         base.Exit();
 
-        if (_player.RBVelocity.y > 0f)
-            _player.SetVelocityY(_player.RBVelocity.y * _player.PlayerData.DashEndYMultiplier);
+        if (_player.RBVelocityY > 0f)
+            _player.SetVelocityY(_player.RBVelocityY * _player.PlayerData.DashEndYMultiplier);
     }
 
     public override void LogicUpdate()

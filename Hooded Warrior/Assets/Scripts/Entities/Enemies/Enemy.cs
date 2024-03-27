@@ -91,6 +91,7 @@ public abstract class Enemy : Entity                // Base Enemy class
     }
     #endregion
 
+    #region Other Functions
     public virtual void OnDrawGizmos()
     {
         Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
@@ -100,4 +101,5 @@ public abstract class Enemy : Entity                // Base Enemy class
         Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
                         _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.right * _entityIntStatusComponents.FacingDirection * _enemyData.CloseRangeActionDistance));
     }
+    #endregion
 }

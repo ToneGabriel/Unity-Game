@@ -46,7 +46,7 @@ public sealed class PlayerInAirState : PlayerState
 
         CheckJumpMultiplier();
 
-        if (_isGrounded && _player.RBVelocity.y < 0.01f)
+        if (_isGrounded && _player.RBVelocityY < 0.01f)
             _player.ChangeState((int)PlayerStateID.Land);
         else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
@@ -66,11 +66,11 @@ public sealed class PlayerInAirState : PlayerState
             _player.FlipIfShould(_inputX);
             _player.SetVelocityX(_player.PlayerData.MovementVelocity * _inputX);
 
-            _workspaceVector2.Set(  _player.RBVelocity.x,
-                                    Mathf.Clamp(_player.RBVelocity.y,
+            _workspaceVector2.Set(  _player.RBVelocityX,
+                                    Mathf.Clamp(_player.RBVelocityY,
                                                 -_player.PlayerData.MaxVelocityY,
                                                 _player.PlayerData.MaxVelocityY));  // prevent using too much velocity
-            _player.RBVelocity = _workspaceVector2;
+            _player.SetVelocity(_workspaceVector2);
         }
     }
 
@@ -84,10 +84,10 @@ public sealed class PlayerInAirState : PlayerState
         if (_isJumping)
             if (_jumpInputStop)
             {
-                _player.SetVelocityY(_player.RBVelocity.y * _player.PlayerData.JumpHeightMultiplier);
+                _player.SetVelocityY(_player.RBVelocityY * _player.PlayerData.JumpHeightMultiplier);
                 _isJumping = false;
             }
-            else if (_player.RBVelocity.y <= 0f)
+            else if (_player.RBVelocityY <= 0f)
                 _isJumping = false;
     }
 

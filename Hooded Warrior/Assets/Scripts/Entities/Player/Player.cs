@@ -3,10 +3,10 @@
 public sealed class Player : Entity
 {
     #region Components & Data
-    [Header("Player External Components")][SerializeField]
+    [SerializeField]
     private PlayerExternalObjectComponents _playerExtObjComponents;
 
-    [Header("Player Data")][SerializeField]
+    [SerializeField]
     private DataPlayer _playerData;
     #endregion
 
@@ -75,7 +75,7 @@ public sealed class Player : Entity
     #region Setters
     public void SetDashArrowActive(bool value)
     {
-        _playerExtObjComponents._dashDirectionIndicator.gameObject.SetActive(value);
+        _playerExtObjComponents._dashDirectionIndicator.SetActive(value);
     }
 
     public void SetDashArrowRotation(Quaternion rotation)

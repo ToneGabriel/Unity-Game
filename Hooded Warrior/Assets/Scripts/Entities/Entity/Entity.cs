@@ -3,10 +3,10 @@ using UnityEngine;
 public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 {
     #region Components & Data
-    [Header("Entity External Components")][SerializeField]
+    [SerializeField]
     protected EntityExternalObjectComponents    _entityExtObjComponents;
 
-    [Header("Entity Data")][SerializeField]
+    [SerializeField]
     protected DataEntity                        _entityData;
 
     protected EntityInternalObjectComponents    _entityIntObjComponents;
@@ -18,26 +18,10 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     #region Component Getters
     public EntityInternalStatusComponents       EntityIntStatusComponents   { get { return _entityIntStatusComponents; } }
-    #endregion
-
-    #region Getters
-    public Vector2 RBVelocity
-    {
-        get { return _entityIntObjComponents.Rigidbody.velocity; }
-        set { _entityIntObjComponents.Rigidbody.velocity = value; }
-    }
-
-    public RigidbodyType2D RBBodyType
-    {
-        get { return _entityIntObjComponents.Rigidbody.bodyType; }
-        set { _entityIntObjComponents.Rigidbody.bodyType = value; }
-    }
-
-    public float RBDrag
-    {
-        get { return _entityIntObjComponents.Rigidbody.drag; }
-        set { _entityIntObjComponents.Rigidbody.drag = value; }
-    }
+    public float                                RBVelocityX                 { get { return _entityIntObjComponents.Rigidbody.velocity.x; } }
+    public float                                RBVelocityY                 { get { return _entityIntObjComponents.Rigidbody.velocity.y; } }
+    public float                                RBDrag                      { set { _entityIntObjComponents.Rigidbody.drag = value; } }
+    public RigidbodyType2D                      RBBodyType                  { set { _entityIntObjComponents.Rigidbody.bodyType = value; } }
     #endregion
 
     #region Unity functions
@@ -104,38 +88,43 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     public void SetVelocityZero()
     {
-        RBVelocity = Vector2.zero;
+        _entityIntObjComponents.Rigidbody.velocity = Vector2.zero;
     }
 
     public void SetVelocityX(float velocity)
     {
-        _workspaceVector2.Set(velocity, RBVelocity.y);
-        RBVelocity = _workspaceVector2;
+        _workspaceVector2.Set(velocity, RBVelocityY);
+        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocityY(float velocity)
     {
-        _workspaceVector2.Set(RBVelocity.x, velocity);
-        RBVelocity = _workspaceVector2;
+        _workspaceVector2.Set(RBVelocityX, velocity);
+        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
+    }
+
+    public void SetVelocity(Vector2 velocity)
+    {
+        _entityIntObjComponents.Rigidbody.velocity = velocity;
     }
 
     public void SetVelocity(float velocity, Vector2 direction)
     {
         _workspaceVector2 = direction * velocity;
-        RBVelocity = _workspaceVector2;
+        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity, Vector2 angle, int direction)
     {
         angle.Normalize();
         _workspaceVector2.Set(angle.x * velocity * direction, angle.y * velocity);
-        RBVelocity = _workspaceVector2;
+        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity)                                     // Set velocity towards facing direction
     {
-        _workspaceVector2.Set(_entityIntStatusComponents.FacingDirection * velocity, RBVelocity.y);
-        RBVelocity = _workspaceVector2;
+        _workspaceVector2.Set(_entityIntStatusComponents.FacingDirection * velocity, RBVelocityY);
+        _entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void Flip()
@@ -223,7 +212,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
         if (_entityIntObjComponents.Rigidbody.bodyType == RigidbodyType2D.Dynamic)
         {
             direction.Set(direction.x * _entityIntStatusComponents.LastDamageDirection * (-1), direction.y);
-            RBVelocity = direction * velocity;
+            _entityIntObjComponents.Rigidbody.velocity = direction * velocity;
         }
     }
     #endregion

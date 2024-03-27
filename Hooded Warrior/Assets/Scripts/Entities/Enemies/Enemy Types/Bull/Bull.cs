@@ -72,7 +72,7 @@ public class Bull : Enemy
             ChangeState((int)BullStateID.Dead);
         else if (_entityIntStatusComponents.IsStuned && _stateMachine.CurrentState != _states[(int)BullStateID.Stun])
             ChangeState((int)BullStateID.Stun);
-        else if (!_entityIntStatusComponents.IsStuned && RBVelocity.x != 0)
+        else if (!_entityIntStatusComponents.IsStuned && RBVelocityX != 0)
             ChangeState((int)BullStateID.LookForPlayer);
     }
 

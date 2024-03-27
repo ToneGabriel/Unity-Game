@@ -1842,8 +1842,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c679eb09a61b22147ba283eede4d74c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _entityExtObjComponents:
+    HealthBar: {fileID: 0}
+    GroundCheck: {fileID: 1892546116019590324}
+    EnvironmentCheck: {fileID: 1892546115777586212}
+    LedgeCheck: {fileID: 1892546116614779453}
   _entityData: {fileID: 0}
-  _dataPlayer: {fileID: 0}
+  _playerExtObjComponents:
+    _inventory: {fileID: 0}
+    _dashDirectionIndicator: {fileID: 2274551983830405710}
+    _lightOrbPosition: {fileID: 173531984}
+  _playerData: {fileID: 11400000, guid: bede729bf422af047980be7a1df7fc2b, type: 2}
 --- !u!114 &1892546115482586541
 MonoBehaviour:
   m_ObjectHideFlags: 0

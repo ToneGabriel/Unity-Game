@@ -7,8 +7,6 @@ public class ArcherRangedAttackState : EnemyRangedAttackState
         : base(archer, animBoolName, stateData)
     {
         _archer = archer;
-
-        ObjectPoolManager.Instance.RequestPool<Arrow>();
     }
 
     public override void LogicUpdate()

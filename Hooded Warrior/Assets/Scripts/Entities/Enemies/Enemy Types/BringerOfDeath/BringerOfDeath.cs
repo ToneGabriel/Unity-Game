@@ -46,6 +46,14 @@ public class BringerOfDeath : Enemy
 
         _stateMachine.InitializeState(_states[(int)BringerOfDeathStateID.Move]);
     }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        ObjectPoolManager.Instance.RequestPool<DeathPortal>();
+        ObjectPoolManager.Instance.RequestPool<DeathOrb>();
+    }
     #endregion
 
     #region Triggers
@@ -92,7 +100,7 @@ public class BringerOfDeath : Enemy
 
         if (_entityIntStatusComponents.IsDead)
             ChangeState((int)BringerOfDeathStateID.Dead);
-        else if (RBVelocity.x != 0)
+        else if (RBVelocityX != 0)
             ChangeState((int)BringerOfDeathStateID.LookForPlayer);
     }
     
