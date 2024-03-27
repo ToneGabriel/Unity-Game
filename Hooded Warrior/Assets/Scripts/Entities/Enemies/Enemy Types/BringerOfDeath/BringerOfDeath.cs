@@ -92,7 +92,7 @@ public class BringerOfDeath : Enemy
 
         if (_entityIntStatusComponents.IsDead)
             ChangeState((int)BringerOfDeathStateID.Dead);
-        else if (_entityExtObjComponents.Rigidbody.velocity.x != 0)
+        else if (RBVelocity.x != 0)
             ChangeState((int)BringerOfDeathStateID.LookForPlayer);
     }
     

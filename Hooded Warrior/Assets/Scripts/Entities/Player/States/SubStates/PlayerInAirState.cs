@@ -23,13 +23,15 @@ public sealed class PlayerInAirState : PlayerState
     {
         base.DoChecks();
 
-        _isGrounded = _player.CheckIfGrounded();
-        _isTouchingWall = _player.CheckIfTouchingWall();
-        _isTouchingLedge = _player.CheckIfTouchingLedge(_player.transform.right);
+        _isGrounded = _player.IsGrounded();
+        _isTouchingWall = _player.IsTouchingWall();
+        _isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
 
         // Save player position as soon as it detects ledge
-        if (_isTouchingWall && !_isTouchingLedge)
-            _player._ledgeClimbState.SetDetectedPosition(_player.transform.position);
+
+        // TODO
+        //if (_isTouchingWall && !_isTouchingLedge)
+        //    _player._ledgeClimbState.SetDetectedPosition(_player.transform.position);
     }
 
     public override void LogicUpdate()
@@ -38,7 +40,7 @@ public sealed class PlayerInAirState : PlayerState
 
         _inputX         = InputManager.Instance.NormalizedInputX;
         _jumpInput      = InputManager.Instance.JumpInput;
-        _jumpInputStop  = InputManager.Instance.JumpInputStop;
+        //_jumpInputStop  = InputManager.Instance.JumpInputStop;
         _grabInput      = InputManager.Instance.GrabInput;
         _dashInput      = InputManager.Instance.DashInput;
 
@@ -48,7 +50,7 @@ public sealed class PlayerInAirState : PlayerState
             _player.ChangeState((int)PlayerStateID.Land);
         else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
-        else if (_jumpInput && _player._jumpState.CanJump())
+        else if (_jumpInput /*&& _player._jumpState.CanJump()*/)
         {
             InputManager.Instance.UseJumpInput();
             _player.ChangeState((int)PlayerStateID.Jump);
@@ -57,17 +59,17 @@ public sealed class PlayerInAirState : PlayerState
             _player.ChangeState((int)PlayerStateID.WallGrab);
         else if (_isTouchingWall && !_grabInput)
             _player.ChangeState((int)PlayerStateID.WallSlide);
-        else if (_dashInput && _player._dashState.CheckIfCanDash())
+        else if (_dashInput /*&& _player._dashState.CheckIfCanDash()*/)
             _player.ChangeState((int)PlayerStateID.Dash);
         else
         {
-            _player.CheckIfShouldFlip(_inputX);
-            _player.SetVelocityX(_dataPlayer.MovementVelocity * _inputX);
+            _player.FlipIfShould(_inputX);
+            _player.SetVelocityX(_player.PlayerData.MovementVelocity * _inputX);
 
             _workspaceVector2.Set(  _player.RBVelocity.x,
                                     Mathf.Clamp(_player.RBVelocity.y,
-                                                -_dataPlayer.MaxVelocityY,
-                                                _dataPlayer.MaxVelocityY));
+                                                -_player.PlayerData.MaxVelocityY,
+                                                _player.PlayerData.MaxVelocityY));  // prevent using too much velocity
             _player.RBVelocity = _workspaceVector2;
         }
     }
@@ -82,7 +84,7 @@ public sealed class PlayerInAirState : PlayerState
         if (_isJumping)
             if (_jumpInputStop)
             {
-                _player.SetVelocityY(_player.RBVelocity.y * _dataPlayer.JumpHeightMultiplier);
+                _player.SetVelocityY(_player.RBVelocity.y * _player.PlayerData.JumpHeightMultiplier);
                 _isJumping = false;
             }
             else if (_player.RBVelocity.y <= 0f)

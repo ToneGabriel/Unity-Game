@@ -36,8 +36,8 @@ public abstract class EnemyChargeState : EnemyState
         base.DoChecks();
 
         _isPlayerInMinAgroRange = _enemy.CheckPlayerInMinAgroRange();
-        _isDetectingLedge = _enemy.CheckIfTouchingLedge(-_enemy.transform.up);
-        _isDetectingWall = _enemy.CheckIfTouchingWall();
+        _isDetectingLedge = _enemy.IsTouchingLedge(-_enemy.transform.up);
+        _isDetectingWall = _enemy.IsTouchingWall();
         _isPlayerInMeleeRange = _enemy.CheckPlayerInMeleeRange();
     }
 

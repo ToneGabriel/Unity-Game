@@ -18,7 +18,8 @@ public sealed class PlayerDefendState : PlayerAbilityState
     {
         base.Exit();
 
-        _player._inputHandler.StopHoldingSecondaryDefendInput();      // make sure isHolding is FALSE (when interrupted)
+        // TODO
+        //_player._inputHandler.StopHoldingSecondaryDefendInput();      // make sure isHolding is FALSE (when interrupted)
         Shield.ExitShield();
     }
 

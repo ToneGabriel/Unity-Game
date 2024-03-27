@@ -50,7 +50,7 @@ public abstract class EnemyStunState : EnemyState
     {
         base.DoChecks();
 
-        _isGrounded = _enemy.CheckIfGrounded();
+        _isGrounded = _enemy.IsGrounded();
         _isPlayerInMeleeRange = _enemy.CheckPlayerInMeleeRange();
         _isPlayerInMinAgroRange = _enemy.CheckPlayerInMinAgroRange();
     }

@@ -3,8 +3,11 @@ using UnityEngine;
 public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 {
     #region Components & Data
-    [SerializeField]
+    [Header("Entity External Components")][SerializeField]
     protected EntityExternalObjectComponents    _entityExtObjComponents;
+
+    [Header("Entity Data")][SerializeField]
+    protected DataEntity                        _entityData;
 
     protected EntityInternalObjectComponents    _entityIntObjComponents;
     protected EntityInternalStatusComponents    _entityIntStatusComponents;
@@ -14,7 +17,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Component Getters
-    public EntityInternalStatusComponents EntityIntStatusComponents { get { return _entityIntStatusComponents; } }
+    public EntityInternalStatusComponents       EntityIntStatusComponents   { get { return _entityIntStatusComponents; } }
     #endregion
 
     #region Getters
@@ -40,14 +43,14 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #region Unity functions
     protected virtual void Awake()
     {
-        _entityExtObjComponents.HealthBar.SetMaxHealth(_entityExtObjComponents.Data.MaxHealth);
+        _entityExtObjComponents.HealthBar.SetMaxHealth(_entityData.MaxHealth);
 
         _entityIntObjComponents.Animator            = GetComponent<Animator>();
         _entityIntObjComponents.Rigidbody           = GetComponent<Rigidbody2D>();
         _entityIntObjComponents.BoxCollider         = GetComponent<BoxCollider2D>();
 
         _entityIntStatusComponents.FacingDirection  = 1;
-        _entityIntStatusComponents.CurrentHealth    = _entityExtObjComponents.Data.MaxHealth;
+        _entityIntStatusComponents.CurrentHealth    = _entityData.MaxHealth;
     }
 
     protected virtual void OnEnable()
@@ -68,7 +71,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
         if (GameManager.Instance.IsGamePaused)
             return;
 
-        if (Time.time >= _entityIntStatusComponents.LastDamageTime + _entityExtObjComponents.Data.StunRecoveryTime)
+        if (Time.time >= _entityIntStatusComponents.LastDamageTime + _entityData.StunRecoveryTime)
             ResetStunResistnce();
 
         _stateMachine.CurrentState.LogicUpdate();
@@ -92,6 +95,11 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     public void SetAnimatorBoolParam(string animBoolName, bool value)
     {
         _entityIntObjComponents.Animator.SetBool(animBoolName, value);
+    }
+
+    public void SetAnimatorFloatParam(string animFloatName, float value)
+    {
+        _entityIntObjComponents.Animator.SetFloat(animFloatName, value);
     }
 
     public void SetVelocityZero()
@@ -138,34 +146,34 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Checkers
-    public bool CheckIfGrounded()
+    public bool IsGrounded()
     {
         return Physics2D.OverlapCircle( _entityExtObjComponents.GroundCheck.transform.position,
-                                        _entityExtObjComponents.Data.GroundCheckRadius,
-                                        _entityExtObjComponents.Data.WhatIsGround);
+                                        _entityData.GroundCheckRadius,
+                                        _entityData.WhatIsGround);
     }
 
-    public bool CheckIfTouchingCeiling()
+    public bool IsTouchingCeiling()
     {
         return Physics2D.OverlapCircle( _entityExtObjComponents.LedgeCheck.transform.position,
-                                        _entityExtObjComponents.Data.GroundCheckRadius,
-                                        _entityExtObjComponents.Data.WhatIsGround);
+                                        _entityData.GroundCheckRadius,
+                                        _entityData.WhatIsGround);
     }
 
-    public bool CheckIfTouchingWall()
+    public bool IsTouchingWall()
     {
         return Physics2D.Raycast(   _entityExtObjComponents.EnvironmentCheck.transform.position,
                                     transform.right,
-                                    _entityExtObjComponents.Data.EnvironmentCheckDistance,
-                                    _entityExtObjComponents.Data.WhatIsGround);
+                                    _entityData.EnvironmentCheckDistance,
+                                    _entityData.WhatIsGround);
     }
 
-    public bool CheckIfTouchingLedge(Vector3 direction)
+    public bool IsTouchingLedge(Vector3 direction)
     {
         return Physics2D.Raycast(   _entityExtObjComponents.LedgeCheck.transform.position,
                                     direction,
-                                    _entityExtObjComponents.Data.EnvironmentCheckDistance,
-                                    _entityExtObjComponents.Data.WhatIsGround);
+                                    _entityData.EnvironmentCheckDistance,
+                                    _entityData.WhatIsGround);
     }
     #endregion
 
@@ -207,7 +215,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     public virtual void ResetStunResistnce()
     {
         _entityIntStatusComponents.IsStuned = false;
-        _entityIntStatusComponents.CurrentStunResistance = _entityExtObjComponents.Data.StunResistance;
+        _entityIntStatusComponents.CurrentStunResistance = _entityData.StunResistance;
     }
 
     public void DamageHop(Vector2 direction, float velocity)

@@ -2,20 +2,19 @@
 
 public abstract class Enemy : Entity                // Base Enemy class
 {
-    protected Data_Enemy _dataEnemy;                // Reference to base enemy data
+    [Header("Enemy Basics")]
+    protected DataEnemy _enemyData;                // Reference to base enemy data
 
     #region Unity Functions
     protected override void Awake()
     {
-        _dataEnemy = (Data_Enemy)_dataEntity;
-
         base.Awake();
     }
 
     protected override void OnEnable()
     {
-        _entityIntStatusComponents.CurrentStunResistance = _dataEnemy.StunResistance;
-        _entityIntStatusComponents.CurrentHealth = _dataEnemy.MaxHealth;
+        _entityIntStatusComponents.CurrentStunResistance = _entityData.StunResistance;
+        _entityIntStatusComponents.CurrentHealth = _entityData.MaxHealth;
         
         base.OnEnable();
     }
@@ -38,21 +37,21 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         return Physics2D.Raycast(   _entityExtObjComponents.EnvironmentCheck.transform.position,
                                     _entityExtObjComponents.EnvironmentCheck.transform.right,
-                                    _dataEnemy.MinAgroDistance, _dataEnemy.WhatIsPlayer);
+                                    _enemyData.MinAgroDistance, _enemyData.WhatIsPlayer);
     }
 
     public virtual bool CheckPlayerInMaxAgroRange()                                     // Raycast to check agro exit range
     {
         return Physics2D.Raycast(   _entityExtObjComponents.EnvironmentCheck.transform.position,
                                     _entityExtObjComponents.EnvironmentCheck.transform.right,
-                                    _dataEnemy.MaxAgroDistance, _dataEnemy.WhatIsPlayer);
+                                    _enemyData.MaxAgroDistance, _enemyData.WhatIsPlayer);
     }
 
     public virtual bool CheckPlayerInMeleeRange()                                       // Raycast to check melee range
     {
         return Physics2D.Raycast(   _entityExtObjComponents.EnvironmentCheck.transform.position,
                                     _entityExtObjComponents.EnvironmentCheck.transform.right,
-                                    _dataEnemy.CloseRangeActionDistance, _dataEnemy.WhatIsPlayer);
+                                    _enemyData.CloseRangeActionDistance, _enemyData.WhatIsPlayer);
     }
     #endregion
 
@@ -95,10 +94,10 @@ public abstract class Enemy : Entity                // Base Enemy class
     public virtual void OnDrawGizmos()
     {
         Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.right * _entityIntStatusComponents.FacingDirection * _dataEnemy.EnvironmentCheckDistance));
+                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.right * _entityIntStatusComponents.FacingDirection * _entityData.EnvironmentCheckDistance));
         Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.down * _entityIntStatusComponents.FacingDirection * _dataEnemy.EnvironmentCheckDistance));
+                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.down * _entityIntStatusComponents.FacingDirection * _entityData.EnvironmentCheckDistance));
         Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.right * _entityIntStatusComponents.FacingDirection * _dataEnemy.CloseRangeActionDistance));
+                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.right * _entityIntStatusComponents.FacingDirection * _enemyData.CloseRangeActionDistance));
     }
 }

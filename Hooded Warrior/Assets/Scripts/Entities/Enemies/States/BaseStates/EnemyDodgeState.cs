@@ -46,7 +46,7 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
 
         _isPlayerInMeleeRange = _enemy.CheckPlayerInMeleeRange();
         _isPlayerInMaxAgroRange = _enemy.CheckPlayerInMaxAgroRange();
-        _isGrounded = _enemy.CheckIfGrounded();
+        _isGrounded = _enemy.IsGrounded();
     }
 
     public void CheckCooldown()

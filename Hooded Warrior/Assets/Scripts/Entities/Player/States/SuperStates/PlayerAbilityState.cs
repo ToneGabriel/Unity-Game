@@ -33,7 +33,7 @@ public abstract class PlayerAbilityState : PlayerState
     {
         base.DoChecks();
 
-        _isGrounded = _player.CheckIfGrounded();
-        _isTouchingCeiling = _player.CheckIfTouchingCeiling();
+        _isGrounded = _player.IsGrounded();
+        _isTouchingCeiling = _player.IsTouchingCeiling();
     }
 }

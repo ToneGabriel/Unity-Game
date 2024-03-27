@@ -10,8 +10,12 @@ public struct PlayerSaveData
 
     public PlayerSaveData(Player player)
     {
-        PlayerFacingDirection = player.FacingDirection;
-        PlayerHealth = player.CurrentHealth;
+        PlayerFacingDirection = 0;
+        PlayerHealth = 0;
+
+        // TODO
+        //PlayerFacingDirection = player.FacingDirection;
+        //PlayerHealth = player.CurrentHealth;
         PlayerPosition = new SerializableVector3(player.transform.position);
         PlayerRotation = new SerializableQuaternion(player.transform.rotation);
     }

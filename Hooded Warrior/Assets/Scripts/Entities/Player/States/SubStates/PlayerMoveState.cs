@@ -23,6 +23,6 @@ public sealed class PlayerMoveState : PlayerGroundedState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.PlayerExtObjComponents._dataPlayer.MovementVelocity * _inputX);
+        _player.SetVelocityX(_player.PlayerData.MovementVelocity * _inputX);
     }
 }

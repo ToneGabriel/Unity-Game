@@ -21,17 +21,18 @@ public sealed class PlayerLedgeClimbState : PlayerState
     {
         base.Enter();
 
-        _player._jumpState.ResetAmountOfJumpsLeft();
-        _player._jumpState.DecreaseAmountOfJumpsLeft();
-        _player._dashState.ResetCanDash();
+        // TODO
+        //_player._jumpState.ResetAmountOfJumpsLeft();
+        //_player._jumpState.DecreaseAmountOfJumpsLeft();
+        //_player._dashState.ResetCanDash();
 
         _player.SetVelocityZero();
         _player.transform.position = _detectedPosition;
         _cornerPosition = _player.DetermineCornerPosition();
-        _startPosition.Set( _cornerPosition.x - (_player.EntityIntStatusComponents.FacingDirection * _dataPlayer.StartOffset.x),
-                            _cornerPosition.y - _dataPlayer.StartOffset.y);
-        _stopPosition.Set(  _cornerPosition.x + (_player.EntityIntStatusComponents.FacingDirection * _dataPlayer.StopOffset.x),
-                            _cornerPosition.y + _dataPlayer.StopOffset.y);
+        _startPosition.Set( _cornerPosition.x - (_player.EntityIntStatusComponents.FacingDirection * _player.PlayerData.StartOffset.x),
+                            _cornerPosition.y - _player.PlayerData.StartOffset.y);
+        _stopPosition.Set(  _cornerPosition.x + (_player.EntityIntStatusComponents.FacingDirection * _player.PlayerData.StopOffset.x),
+                            _cornerPosition.y + _player.PlayerData.StopOffset.y);
 
         _player.transform.position = _startPosition;
     }
@@ -64,7 +65,7 @@ public sealed class PlayerLedgeClimbState : PlayerState
             _player.SetVelocityZero();
             _player.transform.position = _startPosition;
 
-            if (_inputX == _player.EntityIntStatusComponents.FacingDirection && _isHanging && !_isClimbing)
+            if (_player.IsFacingInput(_inputX) && _isHanging && !_isClimbing)
             {
                 _isClimbing = true;
                 _player.SetAnimatorBoolParam(PlayerControllerParameters.ClimbLedge_b, true);

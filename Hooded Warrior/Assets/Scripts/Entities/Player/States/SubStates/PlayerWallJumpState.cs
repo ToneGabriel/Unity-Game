@@ -9,9 +9,10 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
     {
         base.Enter();
 
-        _player._jumpState.ResetAmountOfJumpsLeft();
-        _player.SetVelocity(_dataPlayer.WallJumpVelocity, _dataPlayer.WallJumpAngle, -_player.EntityIntStatusComponents.FacingDirection);
-        _player._jumpState.DecreaseAmountOfJumpsLeft();
+        // TODO
+        //_player._jumpState.ResetAmountOfJumpsLeft();
+        //_player._jumpState.DecreaseAmountOfJumpsLeft();
+        _player.SetVelocity(_player.PlayerData.WallJumpVelocity, _player.PlayerData.WallJumpAngle, -_player.EntityIntStatusComponents.FacingDirection);
         _player.Flip();
     }
 
@@ -19,7 +20,7 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _player.EntityIntStatusComponents.StateStartTime + _dataPlayer.WallJumpTime)
+        if (Time.time >= _player.EntityIntStatusComponents.StateStartTime + _player.PlayerData.WallJumpTime)
             _isAbilityDone = true;
     }
 }

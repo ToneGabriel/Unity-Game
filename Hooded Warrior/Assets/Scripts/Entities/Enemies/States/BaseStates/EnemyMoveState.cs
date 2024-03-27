@@ -23,8 +23,8 @@ public abstract class EnemyMoveState : EnemyState
     {
         base.DoChecks();
 
-        _isDetectingWall = _enemy.CheckIfTouchingWall();
-        _isDetectingLedge = _enemy.CheckIfTouchingLedge(-_enemy.transform.up);
+        _isDetectingWall = _enemy.IsTouchingWall();
+        _isDetectingLedge = _enemy.IsTouchingLedge(-_enemy.transform.up);
         _isPlayerInMinAgroRange = _enemy.CheckPlayerInMinAgroRange();
     }
 }

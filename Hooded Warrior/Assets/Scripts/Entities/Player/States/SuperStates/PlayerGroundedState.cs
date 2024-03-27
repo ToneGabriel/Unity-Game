@@ -27,8 +27,9 @@ public abstract class PlayerGroundedState : PlayerState
     {
         base.Enter();
 
-        _player._jumpState.ResetAmountOfJumpsLeft();
-        _player._dashState.ResetCanDash();
+        // TODO
+        //_player._jumpState.ResetAmountOfJumpsLeft();
+        //_player._dashState.ResetCanDash();
     }
 
     public override void LogicUpdate()
@@ -45,7 +46,7 @@ public abstract class PlayerGroundedState : PlayerState
         _secondaryDefendInput   = InputManager.Instance.SecondaryDefendInput;
         _spellCastInput         = InputManager.Instance.SpellCastInput;
 
-        _player.CheckIfShouldFlip(_inputX);
+        _player.FlipIfShould(_inputX);
 
         if (_primaryAttackInput && !_isTouchingCeiling)
             _player.ChangeState((int)PlayerStateID.PrimaryAttack);
@@ -53,19 +54,19 @@ public abstract class PlayerGroundedState : PlayerState
             _player.ChangeState((int)PlayerStateID.SecondaryDefend);
         else if (_spellCastInput && !_isTouchingCeiling && _canCastSpell)
             _player.ChangeState((int)PlayerStateID.SpellCast);
-        else if (_jumpInput && _player._jumpState.CanJump())
+        else if (_jumpInput /*&& _player._jumpState.CanJump()*/)
         {
             InputManager.Instance.UseJumpInput();
             _player.ChangeState((int)PlayerStateID.Jump);
         }
         else if (!_isGrounded)
         {
-            _player._jumpState.DecreaseAmountOfJumpsLeft();
+            //_player._jumpState.DecreaseAmountOfJumpsLeft();
             _player.ChangeState((int)PlayerStateID.InAir);
         }
         else if (_isTouchingWall && _grabInput && _isTouchingLedge)
             _player.ChangeState((int)PlayerStateID.WallGrab);
-        else if (_dashInput && _player._dashState.CheckIfCanDash() && !_isTouchingCeiling)
+        else if (_dashInput /*&& _player._dashState.CheckIfCanDash()*/ && !_isTouchingCeiling)
             _player.ChangeState((int)PlayerStateID.Dash);
     }
 
@@ -73,11 +74,11 @@ public abstract class PlayerGroundedState : PlayerState
     {
         base.DoChecks();
 
-        _isGrounded = _player.CheckIfGrounded();
-        _isTouchingWall = _player.CheckIfTouchingWall();
-        _isTouchingLedge = _player.CheckIfTouchingLedge(_player.transform.right);
-        _isTouchingCeiling = _player.CheckIfTouchingCeiling();
-        _canDefend = _player.CheckIfCanDefend();
-        _canCastSpell = _player.CheckIfCanCastSpell();
+        _isGrounded = _player.IsGrounded();
+        _isTouchingWall = _player.IsTouchingWall();
+        _isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
+        _isTouchingCeiling = _player.IsTouchingCeiling();
+        _canDefend = _player.CanDefend();
+        _canCastSpell = _player.CanCastSpell();
     }
 }

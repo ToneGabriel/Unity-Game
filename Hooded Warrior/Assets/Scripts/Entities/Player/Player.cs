@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public sealed class Player : Entity
 {
     #region Components & Data
-    [SerializeField]
+    [Header("Player External Components")][SerializeField]
     private PlayerExternalObjectComponents _playerExtObjComponents;
+
+    [Header("Player Data")][SerializeField]
+    private DataPlayer _playerData;
     #endregion
 
     #region Component Getters
-    public PlayerExternalObjectComponents PlayerExtObjComponents { get { return _playerExtObjComponents; } }
+    public DataPlayer PlayerData { get { return _playerData; } }
     #endregion
 
     #region Others
-    private int _weaponIndex;
-    private int _spellIndex;
+    //private int _weaponIndex;
+    //private int _spellIndex;
     #endregion
 
     #region Unity Functions
@@ -23,8 +25,8 @@ public sealed class Player : Entity
         base.Awake();
 
         _playerExtObjComponents._inventory = GetComponent<PlayerInventory>();
-        _weaponIndex    = 0;
-        _spellIndex     = 0;
+        //_weaponIndex    = 0;
+        //_spellIndex     = 0;
 
         // Initialize States
         _stateMachine   = new FiniteStateMachine();
@@ -71,15 +73,6 @@ public sealed class Player : Entity
     #endregion
 
     #region Setters
-    public void UpdateAnimatorVelocityParams()
-    {
-        _entityIntObjComponents.Animator.SetFloat(  PlayerControllerParameters.VelocityY_f,
-                                                    _entityIntObjComponents.Rigidbody.velocity.y);
-
-        _entityIntObjComponents.Animator.SetFloat(  PlayerControllerParameters.VelocityX_f,
-                                                    Mathf.Abs(_entityIntObjComponents.Rigidbody.velocity.x));
-    }
-
     public void SetDashArrowActive(bool value)
     {
         _playerExtObjComponents._dashDirectionIndicator.gameObject.SetActive(value);
@@ -108,18 +101,23 @@ public sealed class Player : Entity
     #endregion
 
     #region Checkers
-    public void CheckIfShouldFlip(int inputX)
+    public bool IsFacingInput(int inputX)
+    {
+        return inputX == _entityIntStatusComponents.FacingDirection;
+    }
+
+    public void FlipIfShould(int inputX)
     {
         if (inputX != 0 && inputX != _entityIntStatusComponents.FacingDirection)
             Flip();
     }
 
-    public bool CheckIfCanDefend()
+    public bool CanDefend()
     {
         return false;// !_secondaryDefendState.Shield.IsOnCooldown;
     }
 
-    public bool CheckIfCanCastSpell()
+    public bool CanCastSpell()
     {
         return false;// !_spellCastState.Spell.IsOnCooldown;
     }
@@ -134,13 +132,13 @@ public sealed class Player : Entity
         {
             gameObject.SetActive(false);
 
-            Instantiate(_playerExtObjComponents._dataPlayer.DeathBloodParticle,
+            Instantiate(_playerData.DeathBloodParticle,
                         transform.position,
-                        _playerExtObjComponents._dataPlayer.DeathBloodParticle.transform.rotation);
+                        _playerData.DeathBloodParticle.transform.rotation);
 
-            Instantiate(_playerExtObjComponents._dataPlayer.DeathChunkParticle,
+            Instantiate(_playerData.DeathChunkParticle,
                         transform.position,
-                        _playerExtObjComponents._dataPlayer.DeathChunkParticle.transform.rotation);
+                        _playerData.DeathChunkParticle.transform.rotation);
         }
     }
 
@@ -152,7 +150,7 @@ public sealed class Player : Entity
     public override void AdditionalDamageActions(AttackDetails attackDetails)
     {
         InterruptActions();
-        DamageHop(_entityExtObjComponents.Data.DamageHopDirection, _entityExtObjComponents.Data.DamageHopSpeed);
+        DamageHop(_entityData.DamageHopDirection, _entityData.DamageHopSpeed);
 
         base.AdditionalDamageActions(attackDetails);
     }
@@ -181,7 +179,7 @@ public sealed class Player : Entity
     public void SetNewGameData()
     {
         _entityIntStatusComponents.FacingDirection = 1;
-        _entityIntStatusComponents.CurrentHealth = _entityExtObjComponents.Data.MaxHealth;
+        _entityIntStatusComponents.CurrentHealth = _entityData.MaxHealth;
         transform.position = GameManager.Instance.GameStartPlayerPosition.position;
         transform.rotation = GameManager.Instance.GameStartPlayerPosition.rotation;
     }
@@ -221,8 +219,8 @@ public sealed class Player : Entity
     {
         RaycastHit2D xHit = Physics2D.Raycast(  _entityExtObjComponents.EnvironmentCheck.transform.position,
                                                 Vector2.right * _entityIntStatusComponents.FacingDirection,
-                                                _entityExtObjComponents.Data.EnvironmentCheckDistance,
-                                                _entityExtObjComponents.Data.WhatIsGround);
+                                                _entityData.EnvironmentCheckDistance,
+                                                _entityData.WhatIsGround);
 
         float xDistance = xHit.distance;
         _workspaceVector2.Set(xDistance * _entityIntStatusComponents.FacingDirection, 0f);
@@ -230,7 +228,7 @@ public sealed class Player : Entity
         RaycastHit2D yHit = Physics2D.Raycast(  _entityExtObjComponents.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
                                                 Vector2.down,
                                                 _entityExtObjComponents.LedgeCheck.transform.position.y - _entityExtObjComponents.EnvironmentCheck.transform.position.y,
-                                                _entityExtObjComponents.Data.WhatIsGround);
+                                                _entityData.WhatIsGround);
 
         float yDistance = yHit.distance;
         _workspaceVector2.Set(  _entityExtObjComponents.EnvironmentCheck.transform.position.x + xDistance * _entityIntStatusComponents.FacingDirection,

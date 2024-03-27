@@ -23,7 +23,7 @@ public sealed class PlayerDashState : PlayerAbilityState
         InputManager.Instance.UseDashInput();
         _dashDirection = Vector2.right * _player.EntityIntStatusComponents.FacingDirection;
 
-        Time.timeScale = _dataPlayer.HoldTimeScale;
+        Time.timeScale = _player.PlayerData.HoldTimeScale;
         _player.EntityIntStatusComponents.StateStartTime = Time.unscaledTime;
 
         _player.SetDashArrowActive(true);
@@ -34,7 +34,7 @@ public sealed class PlayerDashState : PlayerAbilityState
         base.Exit();
 
         if (_player.RBVelocity.y > 0f)
-            _player.SetVelocityY(_player.RBVelocity.y * _dataPlayer.DashEndYMultiplier);
+            _player.SetVelocityY(_player.RBVelocity.y * _player.PlayerData.DashEndYMultiplier);
     }
 
     public override void LogicUpdate()
@@ -45,7 +45,8 @@ public sealed class PlayerDashState : PlayerAbilityState
             if (_isHolding)
             {
                 _dashDirectionInput = InputManager.Instance.DashDirectionInput;
-                _dashInputStop = _player._inputHandler.DashInputStop;
+                // TODO
+                //_dashInputStop = _player._inputHandler.DashInputStop;
 
                 if (_dashDirection != Vector2.zero)
                 {
@@ -56,25 +57,25 @@ public sealed class PlayerDashState : PlayerAbilityState
                 float angle = Vector2.SignedAngle(Vector2.right, _dashDirection);
                 _player.SetDashArrowRotation(Quaternion.Euler(0f, 0f, angle - 45));
 
-                if (_dashInputStop || Time.unscaledTime >= _player.EntityIntStatusComponents.StateStartTime + _dataPlayer.MaxHoldTime)
+                if (_dashInputStop || Time.unscaledTime >= _player.EntityIntStatusComponents.StateStartTime + _player.PlayerData.MaxHoldTime)
                 {
                     _isHolding = false;
                     Time.timeScale = 1f;
                     _player.EntityIntStatusComponents.StateStartTime = Time.time;
-                    _player.CheckIfShouldFlip(Mathf.RoundToInt(_dashDirection.x));
-                    _player.SetVelocity(_dataPlayer.DashVelocity, _dashDirection);
-                    _player.RBDrag = _dataPlayer.Drag;
+                    _player.FlipIfShould(Mathf.RoundToInt(_dashDirection.x));
+                    _player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
+                    _player.RBDrag = _player.PlayerData.Drag;
                     _player.SetDashArrowActive(false);
                     PlaceAfterImage();
                 }
             }
             else
             {
-                _player.SetVelocity(_dataPlayer.DashVelocity, _dashDirection);
+                _player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
 
                 CheckIfShouldPlaceAfterImage();
 
-                if (Time.time >= _player.EntityIntStatusComponents.StateStartTime + _dataPlayer.DashTime)
+                if (Time.time >= _player.EntityIntStatusComponents.StateStartTime + _player.PlayerData.DashTime)
                 {
                     _player.RBDrag = 0f;
                     _isAbilityDone = true;
@@ -91,13 +92,13 @@ public sealed class PlayerDashState : PlayerAbilityState
 
     private void CheckIfShouldPlaceAfterImage()
     {
-        if (Vector2.Distance(_player.transform.position, _lastAIPosition) >= _dataPlayer.DistanceBetweenAfterimages)
+        if (Vector2.Distance(_player.transform.position, _lastAIPosition) >= _player.PlayerData.DistanceBetweenAfterimages)
             PlaceAfterImage();
     }
 
     public bool CheckIfCanDash()
     {
-        return CanDash && Time.time >= _lastDashTime + _dataPlayer.DashCooldown;
+        return CanDash && Time.time >= _lastDashTime + _player.PlayerData.DashCooldown;
     }
 
     public void ResetCanDash()

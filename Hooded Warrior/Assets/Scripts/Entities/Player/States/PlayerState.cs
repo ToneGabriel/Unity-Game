@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine;
+
 public abstract class PlayerState : EntityState
 {
     protected Player _player;
@@ -32,6 +33,10 @@ public abstract class PlayerState : EntityState
             _player.ChangeSpell();
         }
 
-        _player.UpdateAnimatorVelocityParams();
+        _player.SetAnimatorFloatParam(  PlayerControllerParameters.VelocityY_f,
+                                        _player.RBVelocity.y);
+
+        _player.SetAnimatorFloatParam(  PlayerControllerParameters.VelocityX_f,
+                                        Mathf.Abs(_player.RBVelocity.x));
     }
 }

@@ -23,7 +23,8 @@ public class LightOrb : MonoBehaviour
         {
             Instance = this;
             _rigidbody = GetComponent<Rigidbody2D>();
-            _target = GameManager.Instance.Player._lightOrbPosition;
+            // TODO
+            //_target = GameManager.Instance.Player._lightOrbPosition;
         }
     }
 
@@ -44,7 +45,7 @@ public class LightOrb : MonoBehaviour
     #region Orb Functionality
     private void CheckOrbTime()
     {
-        if ((Time.time >= _spellCastTime + _lightOrbSpellData.SpellLifeTime && !_isCoroutineStarted) || GameManager.Instance.Player.IsDead)
+        if ((Time.time >= _spellCastTime + _lightOrbSpellData.SpellLifeTime && !_isCoroutineStarted) || GameManager.Instance.Player.EntityIntStatusComponents.IsDead)
             StartCoroutine(DecreaseOrbLightRadius());
 
         if (GameManager.Instance.IsLoadingData)
