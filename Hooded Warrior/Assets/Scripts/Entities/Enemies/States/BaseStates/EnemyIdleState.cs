@@ -35,7 +35,7 @@ public abstract class EnemyIdleState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _idleTime)
+        if (Time.time >= _stateStartTime + _idleTime)
             _isIdleTimeOver = true;
     }
 

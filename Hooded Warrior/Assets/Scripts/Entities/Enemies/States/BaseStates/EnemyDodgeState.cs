@@ -36,7 +36,7 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
     {
         base.LogicUpdate();
 
-        if (Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.DodgeTime && _isGrounded)
+        if (Time.time >= _stateStartTime + _stateData.DodgeTime && _isGrounded)
             _isDodgeOver = true;
     }
 
@@ -51,7 +51,7 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.DodgeCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.DodgeCooldown)
             ResetCooldown();
     }
 

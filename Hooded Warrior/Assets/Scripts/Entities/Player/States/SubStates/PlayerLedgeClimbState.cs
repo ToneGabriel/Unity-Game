@@ -54,7 +54,7 @@ public sealed class PlayerLedgeClimbState : PlayerState
     {
         base.LogicUpdate();
 
-        if (_player.EntityIntStatusComponents.IsStateAnimationFinished)
+        if (_isStateAnimationFinished)
             _player.ChangeState((int)PlayerStateID.Idle);
         else
         {

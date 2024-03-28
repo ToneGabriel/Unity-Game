@@ -22,9 +22,9 @@ public class LightOrb : MonoBehaviour
         else
         {
             Instance = this;
-            _rigidbody = GetComponent<Rigidbody2D>();
-            // TODO
-            //_target = GameManager.Instance.Player._lightOrbPosition;
+
+            _rigidbody  = GetComponent<Rigidbody2D>();
+            _target     = GameManager.Instance.Player.GetLightOrbPosition();
         }
     }
 

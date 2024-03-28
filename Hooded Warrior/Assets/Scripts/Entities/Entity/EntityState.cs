@@ -3,8 +3,10 @@ using UnityEngine;
 
 public abstract class EntityState : State
 {
-    protected Entity _entity;
-    protected string _animBoolName;     // Animation bool name for each state
+    protected Entity    _entity;
+    protected string    _animBoolName;     // Animation bool name for each state
+    protected float     _stateStartTime;
+    protected bool      _isStateAnimationFinished;
 
     public EntityState(Entity entity, string animBoolName)
     {
@@ -14,8 +16,8 @@ public abstract class EntityState : State
 
     public override void Enter()
     {
-        _entity.EntityIntStatusComponents.StateStartTime             = Time.time;
-        _entity.EntityIntStatusComponents.IsStateAnimationFinished   = false;
+        _stateStartTime             = Time.time;
+        _isStateAnimationFinished   = false;
         _entity.SetAnimatorBoolParam(_animBoolName, true);
 
         DoChecks();
@@ -36,6 +38,6 @@ public abstract class EntityState : State
 
     public override void AnimationFinishTrigger()
     {
-        _entity.EntityIntStatusComponents.IsStateAnimationFinished = true;
+        _isStateAnimationFinished = true;
     }
 }

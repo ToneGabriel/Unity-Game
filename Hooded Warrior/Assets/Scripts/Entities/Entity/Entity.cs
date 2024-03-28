@@ -5,18 +5,18 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #region Components & Data
     [SerializeField]
     protected EntityExternalObjectComponents    _entityExtObjComponents;
-
-    [SerializeField]
-    protected DataEntity                        _entityData;
-
     protected EntityInternalObjectComponents    _entityIntObjComponents;
     protected EntityInternalStatusComponents    _entityIntStatusComponents;
+
+    [SerializeField]
+    protected EntityData                        _entityData;
+
     protected FiniteStateMachine                _stateMachine;      // initialized in derived classes
     protected State[]                           _states;            // initialized in derived classes
     protected Vector2                           _workspaceVector2;
     #endregion
 
-    #region Component Getters
+    #region Component Getters & Setters
     public EntityInternalStatusComponents       EntityIntStatusComponents   { get { return _entityIntStatusComponents; } }
     public float                                RBVelocityX                 { get { return _entityIntObjComponents.Rigidbody.velocity.x; } }
     public float                                RBVelocityY                 { get { return _entityIntObjComponents.Rigidbody.velocity.y; } }

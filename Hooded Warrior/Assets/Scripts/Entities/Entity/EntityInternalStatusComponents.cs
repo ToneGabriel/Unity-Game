@@ -8,7 +8,4 @@ public sealed class EntityInternalStatusComponents
     public float    CurrentStunResistance;
     public bool     IsDead;
     public bool     IsStuned;
-
-    public float    StateStartTime;
-    public bool     IsStateAnimationFinished;
 }

@@ -22,7 +22,7 @@ public abstract class EnemyLookForPlayerState : EnemyState
 
         _isAllTurnsDone = false;
         _isAllTurnsTimeDone = false;
-        _lastTurnTime = _enemy.EntityIntStatusComponents.StateStartTime;
+        _lastTurnTime = _stateStartTime;
         _amountOfTurnsDone = 0;
         _enemy.SetVelocityZero();
     }

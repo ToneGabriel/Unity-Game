@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "newEntityData", menuName = "Data/Entity Data/Base Data")]
-public class DataEntity : ScriptableObject
+public class EntityData : ScriptableObject
 {
     [Header("Basics")]
     public float MaxHealth                  = 1000f;

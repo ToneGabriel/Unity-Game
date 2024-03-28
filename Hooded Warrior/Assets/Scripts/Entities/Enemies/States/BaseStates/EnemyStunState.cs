@@ -36,10 +36,10 @@ public abstract class EnemyStunState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.StunTime)                                                        // Counts stun time
+        if (Time.time >= _stateStartTime + _stateData.StunTime)                                                        // Counts stun time
             _isStunTimeOver = true;
 
-        if (_isGrounded && Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.StunKnockBackTime && !_isMovementStopped)         // sets velocity to 0 while stunned
+        if (_isGrounded && Time.time >= _stateStartTime + _stateData.StunKnockBackTime && !_isMovementStopped)         // sets velocity to 0 while stunned
         {
             _isMovementStopped = true;
             _enemy.RBBodyType = RigidbodyType2D.Static;

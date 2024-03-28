@@ -17,7 +17,7 @@ public abstract class EnemyRangedAttackState : EnemyState, ICooldown
     {
         base.Enter();
 
-        _enemy.EntityIntStatusComponents.IsStateAnimationFinished = false;
+        _isStateAnimationFinished = false;
         _enemy.SetVelocityZero();
     }
 
@@ -38,7 +38,7 @@ public abstract class EnemyRangedAttackState : EnemyState, ICooldown
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _enemy.EntityIntStatusComponents.StateStartTime + _stateData.AttackCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.AttackCooldown)
             ResetCooldown();
     }
 
@@ -52,6 +52,6 @@ public abstract class EnemyRangedAttackState : EnemyState, ICooldown
 
     public virtual void FinishRangedAttack()
     {
-        _enemy.EntityIntStatusComponents.IsStateAnimationFinished = true;
+        _isStateAnimationFinished = true;
     }
 }

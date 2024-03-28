@@ -7,11 +7,11 @@ public sealed class Player : Entity
     private PlayerExternalObjectComponents _playerExtObjComponents;
 
     [SerializeField]
-    private DataPlayer _playerData;
+    private PlayerData _playerData;
     #endregion
 
     #region Component Getters
-    public DataPlayer PlayerData { get { return _playerData; } }
+    public PlayerData PlayerData { get { return _playerData; } }
     #endregion
 
     #region Others
@@ -92,6 +92,11 @@ public sealed class Player : Entity
 
         _entityIntObjComponents.BoxCollider.size   = _workspaceVector2;
         _entityIntObjComponents.BoxCollider.offset = center;
+    }
+
+    public GameObject GetLightOrbPosition()
+    {
+        return _playerExtObjComponents._lightOrbPosition;
     }
 
     public void SetLightOrbPosition(Vector2 position)
@@ -180,8 +185,8 @@ public sealed class Player : Entity
     {
         _entityIntStatusComponents.FacingDirection = 1;
         _entityIntStatusComponents.CurrentHealth = _entityData.MaxHealth;
-        transform.position = GameManager.Instance.GameStartPlayerPosition.position;
-        transform.rotation = GameManager.Instance.GameStartPlayerPosition.rotation;
+        transform.SetPositionAndRotation(   GameManager.Instance.GameStartPlayerPosition.position,
+                                            GameManager.Instance.GameStartPlayerPosition.rotation);
     }
 
     public void ChangeWeapon()

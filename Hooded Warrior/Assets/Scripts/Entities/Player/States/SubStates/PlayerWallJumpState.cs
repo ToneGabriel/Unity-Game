@@ -20,7 +20,7 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _player.EntityIntStatusComponents.StateStartTime + _player.PlayerData.WallJumpTime)
+        if (Time.time >= _stateStartTime + _player.PlayerData.WallJumpTime)
             _isAbilityDone = true;
     }
 }
