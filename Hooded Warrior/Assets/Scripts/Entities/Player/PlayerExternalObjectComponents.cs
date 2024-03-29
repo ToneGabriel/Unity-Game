@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public sealed class PlayerExternalObjectComponents
+public struct PlayerExternalObjectComponents
 {
     //public PlayerInventory _inventory;
     public GameObject      _dashDirectionIndicator;

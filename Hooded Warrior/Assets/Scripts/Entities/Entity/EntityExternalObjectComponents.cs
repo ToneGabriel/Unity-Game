@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public sealed class EntityExternalObjectComponents
+public struct EntityExternalObjectComponents
 {
     //public HealthBar        HealthBar;
     public GameObject       GroundCheck;

@@ -17,11 +17,11 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Component Getters & Setters
-    public EntityInternalStatusComponents   GeneralStatus   { get { return _entityIntStatusComponents; } }
-    public float                            RBVelocityX     { get { return _entityIntObjComponents.Rigidbody.velocity.x; } }
-    public float                            RBVelocityY     { get { return _entityIntObjComponents.Rigidbody.velocity.y; } }
-    public float                            RBDrag          { set { _entityIntObjComponents.Rigidbody.drag = value; } }
-    public RigidbodyType2D                  RBBodyType      { set { _entityIntObjComponents.Rigidbody.bodyType = value; } }
+    public ref EntityInternalStatusComponents   GeneralStatus   { get { return ref _entityIntStatusComponents; } }
+    public float                                RBVelocityX     { get { return _entityIntObjComponents.Rigidbody.velocity.x; } }
+    public float                                RBVelocityY     { get { return _entityIntObjComponents.Rigidbody.velocity.y; } }
+    public float                                RBDrag          { set { _entityIntObjComponents.Rigidbody.drag = value; } }
+    public RigidbodyType2D                      RBBodyType      { set { _entityIntObjComponents.Rigidbody.bodyType = value; } }
     #endregion
 
     #region Unity functions
@@ -47,16 +47,16 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     protected virtual void Start()
     {
-        ObjectPoolManager.Instance.RequestPool<HitParticleController>();
+        //ObjectPoolManager.Instance.RequestPool<HitParticleController>();
     }
 
     protected virtual void Update()
     {
-        if (GameManager.Instance.IsGamePaused)
-            return;
+        //if (GameManager.Instance.IsGamePaused)
+        //    return;
 
-        if (Time.time >= _entityIntStatusComponents.LastDamageTime + _entityData.StunRecoveryTime)
-            ResetStunResistnce();
+        //if (Time.time >= _entityIntStatusComponents.LastDamageTime + _entityData.StunRecoveryTime)
+        //    ResetStunResistnce();
 
         // Update real velocity based on status parameter
         //_entityIntObjComponents.Rigidbody.velocity = GeneralStatus.Velocity;
@@ -66,8 +66,8 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     protected virtual void FixedUpdate()
     {
-        if (GameManager.Instance.IsGamePaused)
-            return;
+        //if (GameManager.Instance.IsGamePaused)
+        //    return;
 
         _stateMachine.CurrentState.PhysicsUpdate();
     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed class EntityInternalObjectComponents
+public struct EntityInternalObjectComponents
 {
     public Rigidbody2D      Rigidbody;
     public Animator         Animator;

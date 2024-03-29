@@ -12,8 +12,8 @@ public sealed class Player : Entity
     #endregion
 
     #region Component Getters
-    public PlayerInternalStatusComponents   AdvancedStatus  { get { return _playerIntStatusComponents; } }
-    public PlayerData                       PlayerData      { get { return _playerData; } }
+    public ref PlayerInternalStatusComponents   AdvancedStatus  { get { return ref _playerIntStatusComponents; } }
+    public PlayerData                           PlayerData      { get { return _playerData; } }
     #endregion
 
     #region Others
@@ -68,7 +68,7 @@ public sealed class Player : Entity
     {
         base.Start();
 
-        ObjectPoolManager.Instance.RequestPool<PlayerAfterImage>();
+        //ObjectPoolManager.Instance.RequestPool<PlayerAfterImage>();
 
         //gameObject.SetActive(false);                    // Allows "Awake" on application start but prevents loading errors
     }
