@@ -6,8 +6,8 @@ public class ResetGameState : GameManagerState
     private ResetGameData _resetGameData;
     private WaitForSeconds _timeBeforeDeathPrompt;
 
-    public ResetGameState(GameManager gameManager, GameManagerFiniteStateMachine stateMachine, ResetGameData resetGameData)
-        : base(gameManager, stateMachine)
+    public ResetGameState(GameManager gameManager, ResetGameData resetGameData)
+        : base(gameManager)
     {
         _resetGameData = resetGameData;
         _timeBeforeDeathPrompt = new WaitForSeconds(2f);
@@ -42,18 +42,18 @@ public class ResetGameState : GameManagerState
 
     private void ResetToLoadGame()
     {
-        _loadData = () => { SaveManager.Instance.Load(); };
-        _gameManager.LoadingScreenState.SetLoadData(_loadData);
-        _gameManager.LoadingScreenState.SetNextState(_gameManager.GameplayState);
-        _stateMachine.ChangeState(_gameManager.LoadingScreenState);
+        //_loadData = () => { SaveManager.Instance.Load(); };
+        //_gameManager.LoadingScreenState.SetLoadData(_loadData);
+        //_gameManager.LoadingScreenState.SetNextState(_gameManager.GameplayState);
+        //_stateMachine.ChangeState(_gameManager.LoadingScreenState);
     }
 
     private void ResetToMainMenu()
     {
-        _loadData = null;
-        _gameManager.LoadingScreenState.SetLoadData(_loadData);
-        _gameManager.LoadingScreenState.SetNextState(_gameManager.StartMenuState);
-        _stateMachine.ChangeState(_gameManager.LoadingScreenState);
+        //_loadData = null;
+        //_gameManager.LoadingScreenState.SetLoadData(_loadData);
+        //_gameManager.LoadingScreenState.SetNextState(_gameManager.StartMenuState);
+        //_stateMachine.ChangeState(_gameManager.LoadingScreenState);
     }
     #endregion
 }

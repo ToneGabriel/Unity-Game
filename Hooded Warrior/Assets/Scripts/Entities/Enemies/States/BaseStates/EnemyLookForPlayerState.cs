@@ -52,7 +52,7 @@ public abstract class EnemyLookForPlayerState : EnemyState
             _isAllTurnsTimeDone = true;
     }
 
-    public override void DoChecks()
+    protected override void DoChecks()
     {
         base.DoChecks();
 

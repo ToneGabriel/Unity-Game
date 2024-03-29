@@ -21,7 +21,7 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
         base.Enter();
 
         _isDodgeOver = false;
-        _enemy.SetVelocity(_stateData.DodgeSpeed, _stateData.DodgeAngle, -_enemy.EntityIntStatusComponents.FacingDirection);
+        _enemy.SetVelocity(_stateData.DodgeSpeed, _stateData.DodgeAngle, -_enemy.GeneralStatus.FacingDirection);
     }
 
     public override void Exit()
@@ -29,7 +29,7 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
         base.Exit();
 
         IsOnCooldown = true;
-        CooldownManager.Instance.Subscribe(this);
+        //CooldownManager.Instance.Subscribe(this);
     }
 
     public override void LogicUpdate()                                              // Counts dodge time
@@ -40,7 +40,7 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
             _isDodgeOver = true;
     }
 
-    public override void DoChecks()                                                     // Check Ranges
+    protected override void DoChecks()                                                     // Check Ranges
     {
         base.DoChecks();
 
@@ -58,6 +58,6 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
     public void ResetCooldown()
     {
         IsOnCooldown = false;
-        CooldownManager.Instance.UnSubscribe(this);
+        //CooldownManager.Instance.UnSubscribe(this);
     }
 }

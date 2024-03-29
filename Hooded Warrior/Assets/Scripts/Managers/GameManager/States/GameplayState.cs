@@ -5,8 +5,8 @@ public class GameplayState : GameManagerState
     private GameplayData _gameplayData;
     private bool _pauseGameInput;
 
-    public GameplayState(GameManager gameManager, GameManagerFiniteStateMachine stateMachine, GameplayData gameplayData)
-        : base(gameManager, stateMachine)
+    public GameplayState(GameManager gameManager, GameplayData gameplayData)
+        : base(gameManager)
     {
         _gameplayData = gameplayData;
         
@@ -31,8 +31,8 @@ public class GameplayState : GameManagerState
         _pauseGameInput = InputManager.Instance.PauseGameInput;
         //_pauseGameInput = _gameManager.Player._inputHandler.PauseGameInput;    // check "ESC" input for pause/resume game
 
-        if(_gameManager.Player.EntityIntStatusComponents.IsDead)
-            _stateMachine.ChangeState(_gameManager.ResetGameState);
+        if(_gameManager.Player.GeneralStatus.IsDead)
+            _gameManager.ChangeState((int)GameManagerStateID.ResetGame);
         else if(_pauseGameInput)
         {
             if (!_gameManager.IsGamePaused)
@@ -76,19 +76,19 @@ public class GameplayState : GameManagerState
     private void LoadGame()
     {
         ResumeGame();
-        _loadData = () => { SaveManager.Instance.Load(); };
-        _gameManager.LoadingScreenState.SetLoadData(_loadData);
-        _gameManager.LoadingScreenState.SetNextState(_gameManager.GameplayState);
-        _stateMachine.ChangeState(_gameManager.LoadingScreenState);
+        //_loadData = () => { SaveManager.Instance.Load(); };
+        //_gameManager.LoadingScreenState.SetLoadData(_loadData);
+        //_gameManager.LoadingScreenState.SetNextState(_gameManager.GameplayState);
+        //_stateMachine.ChangeState(_gameManager.LoadingScreenState);
     }
 
     private void QuitToMainMenu()
     {
         ResumeGame();
-        _loadData = null;
-        _gameManager.LoadingScreenState.SetLoadData(_loadData);
-        _gameManager.LoadingScreenState.SetNextState(_gameManager.StartMenuState);
-        _stateMachine.ChangeState(_gameManager.LoadingScreenState);
+        //_loadData = null;
+        //_gameManager.LoadingScreenState.SetLoadData(_loadData);
+        //_gameManager.LoadingScreenState.SetNextState(_gameManager.StartMenuState);
+        //_stateMachine.ChangeState(_gameManager.LoadingScreenState);
     }
     #endregion
 }

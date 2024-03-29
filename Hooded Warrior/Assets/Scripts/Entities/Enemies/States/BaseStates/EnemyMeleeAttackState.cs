@@ -30,10 +30,10 @@ public abstract class EnemyMeleeAttackState : EnemyState, ICooldown
         base.Exit();
 
         IsOnCooldown = true;
-        CooldownManager.Instance.Subscribe(this);
+        //CooldownManager.Instance.Subscribe(this);
     }
 
-    public override void DoChecks()
+    protected override void DoChecks()
     {
         base.DoChecks();
 
@@ -56,6 +56,6 @@ public abstract class EnemyMeleeAttackState : EnemyState, ICooldown
     public void ResetCooldown()
     {
         IsOnCooldown = false;
-        CooldownManager.Instance.UnSubscribe(this);
+        //CooldownManager.Instance.UnSubscribe(this);
     }
 }

@@ -37,7 +37,7 @@ public class Shield : MonoBehaviour, IDamageble, ICooldown
     {
         SetAnimatorDefend(false);
 
-        CooldownManager.Instance.Subscribe(this);
+        //CooldownManager.Instance.Subscribe(this);
     }
     
     public void LowerShield()       // exit if not holding
@@ -58,7 +58,7 @@ public class Shield : MonoBehaviour, IDamageble, ICooldown
     public void ResetCooldown()
     {
         IsOnCooldown = false;
-        CooldownManager.Instance.UnSubscribe(this);
+        //CooldownManager.Instance.UnSubscribe(this);
     }
     #endregion
 

@@ -9,10 +9,8 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
     {
         base.Enter();
 
-        // TODO
-        //_player._jumpState.ResetAmountOfJumpsLeft();
-        //_player._jumpState.DecreaseAmountOfJumpsLeft();
-        _player.SetVelocity(_player.PlayerData.WallJumpVelocity, _player.PlayerData.WallJumpAngle, -_player.EntityIntStatusComponents.FacingDirection);
+        _player.ResetAndDecreaseAmountOfJumpsLeft();
+        _player.SetVelocity(_player.PlayerData.WallJumpVelocity, _player.PlayerData.WallJumpAngle, -_player.GeneralStatus.FacingDirection);
         _player.Flip();
     }
 

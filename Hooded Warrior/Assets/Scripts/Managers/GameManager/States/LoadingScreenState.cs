@@ -10,8 +10,8 @@ public class LoadingScreenState : GameManagerState
     private int _loadingBarLength;                                  // The number of processes included in loading bar
     private int _loadingProcessCounter;                             // The counter of these processes
 
-    public LoadingScreenState(GameManager gameManager, GameManagerFiniteStateMachine stateMachine, LoadingScreenData loadingScreenData)
-        :base(gameManager, stateMachine)
+    public LoadingScreenState(GameManager gameManager, LoadingScreenData loadingScreenData)
+        :base(gameManager)
     {
         _loadingScreenData = loadingScreenData;
         _loadingBarLength = _loadingScreenData.SceneLoaders.Length * 2;    // Loading bar includes loading/unloading of scenes, therefore double the number of scenes
@@ -22,7 +22,7 @@ public class LoadingScreenState : GameManagerState
         base.Enter();
 
         ObjectPoolManager.Instance.ClearScene();
-        CooldownManager.Instance.ResetCooldowns();
+        //CooldownManager.Instance.ResetCooldowns();
 
         _gameManager.IsLoadingData = true;
         _loadingScreenData.LoaderCanvas.SetActive(true);
@@ -46,10 +46,10 @@ public class LoadingScreenState : GameManagerState
         _loadData = loadData;
     }
 
-    public void SetNextState(GameManagerState nextState)
-    {
-        _nextState = nextState;
-    }
+    //public void SetNextState(GameManagerState nextState)
+    //{
+    //    _nextState = nextState;
+    //}
 
     #region Load Coroutines
     private IEnumerator LoadingScreen()
@@ -57,7 +57,7 @@ public class LoadingScreenState : GameManagerState
         yield return _gameManager.StartCoroutine(LoadScenes(false));        // Unload ALL scenes
         _loadData?.Invoke();
         yield return _gameManager.StartCoroutine(LoadScenes(true));         // Load needed scenes
-        _stateMachine.ChangeState(_nextState);
+        //_gameManager.ChangeState(_nextState);
     }
 
     private IEnumerator LoadScenes(bool activateScenes)

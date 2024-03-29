@@ -39,7 +39,7 @@ public abstract class EnemyIdleState : EnemyState
             _isIdleTimeOver = true;
     }
 
-    public override void DoChecks()                                         // Check ranges
+    protected override void DoChecks()                                         // Check ranges
     {
         base.DoChecks();
 

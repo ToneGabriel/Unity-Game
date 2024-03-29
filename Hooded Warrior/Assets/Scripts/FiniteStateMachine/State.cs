@@ -10,8 +10,6 @@ public abstract class State
 
     public virtual void PhysicsUpdate() { }
 
-    public virtual void DoChecks() { }
-
     public virtual void AnimationTrigger() { }
 
     public virtual void AnimationFinishTrigger() { }

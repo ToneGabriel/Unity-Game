@@ -29,7 +29,7 @@ public abstract class PlayerAbilityState : PlayerState
         }
     }
 
-    public override void DoChecks()
+    protected override void DoChecks()
     {
         base.DoChecks();
 

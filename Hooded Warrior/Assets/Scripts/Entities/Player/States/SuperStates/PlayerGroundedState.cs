@@ -27,9 +27,9 @@ public abstract class PlayerGroundedState : PlayerState
     {
         base.Enter();
 
+        _player.ResetAmountOfJumpsLeft();
         // TODO
-        //_player._jumpState.ResetAmountOfJumpsLeft();
-        //_player._dashState.ResetCanDash();
+        // _player.AdvancedStatus.CanDash = true;
     }
 
     public override void LogicUpdate()
@@ -54,14 +54,11 @@ public abstract class PlayerGroundedState : PlayerState
             _player.ChangeState((int)PlayerStateID.SecondaryDefend);
         else if (_spellCastInput && !_isTouchingCeiling && _canCastSpell)
             _player.ChangeState((int)PlayerStateID.SpellCast);
-        else if (_jumpInput /*&& _player._jumpState.CanJump()*/)
-        {
-            InputManager.Instance.UseJumpInput();
+        else if (_jumpInput && _player.CanJump())
             _player.ChangeState((int)PlayerStateID.Jump);
-        }
         else if (!_isGrounded)
         {
-            //_player._jumpState.DecreaseAmountOfJumpsLeft();
+            _player.DecreaseAmountOfJumpsLeft();
             _player.ChangeState((int)PlayerStateID.InAir);
         }
         else if (_isTouchingWall && _grabInput && _isTouchingLedge)
@@ -70,15 +67,15 @@ public abstract class PlayerGroundedState : PlayerState
             _player.ChangeState((int)PlayerStateID.Dash);
     }
 
-    public override void DoChecks()
+    protected override void DoChecks()
     {
         base.DoChecks();
 
-        _isGrounded = _player.IsGrounded();
-        _isTouchingWall = _player.IsTouchingWall();
-        _isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
-        _isTouchingCeiling = _player.IsTouchingCeiling();
-        _canDefend = _player.CanDefend();
-        _canCastSpell = _player.CanCastSpell();
+        _isGrounded         = _player.IsGrounded();
+        _isTouchingWall     = _player.IsTouchingWall();
+        _isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
+        _isTouchingCeiling  = _player.IsTouchingCeiling();
+        _canDefend          = _player.CanDefend();
+        _canCastSpell       = _player.CanCastSpell();
     }
 }

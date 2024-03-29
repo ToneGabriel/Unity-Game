@@ -8,7 +8,7 @@ public class PlayerData : ScriptableObject
 
     [Header("Jump State")]
     public float JumpVelocity               = 15f;
-    public int AmountOfJumps                = 2;
+    public int MaxAmountOfJumps             = 2;
 
     [Header("In Air State")]
     public float JumpHeightMultiplier       = 0.5f;
@@ -28,7 +28,6 @@ public class PlayerData : ScriptableObject
     [Header("Dash State")]
     public float DashCooldown               = 0.5f;
     public float MaxHoldTime                = 1f;
-    public float HoldTimeScale              = 0f;
     public float DashTime                   = 0.2f;
     public float DashVelocity               = 30f;
     public float Drag                       = 10f;

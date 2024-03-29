@@ -21,17 +21,16 @@ public sealed class PlayerLedgeClimbState : PlayerState
     {
         base.Enter();
 
+        _player.ResetAndDecreaseAmountOfJumpsLeft();
         // TODO
-        //_player._jumpState.ResetAmountOfJumpsLeft();
-        //_player._jumpState.DecreaseAmountOfJumpsLeft();
-        //_player._dashState.ResetCanDash();
+        // _player.AdvancedStatus.CanDash = true;
 
         _player.SetVelocityZero();
-        _player.transform.position = _detectedPosition;
+        _player.transform.position = _player.AdvancedStatus.LedgeDetectedposition;
         _cornerPosition = _player.DetermineCornerPosition();
-        _startPosition.Set( _cornerPosition.x - (_player.EntityIntStatusComponents.FacingDirection * _player.PlayerData.StartOffset.x),
+        _startPosition.Set( _cornerPosition.x - (_player.GeneralStatus.FacingDirection * _player.PlayerData.StartOffset.x),
                             _cornerPosition.y - _player.PlayerData.StartOffset.y);
-        _stopPosition.Set(  _cornerPosition.x + (_player.EntityIntStatusComponents.FacingDirection * _player.PlayerData.StopOffset.x),
+        _stopPosition.Set(  _cornerPosition.x + (_player.GeneralStatus.FacingDirection * _player.PlayerData.StopOffset.x),
                             _cornerPosition.y + _player.PlayerData.StopOffset.y);
 
         _player.transform.position = _startPosition;
@@ -65,7 +64,7 @@ public sealed class PlayerLedgeClimbState : PlayerState
             _player.SetVelocityZero();
             _player.transform.position = _startPosition;
 
-            if (_player.IsFacingInput(_inputX) && _isHanging && !_isClimbing)
+            if (_player.GeneralStatus.FacingDirection == _inputX && _isHanging && !_isClimbing)
             {
                 _isClimbing = true;
                 _player.SetAnimatorBoolParam(PlayerControllerParameters.ClimbLedge_b, true);
@@ -89,10 +88,5 @@ public sealed class PlayerLedgeClimbState : PlayerState
         base.AnimationTrigger();
 
         _isHanging = true;
-    }
-
-    public void SetDetectedPosition(Vector2 pos)
-    {
-        _detectedPosition = pos;
     }
 }

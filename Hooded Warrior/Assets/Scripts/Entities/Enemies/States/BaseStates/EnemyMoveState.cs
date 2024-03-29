@@ -19,7 +19,7 @@ public abstract class EnemyMoveState : EnemyState
         _enemy.SetVelocity(_stateData.MovementSpeed);                             // Set velocity
     }
 
-    public override void DoChecks()                                              // Check Ranges
+    protected override void DoChecks()                                              // Check Ranges
     {
         base.DoChecks();
 

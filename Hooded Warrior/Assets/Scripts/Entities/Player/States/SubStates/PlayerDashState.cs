@@ -21,9 +21,9 @@ public sealed class PlayerDashState : PlayerAbilityState
         CanDash = false;
         _isHolding = true;
         InputManager.Instance.UseDashInput();
-        _dashDirection = Vector2.right * _player.EntityIntStatusComponents.FacingDirection;
+        //_dashDirection = Vector2.right * _player.FacingDirection;
 
-        Time.timeScale = _player.PlayerData.HoldTimeScale;
+        GameManager.Instance.ChangeTimeScale(TimeScale.Frozen);
         _stateStartTime = Time.unscaledTime;
 
         _player.SetDashArrowActive(true);
@@ -56,27 +56,28 @@ public sealed class PlayerDashState : PlayerAbilityState
 
                 if (_dashInputStop || Time.unscaledTime >= _stateStartTime + _player.PlayerData.MaxHoldTime)
                 {
-                    _isHolding = false;
-                    Time.timeScale = 1f;
+                    _isHolding      = false;
+                    GameManager.Instance.ChangeTimeScale(TimeScale.Normal);
                     _stateStartTime = Time.time;
+                    _player.RBDrag  = _player.PlayerData.Drag;
                     _player.FlipIfShould(Mathf.RoundToInt(_dashDirection.x));
-                    _player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
-                    _player.RBDrag = _player.PlayerData.Drag;
                     _player.SetDashArrowActive(false);
-                    PlaceAfterImage();
+                    //_player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
+                    //PlaceAfterImage();
                 }
             }
             else
             {
                 _player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
 
-                CheckIfShouldPlaceAfterImage();
+                if (Vector2.Distance(_player.transform.position, _lastAIPosition) >= _player.PlayerData.DistanceBetweenAfterimages)
+                    PlaceAfterImage();
 
                 if (Time.time >= _stateStartTime + _player.PlayerData.DashTime)
                 {
-                    _player.RBDrag = 0f;
-                    _isAbilityDone = true;
-                    _lastDashTime = Time.time;
+                    _player.RBDrag  = 0f;
+                    _isAbilityDone  = true;
+                    _lastDashTime   = Time.time;
                 }
             }
     }
@@ -85,12 +86,6 @@ public sealed class PlayerDashState : PlayerAbilityState
     {
         ObjectPoolManager.Instance.GetFromPool<PlayerAfterImage>(_player.transform.position, _player.transform.rotation);
         _lastAIPosition = _player.transform.position;
-    }
-
-    private void CheckIfShouldPlaceAfterImage()
-    {
-        if (Vector2.Distance(_player.transform.position, _lastAIPosition) >= _player.PlayerData.DistanceBetweenAfterimages)
-            PlaceAfterImage();
     }
 
     public bool CheckIfCanDash()

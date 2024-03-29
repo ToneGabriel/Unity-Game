@@ -17,20 +17,20 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Component Getters & Setters
-    public EntityInternalStatusComponents       EntityIntStatusComponents   { get { return _entityIntStatusComponents; } }
-    public float                                RBVelocityX                 { get { return _entityIntObjComponents.Rigidbody.velocity.x; } }
-    public float                                RBVelocityY                 { get { return _entityIntObjComponents.Rigidbody.velocity.y; } }
-    public float                                RBDrag                      { set { _entityIntObjComponents.Rigidbody.drag = value; } }
-    public RigidbodyType2D                      RBBodyType                  { set { _entityIntObjComponents.Rigidbody.bodyType = value; } }
+    public EntityInternalStatusComponents   GeneralStatus   { get { return _entityIntStatusComponents; } }
+    public float                            RBVelocityX     { get { return _entityIntObjComponents.Rigidbody.velocity.x; } }
+    public float                            RBVelocityY     { get { return _entityIntObjComponents.Rigidbody.velocity.y; } }
+    public float                            RBDrag          { set { _entityIntObjComponents.Rigidbody.drag = value; } }
+    public RigidbodyType2D                  RBBodyType      { set { _entityIntObjComponents.Rigidbody.bodyType = value; } }
     #endregion
 
     #region Unity functions
     protected virtual void Awake()
     {
-        _entityExtObjComponents.HealthBar.SetMaxHealth(_entityData.MaxHealth);
+        //_entityExtObjComponents.HealthBar.SetMaxHealth(_entityData.MaxHealth);
 
-        _entityIntObjComponents.Animator            = GetComponent<Animator>();
         _entityIntObjComponents.Rigidbody           = GetComponent<Rigidbody2D>();
+        _entityIntObjComponents.Animator            = GetComponent<Animator>();
         _entityIntObjComponents.BoxCollider         = GetComponent<BoxCollider2D>();
 
         _entityIntStatusComponents.FacingDirection  = 1;
@@ -39,7 +39,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     protected virtual void OnEnable()
     {
-        _entityExtObjComponents.HealthBar.SetHealthBar(_entityIntStatusComponents.CurrentHealth);
+        //_entityExtObjComponents.HealthBar.SetHealthBar(_entityIntStatusComponents.CurrentHealth);
 
         _entityIntStatusComponents.IsDead    = false;
         _entityIntStatusComponents.IsStuned  = false;
@@ -57,6 +57,9 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
         if (Time.time >= _entityIntStatusComponents.LastDamageTime + _entityData.StunRecoveryTime)
             ResetStunResistnce();
+
+        // Update real velocity based on status parameter
+        //_entityIntObjComponents.Rigidbody.velocity = GeneralStatus.Velocity;
 
         _stateMachine.CurrentState.LogicUpdate();
     }
@@ -179,7 +182,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
             AdditionalDamageActions(attackDetails);
 
             _entityIntStatusComponents.CurrentHealth -= attackDetails.DamageAmount;
-            _entityExtObjComponents.HealthBar.SetHealthBar(_entityIntStatusComponents.CurrentHealth);
+            //_entityExtObjComponents.HealthBar.SetHealthBar(_entityIntStatusComponents.CurrentHealth);
             ObjectPoolManager.Instance.GetFromPool<HitParticleController>(transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
 
             CheckStatus();

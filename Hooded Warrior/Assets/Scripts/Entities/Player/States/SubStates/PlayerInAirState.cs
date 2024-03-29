@@ -19,7 +19,7 @@ public sealed class PlayerInAirState : PlayerState
     public PlayerInAirState(Player player, string animBoolName)
         : base(player, animBoolName) { }
 
-    public override void DoChecks()
+    protected override void DoChecks()
     {
         base.DoChecks();
 
@@ -28,10 +28,8 @@ public sealed class PlayerInAirState : PlayerState
         _isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
 
         // Save player position as soon as it detects ledge
-
-        // TODO
-        //if (_isTouchingWall && !_isTouchingLedge)
-        //    _player._ledgeClimbState.SetDetectedPosition(_player.transform.position);
+        if (_isTouchingWall && !_isTouchingLedge)
+            _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
     }
 
     public override void LogicUpdate()
@@ -50,11 +48,8 @@ public sealed class PlayerInAirState : PlayerState
             _player.ChangeState((int)PlayerStateID.Land);
         else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
-        else if (_jumpInput /*&& _player._jumpState.CanJump()*/)
-        {
-            InputManager.Instance.UseJumpInput();
+        else if (_jumpInput && _player.CanJump())
             _player.ChangeState((int)PlayerStateID.Jump);
-        }
         else if (_isTouchingWall && _grabInput && _isTouchingLedge)
             _player.ChangeState((int)PlayerStateID.WallGrab);
         else if (_isTouchingWall && !_grabInput)

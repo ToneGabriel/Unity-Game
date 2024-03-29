@@ -17,11 +17,14 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Game States
-    public GameManagerFiniteStateMachine StateMachine { get; private set; }
-    public StartMenuState StartMenuState { get; private set; }
-    public LoadingScreenState LoadingScreenState { get; private set; }
-    public GameplayState GameplayState { get; private set; }
-    public ResetGameState ResetGameState { get; private set; }
+    private FiniteStateMachine  _stateMachine;
+    private State[]             _states;
+
+    //public GameManagerFiniteStateMachine StateMachine { get; private set; }
+    //public StartMenuState StartMenuState { get; private set; }
+    //public LoadingScreenState LoadingScreenState { get; private set; }
+    //public GameplayState GameplayState { get; private set; }
+    //public ResetGameState ResetGameState { get; private set; }
 
     public bool IsGamePaused { get; set; }                                       // True when game is paused
     public bool IsLoadingData { get; set; }                                      // True when loading screen is active
@@ -34,19 +37,26 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         else
         {
-            Instance = this;
-            InitializeStates();
+            Instance        = this;
+
+            _stateMachine   = new FiniteStateMachine();
+            _states         = new State[(int)GameManagerStateID.Count];
+
+            _states[(int)GameManagerStateID.StartMenu]      = new StartMenuState(Instance, _startMenuData);
+            _states[(int)GameManagerStateID.LoadingScreen]  = new LoadingScreenState(Instance, _loadingScreenData);
+            _states[(int)GameManagerStateID.Gameplay]       = new GameplayState(Instance, _gameplayData);
+            _states[(int)GameManagerStateID.ResetGame]      = new ResetGameState(Instance, _resetGameData);
         }
     }
 
     private void Start()                                            // Set Game States
     {
-        StateMachine.Initialize(StartMenuState);
+        _stateMachine.InitializeState(_states[(int)GameManagerStateID.StartMenu]);
     }
     
     private void Update()
     {
-        StateMachine.CurrentState.LogicUpdate();
+        _stateMachine.CurrentState.LogicUpdate();
     }
     #endregion
 
@@ -57,13 +67,14 @@ public class GameManager : MonoBehaviour
         Player.SetNewGameData();
     }
 
-    private void InitializeStates()
+    public void ChangeState(int stateID)
     {
-        StateMachine = new GameManagerFiniteStateMachine();
-        StartMenuState = new StartMenuState(Instance, StateMachine, _startMenuData);
-        LoadingScreenState = new LoadingScreenState(Instance, StateMachine, _loadingScreenData);
-        GameplayState = new GameplayState(Instance, StateMachine, _gameplayData);
-        ResetGameState = new ResetGameState(Instance, StateMachine, _resetGameData);
+        _stateMachine.ChangeState(_states[stateID]);
     }
     #endregion
+
+    public void ChangeTimeScale(TimeScale value)
+    {
+        Time.timeScale = (int)value;
+    }
 }

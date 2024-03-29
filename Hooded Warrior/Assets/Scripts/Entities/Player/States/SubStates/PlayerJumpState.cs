@@ -1,39 +1,18 @@
 ﻿
 public sealed class PlayerJumpState : PlayerAbilityState
 {
-    private int _amountOfJumpsLeft;
-
     public PlayerJumpState(Player player, string animBoolName)
-        : base(player, animBoolName)
-    {
-        _amountOfJumpsLeft = _player.PlayerData.AmountOfJumps;
-    }
+        : base(player, animBoolName) { }
 
     public override void Enter()
     {
         base.Enter();
 
+        InputManager.Instance.UseJumpInput();
         _player.SetVelocityY(_player.PlayerData.JumpVelocity);
+        _player.DecreaseAmountOfJumpsLeft();
         _isAbilityDone = true;
-        DecreaseAmountOfJumpsLeft();
         // TODO
         //_player._inAirState.SetIsJumping();
-    }
-
-    public bool CanJump()
-    {
-        if (_amountOfJumpsLeft > 0)
-            return true;
-        return false;
-    }
-
-    public void ResetAmountOfJumpsLeft()
-    {
-        _amountOfJumpsLeft = _player.PlayerData.AmountOfJumps;
-    }
-
-    public void DecreaseAmountOfJumpsLeft()
-    {
-        _amountOfJumpsLeft--;
     }
 }

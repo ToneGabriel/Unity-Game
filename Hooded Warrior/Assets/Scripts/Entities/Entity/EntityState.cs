@@ -32,12 +32,12 @@ public abstract class EntityState : State
 
     public override void PhysicsUpdate() => DoChecks();
 
-    public override void DoChecks() { }
-
     public override void AnimationTrigger() { }
 
     public override void AnimationFinishTrigger()
     {
         _isStateAnimationFinished = true;
     }
+
+    protected virtual void DoChecks() { }
 }

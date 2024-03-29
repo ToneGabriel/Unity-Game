@@ -34,7 +34,7 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.PlayerData.CrouchMovementVelocity * _player.EntityIntStatusComponents.FacingDirection);
+        _player.SetVelocityX(_player.PlayerData.CrouchMovementVelocity * _player.GeneralStatus.FacingDirection);
     }
 
 }

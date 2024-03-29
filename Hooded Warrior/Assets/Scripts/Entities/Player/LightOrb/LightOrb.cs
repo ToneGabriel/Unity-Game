@@ -45,7 +45,7 @@ public class LightOrb : MonoBehaviour
     #region Orb Functionality
     private void CheckOrbTime()
     {
-        if ((Time.time >= _spellCastTime + _lightOrbSpellData.SpellLifeTime && !_isCoroutineStarted) || GameManager.Instance.Player.EntityIntStatusComponents.IsDead)
+        if ((Time.time >= _spellCastTime + _lightOrbSpellData.SpellLifeTime && !_isCoroutineStarted) || GameManager.Instance.Player.GeneralStatus.IsDead)
             StartCoroutine(DecreaseOrbLightRadius());
 
         if (GameManager.Instance.IsLoadingData)

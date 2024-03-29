@@ -28,7 +28,7 @@ public class Spell : MonoBehaviour, ICooldown
     {
         SetAnimatorCast(false);
 
-        CooldownManager.Instance.Subscribe(this);
+        //CooldownManager.Instance.Subscribe(this);
     }
 
     public void CastSpell()     // TODO: check on interrupt
@@ -48,7 +48,7 @@ public class Spell : MonoBehaviour, ICooldown
     public void ResetCooldown()
     {
         IsOnCooldown = false;
-        CooldownManager.Instance.UnSubscribe(this);
+        //CooldownManager.Instance.UnSubscribe(this);
     }
     #endregion
 

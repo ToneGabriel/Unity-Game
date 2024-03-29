@@ -30,7 +30,7 @@ public abstract class EnemyPlayerDetectedState : EnemyState
             _canMove = true;
     }
 
-    public override void DoChecks()                                             // Check Ranges
+    protected override void DoChecks()                                             // Check Ranges
     {
         base.DoChecks();
 

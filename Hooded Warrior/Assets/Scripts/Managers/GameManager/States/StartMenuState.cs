@@ -4,8 +4,8 @@ public class StartMenuState : GameManagerState
 {
     private StartMenuData _startMenuData;
 
-    public StartMenuState(GameManager gameManager, GameManagerFiniteStateMachine stateMachine, StartMenuData startMenuData)
-        : base(gameManager, stateMachine) 
+    public StartMenuState(GameManager gameManager, StartMenuData startMenuData)
+        : base(gameManager) 
     {
         _startMenuData = startMenuData;
 
@@ -32,18 +32,18 @@ public class StartMenuState : GameManagerState
 
     private void StartNewGame()
     {
-        _loadData = () => { _gameManager.LoadDataOnNewGame(); };
-        _gameManager.LoadingScreenState.SetLoadData(_loadData);
-        _gameManager.LoadingScreenState.SetNextState(_gameManager.GameplayState);
-        _stateMachine.ChangeState(_gameManager.LoadingScreenState);
+        //_loadData = () => { _gameManager.LoadDataOnNewGame(); };
+        //_gameManager.LoadingScreenState.SetLoadData(_loadData);
+        //_gameManager.LoadingScreenState.SetNextState(_gameManager.GameplayState);
+        //_gameManager.ChangeState((int)GameManagerStateID.LoadingScreen);
     }
 
     private void LoadGame()
     {
-        _loadData = () => { SaveManager.Instance.Load(); };
-        _gameManager.LoadingScreenState.SetLoadData(_loadData);
-        _gameManager.LoadingScreenState.SetNextState(_gameManager.GameplayState);
-        _stateMachine.ChangeState(_gameManager.LoadingScreenState);
+        //_loadData = () => { SaveManager.Instance.Load(); };
+        //_gameManager.LoadingScreenState.SetLoadData(_loadData);
+        //_gameManager.LoadingScreenState.SetNextState(_gameManager.GameplayState);
+        //_gameManager.ChangeState((int)GameManagerStateID.LoadingScreen);
     }
 
     private void QuitGame()

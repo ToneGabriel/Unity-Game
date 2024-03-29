@@ -8,7 +8,7 @@ public sealed class PlayerRollState : PlayerAbilityState
     {
         base.Enter();
 
-        _player.SetVelocityX(_player.PlayerData.RollVelocity * _player.EntityIntStatusComponents.FacingDirection);
+        _player.SetVelocityX(_player.PlayerData.RollVelocity * _player.GeneralStatus.FacingDirection);
         _player.SetColiderHeight(_player.PlayerData.CrouchColliderHeight);
         _player.SetLightOrbPosition(_player.PlayerData.CrouchLightOrbPosition);
     }
@@ -17,7 +17,7 @@ public sealed class PlayerRollState : PlayerAbilityState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.PlayerData.RollVelocity * _player.EntityIntStatusComponents.FacingDirection);
+        _player.SetVelocityX(_player.PlayerData.RollVelocity * _player.GeneralStatus.FacingDirection);
     }
 
     public override void Exit()

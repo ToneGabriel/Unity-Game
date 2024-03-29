@@ -1,21 +1,12 @@
 using System;
 
-public abstract class GameManagerState
+public abstract class GameManagerState : State
 {
-    protected GameManager _gameManager;
-    protected GameManagerFiniteStateMachine _stateMachine;
-    protected Action _loadData;
+    protected GameManager   _gameManager;
+    protected Action        _loadData;
 
-    public GameManagerState(GameManager gameManager, GameManagerFiniteStateMachine stateMachine)
+    public GameManagerState(GameManager gameManager)
     {
         _gameManager = gameManager;
-        _stateMachine = stateMachine;
     }
-
-    public virtual void Enter() { }
-
-    public virtual void LogicUpdate() { }
-
-    public virtual void Exit() { }
-
 }

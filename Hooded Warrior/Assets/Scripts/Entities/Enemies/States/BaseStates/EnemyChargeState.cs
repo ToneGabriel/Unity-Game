@@ -31,7 +31,7 @@ public abstract class EnemyChargeState : EnemyState
             _isChargeTimeOver = true;
     }
 
-    public override void DoChecks()                                                     // Check ranges
+    protected override void DoChecks()                                                  // Check ranges
     {
         base.DoChecks();
 

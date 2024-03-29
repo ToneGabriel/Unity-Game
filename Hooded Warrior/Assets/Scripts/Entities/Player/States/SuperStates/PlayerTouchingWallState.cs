@@ -16,10 +16,9 @@ public abstract class PlayerTouchingWallState : PlayerState
     {
         base.Enter();
 
+        _player.ResetAndDecreaseAmountOfJumpsLeft();
         // TODO
-        //_player._jumpState.ResetAmountOfJumpsLeft();
-        //_player._jumpState.DecreaseAmountOfJumpsLeft();
-        //_player._dashState.ResetCanDash();
+        // _player.AdvancedStatus.CanDash = true;
     }
 
     public override void LogicUpdate()
@@ -39,16 +38,15 @@ public abstract class PlayerTouchingWallState : PlayerState
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
     }
 
-    public override void DoChecks()
+    protected override void DoChecks()
     {
         base.DoChecks();
 
-        _isGrounded = _player.IsGrounded();
-        _isTouchingWall = _player.IsTouchingWall();
-        _isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
+        _isGrounded         = _player.IsGrounded();
+        _isTouchingWall     = _player.IsTouchingWall();
+        _isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
 
-        // TODO
-        //if (_isTouchingWall && !_isTouchingLedge)
-        //    _player._ledgeClimbState.SetDetectedPosition(_player.transform.position);
+        if (_isTouchingWall && !_isTouchingLedge)
+            _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
     }
 }

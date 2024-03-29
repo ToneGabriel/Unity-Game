@@ -46,7 +46,7 @@ public abstract class EnemyStunState : EnemyState
         }
     }
 
-    public override void DoChecks()
+    protected override void DoChecks()
     {
         base.DoChecks();
 

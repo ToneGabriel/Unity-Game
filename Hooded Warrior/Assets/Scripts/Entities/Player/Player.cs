@@ -5,13 +5,15 @@ public sealed class Player : Entity
     #region Components & Data
     [SerializeField]
     private PlayerExternalObjectComponents _playerExtObjComponents;
+    private PlayerInternalStatusComponents _playerIntStatusComponents;
 
     [SerializeField]
     private PlayerData _playerData;
     #endregion
 
     #region Component Getters
-    public PlayerData PlayerData { get { return _playerData; } }
+    public PlayerInternalStatusComponents   AdvancedStatus  { get { return _playerIntStatusComponents; } }
+    public PlayerData                       PlayerData      { get { return _playerData; } }
     #endregion
 
     #region Others
@@ -24,7 +26,7 @@ public sealed class Player : Entity
     {
         base.Awake();
 
-        _playerExtObjComponents._inventory = GetComponent<PlayerInventory>();
+        //_playerExtObjComponents._inventory = GetComponent<PlayerInventory>();
         //_weaponIndex    = 0;
         //_spellIndex     = 0;
 
@@ -68,11 +70,26 @@ public sealed class Player : Entity
 
         ObjectPoolManager.Instance.RequestPool<PlayerAfterImage>();
 
-        gameObject.SetActive(false);                    // Allows "Awake" on application start but prevents loading errors
+        //gameObject.SetActive(false);                    // Allows "Awake" on application start but prevents loading errors
     }
     #endregion
 
     #region Setters
+    public void ResetAmountOfJumpsLeft()
+    {
+        _playerIntStatusComponents.AmountOfJumpsLeft = _playerData.MaxAmountOfJumps;
+    }
+
+    public void DecreaseAmountOfJumpsLeft()
+    {
+        --_playerIntStatusComponents.AmountOfJumpsLeft;
+    }
+
+    public void ResetAndDecreaseAmountOfJumpsLeft()
+    {
+        _playerIntStatusComponents.AmountOfJumpsLeft = _playerData.MaxAmountOfJumps - 1;
+    }
+
     public void SetDashArrowActive(bool value)
     {
         _playerExtObjComponents._dashDirectionIndicator.SetActive(value);
@@ -106,9 +123,14 @@ public sealed class Player : Entity
     #endregion
 
     #region Checkers
-    public bool IsFacingInput(int inputX)
+    public bool CanJump()
     {
-        return inputX == _entityIntStatusComponents.FacingDirection;
+        return (_playerIntStatusComponents.AmountOfJumpsLeft > 0);
+    }
+
+    public bool CanDash()
+    {
+        return false;   // TODO
     }
 
     public void FlipIfShould(int inputX)
