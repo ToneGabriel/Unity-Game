@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public sealed class Player : Entity
 {
@@ -29,32 +30,9 @@ public sealed class Player : Entity
         //_playerExtObjComponents._inventory = GetComponent<PlayerInventory>();
         //_weaponIndex    = 0;
         //_spellIndex     = 0;
-
-        // Initialize States
-        _stateMachine   = new FiniteStateMachine();
-        _states         = new State[(int)PlayerStateID.Count];
-
-        _states[(int)PlayerStateID.Idle]            = new PlayerIdleState(this, PlayerControllerParameters.Idle_b);
-        _states[(int)PlayerStateID.Move]            = new PlayerMoveState(this, PlayerControllerParameters.Move_b);
-        _states[(int)PlayerStateID.Jump]            = new PlayerJumpState(this, PlayerControllerParameters.InAir_b);
-        _states[(int)PlayerStateID.InAir]           = new PlayerInAirState(this, PlayerControllerParameters.InAir_b);
-        _states[(int)PlayerStateID.Land]            = new PlayerLandState(this, PlayerControllerParameters.Land_b);
-        _states[(int)PlayerStateID.WallSlide]       = new PlayerWallSlideState(this, PlayerControllerParameters.WallSlide_b);
-        _states[(int)PlayerStateID.WallGrab]        = new PlayerWallGrabState(this, PlayerControllerParameters.WallGrab_b);
-        _states[(int)PlayerStateID.WallClimb]       = new PlayerWallClimbState(this, PlayerControllerParameters.WallClimb_b);
-        _states[(int)PlayerStateID.WallJump]        = new PlayerWallJumpState(this, PlayerControllerParameters.InAir_b);
-        _states[(int)PlayerStateID.LedgeClimb]      = new PlayerLedgeClimbState(this, PlayerControllerParameters.LedgeClimbState_b);
-        _states[(int)PlayerStateID.Dash]            = new PlayerDashState(this, PlayerControllerParameters.InAir_b);
-        _states[(int)PlayerStateID.CrouchIdle]      = new PlayerCrouchIdleState(this, PlayerControllerParameters.CrouchIdle_b);
-        _states[(int)PlayerStateID.CrouchMove]      = new PlayerCrouchMoveState(this, PlayerControllerParameters.CrouchMove_b);
-        _states[(int)PlayerStateID.Roll]            = new PlayerRollState(this, PlayerControllerParameters.Roll_b);
-        _states[(int)PlayerStateID.PrimaryAttack]   = new PlayerAttackState(this, PlayerControllerParameters.Combat_b);
-        _states[(int)PlayerStateID.SecondaryDefend] = new PlayerDefendState(this, PlayerControllerParameters.Combat_b);
-        _states[(int)PlayerStateID.SpellCast]       = new PlayerSpellState(this, PlayerControllerParameters.Combat_b);
-
-        //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
-        //_secondaryDefendState.SetShield(_inventory.Shield);
-        //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
+        
+        InitializeStates();
+        InitializeCoditions();
     }
 
     protected override void OnEnable()
@@ -203,6 +181,87 @@ public sealed class Player : Entity
     #endregion
 
     #region Other Functions
+    private void InitializeStates()
+    {
+        _stateMachine   = new FiniteStateMachine();
+        _states         = new State[(int)PlayerStateID.Count];
+
+        _states[(int)PlayerStateID.Idle]            = new PlayerIdleState(this, PlayerControllerParameters.Idle_b);
+        _states[(int)PlayerStateID.Move]            = new PlayerMoveState(this, PlayerControllerParameters.Move_b);
+        _states[(int)PlayerStateID.Jump]            = new PlayerJumpState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.InAir]           = new PlayerInAirState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.Land]            = new PlayerLandState(this, PlayerControllerParameters.Land_b);
+        _states[(int)PlayerStateID.WallSlide]       = new PlayerWallSlideState(this, PlayerControllerParameters.WallSlide_b);
+        _states[(int)PlayerStateID.WallGrab]        = new PlayerWallGrabState(this, PlayerControllerParameters.WallGrab_b);
+        _states[(int)PlayerStateID.WallClimb]       = new PlayerWallClimbState(this, PlayerControllerParameters.WallClimb_b);
+        _states[(int)PlayerStateID.WallJump]        = new PlayerWallJumpState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.LedgeClimb]      = new PlayerLedgeClimbState(this, PlayerControllerParameters.LedgeClimbState_b);
+        _states[(int)PlayerStateID.Dash]            = new PlayerDashState(this, PlayerControllerParameters.InAir_b);
+        _states[(int)PlayerStateID.CrouchIdle]      = new PlayerCrouchIdleState(this, PlayerControllerParameters.CrouchIdle_b);
+        _states[(int)PlayerStateID.CrouchMove]      = new PlayerCrouchMoveState(this, PlayerControllerParameters.CrouchMove_b);
+        _states[(int)PlayerStateID.Roll]            = new PlayerRollState(this, PlayerControllerParameters.Roll_b);
+        _states[(int)PlayerStateID.PrimaryAttack]   = new PlayerAttackState(this, PlayerControllerParameters.Combat_b);
+        _states[(int)PlayerStateID.SecondaryDefend] = new PlayerDefendState(this, PlayerControllerParameters.Combat_b);
+        _states[(int)PlayerStateID.SpellCast]       = new PlayerSpellState(this, PlayerControllerParameters.Combat_b);
+
+        //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
+        //_secondaryDefendState.SetShield(_inventory.Shield);
+        //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
+    }
+
+    private void InitializeCoditions()
+    {
+        _conditions = new Func<bool>[(int)PlayerStateTransitionID.Count];
+
+        _conditions[(int)PlayerStateTransitionID.GroundedToJump]            = () => { return (InputManager.Instance.JumpInput && CanJump()); };
+        _conditions[(int)PlayerStateTransitionID.GroundedToInAir]           = () => { return (!IsGrounded()); };
+        _conditions[(int)PlayerStateTransitionID.GroundedToWallGrab]        = () => { return (InputManager.Instance.GrabInput && IsTouchingWall() && IsTouchingLedge(transform.right)); };
+        _conditions[(int)PlayerStateTransitionID.GroundedToDash]            = () => { return (InputManager.Instance.DashInput && !IsTouchingCeiling()); };
+        
+        _conditions[(int)PlayerStateTransitionID.AbilityToCrouchIdle]       = () => { return (IsTouchingCeiling()); };
+        _conditions[(int)PlayerStateTransitionID.AbilityToIdle]             = () => { return (IsGrounded() && RBVelocityY < 0.01f); };
+        _conditions[(int)PlayerStateTransitionID.AbilityToInAir]            = () => { return true; };
+        
+        _conditions[(int)PlayerStateTransitionID.TouchingWallToIdle]        = () => { return (!InputManager.Instance.GrabInput && IsGrounded()); };
+        _conditions[(int)PlayerStateTransitionID.TouchingWallToInAir]       = () => { return (!IsTouchingWall()); };
+        _conditions[(int)PlayerStateTransitionID.TouchingWallToLedgeClimb]  = () => { return (IsTouchingWall() && !IsTouchingLedge(transform.right)); };
+        
+        _conditions[(int)PlayerStateTransitionID.IdleToMove]                = () => { return (InputManager.Instance.NormalizedInputX != 0); };
+        _conditions[(int)PlayerStateTransitionID.IdleToCrouchIdle]          = () => { return (InputManager.Instance.NormalizedInputY == -1); };
+        
+        _conditions[(int)PlayerStateTransitionID.MoveToIdle]                = () => { return (InputManager.Instance.NormalizedInputX == 0); };
+        _conditions[(int)PlayerStateTransitionID.MoveToCrouchMove]          = () => { return (InputManager.Instance.NormalizedInputY == -1); };
+        _conditions[(int)PlayerStateTransitionID.MoveToRoll]                = () => { return (InputManager.Instance.RollInput && IsGrounded()); };
+        
+        _conditions[(int)PlayerStateTransitionID.InAirToLand]               = () => { return (IsGrounded() && RBVelocityY < 0.01f); };
+        _conditions[(int)PlayerStateTransitionID.InAirToLedgeClimb]         = () => { return (IsTouchingWall() && !IsTouchingLedge(transform.right) && !IsGrounded()); };
+        _conditions[(int)PlayerStateTransitionID.InAirToJump]               = () => { return (InputManager.Instance.JumpInput && CanJump()); };
+        _conditions[(int)PlayerStateTransitionID.InAirToWallGrab]           = () => { return (InputManager.Instance.GrabInput && IsTouchingWall() && IsTouchingLedge(transform.right)); };
+        _conditions[(int)PlayerStateTransitionID.InAirToWallSlide]          = () => { return (!InputManager.Instance.GrabInput && IsTouchingWall()); };
+        _conditions[(int)PlayerStateTransitionID.InAirToDash]               = () => { return (InputManager.Instance.DashInput /*&& _player._dashState.CheckIfCanDash()*/); };
+        
+        //_conditions[(int)PlayerStateTransitionID.LandToIdle]                = () => { return _isStateAnimationFinished; };
+        _conditions[(int)PlayerStateTransitionID.LandToMove]                = () => { return (InputManager.Instance.NormalizedInputX != 0); };
+        
+        _conditions[(int)PlayerStateTransitionID.WallSlideToWallGrab]       = () => { return (InputManager.Instance.GrabInput && InputManager.Instance.NormalizedInputY == 0); };
+        _conditions[(int)PlayerStateTransitionID.WallSlideToWallJump]       = () => { return (InputManager.Instance.JumpInput && IsTouchingWall()); };
+        _conditions[(int)PlayerStateTransitionID.WallSlideToInAir]          = () => { return (!InputManager.Instance.GrabInput && InputManager.Instance.NormalizedInputX != 0 && InputManager.Instance.NormalizedInputX != GeneralStatus.FacingDirection); };
+        
+        _conditions[(int)PlayerStateTransitionID.WallGrabToWallClimb]       = () => { return (InputManager.Instance.NormalizedInputY > 0); };
+        _conditions[(int)PlayerStateTransitionID.WallGrabToWallSlide]       = () => { return (InputManager.Instance.NormalizedInputY < 0 || !InputManager.Instance.GrabInput); };
+        
+        _conditions[(int)PlayerStateTransitionID.WallClimbToWallGrab]       = () => { return (InputManager.Instance.NormalizedInputY != 1); };
+        
+        //_conditions[(int)PlayerStateTransitionID.LedgeClimbToWallSlide]     = () => { return (InputManager.Instance.NormalizedInputY == -1 && _isHanging && !_isClimbing); };
+        //_conditions[(int)PlayerStateTransitionID.LedgeClimbToWallJump]      = () => { return (InputManager.Instance.JumpInput && !_isClimbing); };
+        
+        _conditions[(int)PlayerStateTransitionID.CrouchIdleToCrouchMove]    = () => { return (InputManager.Instance.NormalizedInputX != 0); };
+        _conditions[(int)PlayerStateTransitionID.CrouchIdleToIdle]          = () => { return (InputManager.Instance.NormalizedInputY != -1 && !IsTouchingCeiling()); };
+        
+        _conditions[(int)PlayerStateTransitionID.CrouchMoveToCrouchIdle]    = () => { return (InputManager.Instance.NormalizedInputX == 0); };
+        _conditions[(int)PlayerStateTransitionID.CrouchMoveToMove]          = () => { return (InputManager.Instance.NormalizedInputY != -1 && !IsTouchingCeiling()); };
+    }
+
     public void SetNewGameData()
     {
         _entityIntStatusComponents.FacingDirection = 1;

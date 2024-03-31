@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
@@ -11,8 +12,9 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     [SerializeField]
     protected EntityData                        _entityData;
 
-    protected FiniteStateMachine                _stateMachine;      // initialized in derived classes
-    protected State[]                           _states;            // initialized in derived classes
+    protected FiniteStateMachine                _stateMachine;              // initialized in derived classes
+    protected State[]                           _states;                    // initialized in derived classes
+    protected Func<bool>[]                      _conditions;                // initialized in derived classes
     protected Vector2                           _workspaceVector2;
     #endregion
 
@@ -138,6 +140,11 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Checkers
+    public bool IsTransitionValid(int stateTransitionID)
+    {
+        return _conditions[stateTransitionID]();
+    }
+
     public bool IsGrounded()
     {
         return Physics2D.OverlapCircle( _entityExtObjComponents.GroundCheck.transform.position,
@@ -183,7 +190,7 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
             _entityIntStatusComponents.CurrentHealth -= attackDetails.DamageAmount;
             //_entityExtObjComponents.HealthBar.SetHealthBar(_entityIntStatusComponents.CurrentHealth);
-            ObjectPoolManager.Instance.GetFromPool<HitParticleController>(transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
+            ObjectPoolManager.Instance.GetFromPool<HitParticleController>(transform.position, Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f)));
 
             CheckStatus();
         }
