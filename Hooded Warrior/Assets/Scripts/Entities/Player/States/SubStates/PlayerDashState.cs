@@ -59,7 +59,7 @@ public sealed class PlayerDashState : PlayerAbilityState
                     _isHolding      = false;
                     GameManager.Instance.ChangeTimeScale(TimeScale.Normal);
                     _stateStartTime = Time.time;
-                    _player.RBDrag  = _player.PlayerData.Drag;
+                    _player.SetDrag(_player.PlayerData.Drag);
                     _player.FlipIfShould(Mathf.RoundToInt(_dashDirection.x));
                     _player.SetDashArrowActive(false);
                     //_player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
@@ -75,7 +75,7 @@ public sealed class PlayerDashState : PlayerAbilityState
 
                 if (Time.time >= _stateStartTime + _player.PlayerData.DashTime)
                 {
-                    _player.RBDrag  = 0f;
+                    _player.SetDrag(0f);
                     _isAbilityDone  = true;
                     _lastDashTime   = Time.time;
                 }

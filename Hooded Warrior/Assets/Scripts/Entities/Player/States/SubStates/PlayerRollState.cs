@@ -8,7 +8,6 @@ public sealed class PlayerRollState : PlayerAbilityState
     {
         base.Enter();
 
-        _player.SetVelocityX(_player.PlayerData.RollVelocity * _player.GeneralStatus.FacingDirection);
         _player.SetColiderHeight(_player.PlayerData.CrouchColliderHeight);
         _player.SetLightOrbPosition(_player.PlayerData.CrouchLightOrbPosition);
     }

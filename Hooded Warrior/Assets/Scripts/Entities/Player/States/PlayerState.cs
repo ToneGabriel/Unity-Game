@@ -32,11 +32,5 @@ public abstract class PlayerState : EntityState
             InputManager.Instance.UseChangeSpellInput();
             _player.ChangeSpell();
         }
-
-        _player.SetAnimatorFloatParam(  PlayerControllerParameters.VelocityY_f,
-                                        _player.RBVelocityY);
-
-        _player.SetAnimatorFloatParam(  PlayerControllerParameters.VelocityX_f,
-                                        Mathf.Abs(_player.RBVelocityX));
     }
 }

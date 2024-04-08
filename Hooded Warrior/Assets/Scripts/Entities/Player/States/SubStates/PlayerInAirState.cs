@@ -14,18 +14,16 @@ public sealed class PlayerInAirState : PlayerState
     private bool _isTouchingWall;
     private bool _isTouchingLedge;
 
-    private Vector2 _workspaceVector2;
-
     public PlayerInAirState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+        : base(player, animBoolName) { /*Empty*/ }
 
     protected override void DoChecks()
     {
         base.DoChecks();
 
-        _isGrounded = _player.IsGrounded();
-        _isTouchingWall = _player.IsTouchingWall();
-        _isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
+        _isGrounded         = _player.IsGrounded();
+        _isTouchingWall     = _player.IsTouchingWall();
+        _isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
 
         // Save player position as soon as it detects ledge
         if (_isTouchingWall && !_isTouchingLedge)
@@ -60,12 +58,7 @@ public sealed class PlayerInAirState : PlayerState
         {
             _player.FlipIfShould(_inputX);
             _player.SetVelocityX(_player.PlayerData.MovementVelocity * _inputX);
-
-            _workspaceVector2.Set(  _player.RBVelocityX,
-                                    Mathf.Clamp(_player.RBVelocityY,
-                                                -_player.PlayerData.MaxVelocityY,
-                                                _player.PlayerData.MaxVelocityY));  // prevent using too much velocity
-            _player.SetVelocity(_workspaceVector2);
+            _player.ApplyVelocityLimitY(-_player.PlayerData.MaxVelocityY, _player.PlayerData.MaxVelocityY);
         }
     }
 

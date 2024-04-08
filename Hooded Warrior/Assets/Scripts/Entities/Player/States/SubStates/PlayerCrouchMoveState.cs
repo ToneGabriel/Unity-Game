@@ -2,7 +2,7 @@
 public sealed class PlayerCrouchMoveState : PlayerGroundedState
 {
     public PlayerCrouchMoveState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+        : base(player, animBoolName) { /*Empty*/ }
 
     public override void Enter()
     {
@@ -10,14 +10,6 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
 
         _player.SetColiderHeight(_player.PlayerData.CrouchColliderHeight);
         _player.SetLightOrbPosition(_player.PlayerData.CrouchLightOrbPosition);
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-
-        _player.SetColiderHeight(_player.PlayerData.StandColliderHeight);
-        _player.SetLightOrbPosition(_player.PlayerData.StandLightOrbPosition);
     }
 
     public override void LogicUpdate()
@@ -34,7 +26,14 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.PlayerData.CrouchMovementVelocity * _player.GeneralStatus.FacingDirection);
+        _player.SetVelocityX(_player.PlayerData.CrouchMovementVelocity * _inputX);
     }
 
+    public override void Exit()
+    {
+        base.Exit();
+
+        _player.SetColiderHeight(_player.PlayerData.StandColliderHeight);
+        _player.SetLightOrbPosition(_player.PlayerData.StandLightOrbPosition);
+    }
 }

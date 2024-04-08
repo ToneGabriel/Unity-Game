@@ -32,7 +32,6 @@ public sealed class Player : Entity
         //_spellIndex     = 0;
         
         InitializeStates();
-        InitializeCoditions();
     }
 
     protected override void OnEnable()
@@ -49,6 +48,14 @@ public sealed class Player : Entity
         //ObjectPoolManager.Instance.RequestPool<PlayerAfterImage>();
 
         //gameObject.SetActive(false);                    // Allows "Awake" on application start but prevents loading errors
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        SetAnimatorFloatParam(PlayerControllerParameters.VelocityY_f, RBVelocityY);
+        SetAnimatorFloatParam(PlayerControllerParameters.VelocityX_f, Mathf.Abs(RBVelocityX));
     }
     #endregion
 
@@ -76,6 +83,12 @@ public sealed class Player : Entity
     public void SetDashArrowRotation(Quaternion rotation)
     {
         _playerExtObjComponents._dashDirectionIndicator.transform.rotation = rotation;
+    }
+
+    public void ApplyVelocityLimitY(float min, float max)   // prevent using too much velocity
+    {
+        _workspaceVector2.Set(RBVelocityX, Mathf.Clamp(RBVelocityY, min, max));
+        SetVelocity(_workspaceVector2);
     }
 
     public void SetColiderHeight(float height)
@@ -207,59 +220,6 @@ public sealed class Player : Entity
         //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
         //_secondaryDefendState.SetShield(_inventory.Shield);
         //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
-    }
-
-    private void InitializeCoditions()
-    {
-        _conditions = new Func<bool>[(int)PlayerStateTransitionID.Count];
-
-        _conditions[(int)PlayerStateTransitionID.GroundedToJump]            = () => { return (InputManager.Instance.JumpInput && CanJump()); };
-        _conditions[(int)PlayerStateTransitionID.GroundedToInAir]           = () => { return (!IsGrounded()); };
-        _conditions[(int)PlayerStateTransitionID.GroundedToWallGrab]        = () => { return (InputManager.Instance.GrabInput && IsTouchingWall() && IsTouchingLedge(transform.right)); };
-        _conditions[(int)PlayerStateTransitionID.GroundedToDash]            = () => { return (InputManager.Instance.DashInput && !IsTouchingCeiling()); };
-        
-        _conditions[(int)PlayerStateTransitionID.AbilityToCrouchIdle]       = () => { return (IsTouchingCeiling()); };
-        _conditions[(int)PlayerStateTransitionID.AbilityToIdle]             = () => { return (IsGrounded() && RBVelocityY < 0.01f); };
-        _conditions[(int)PlayerStateTransitionID.AbilityToInAir]            = () => { return true; };
-        
-        _conditions[(int)PlayerStateTransitionID.TouchingWallToIdle]        = () => { return (!InputManager.Instance.GrabInput && IsGrounded()); };
-        _conditions[(int)PlayerStateTransitionID.TouchingWallToInAir]       = () => { return (!IsTouchingWall()); };
-        _conditions[(int)PlayerStateTransitionID.TouchingWallToLedgeClimb]  = () => { return (IsTouchingWall() && !IsTouchingLedge(transform.right)); };
-        
-        _conditions[(int)PlayerStateTransitionID.IdleToMove]                = () => { return (InputManager.Instance.NormalizedInputX != 0); };
-        _conditions[(int)PlayerStateTransitionID.IdleToCrouchIdle]          = () => { return (InputManager.Instance.NormalizedInputY == -1); };
-        
-        _conditions[(int)PlayerStateTransitionID.MoveToIdle]                = () => { return (InputManager.Instance.NormalizedInputX == 0); };
-        _conditions[(int)PlayerStateTransitionID.MoveToCrouchMove]          = () => { return (InputManager.Instance.NormalizedInputY == -1); };
-        _conditions[(int)PlayerStateTransitionID.MoveToRoll]                = () => { return (InputManager.Instance.RollInput && IsGrounded()); };
-        
-        _conditions[(int)PlayerStateTransitionID.InAirToLand]               = () => { return (IsGrounded() && RBVelocityY < 0.01f); };
-        _conditions[(int)PlayerStateTransitionID.InAirToLedgeClimb]         = () => { return (IsTouchingWall() && !IsTouchingLedge(transform.right) && !IsGrounded()); };
-        _conditions[(int)PlayerStateTransitionID.InAirToJump]               = () => { return (InputManager.Instance.JumpInput && CanJump()); };
-        _conditions[(int)PlayerStateTransitionID.InAirToWallGrab]           = () => { return (InputManager.Instance.GrabInput && IsTouchingWall() && IsTouchingLedge(transform.right)); };
-        _conditions[(int)PlayerStateTransitionID.InAirToWallSlide]          = () => { return (!InputManager.Instance.GrabInput && IsTouchingWall()); };
-        _conditions[(int)PlayerStateTransitionID.InAirToDash]               = () => { return (InputManager.Instance.DashInput /*&& _player._dashState.CheckIfCanDash()*/); };
-        
-        //_conditions[(int)PlayerStateTransitionID.LandToIdle]                = () => { return _isStateAnimationFinished; };
-        _conditions[(int)PlayerStateTransitionID.LandToMove]                = () => { return (InputManager.Instance.NormalizedInputX != 0); };
-        
-        _conditions[(int)PlayerStateTransitionID.WallSlideToWallGrab]       = () => { return (InputManager.Instance.GrabInput && InputManager.Instance.NormalizedInputY == 0); };
-        _conditions[(int)PlayerStateTransitionID.WallSlideToWallJump]       = () => { return (InputManager.Instance.JumpInput && IsTouchingWall()); };
-        _conditions[(int)PlayerStateTransitionID.WallSlideToInAir]          = () => { return (!InputManager.Instance.GrabInput && InputManager.Instance.NormalizedInputX != 0 && InputManager.Instance.NormalizedInputX != GeneralStatus.FacingDirection); };
-        
-        _conditions[(int)PlayerStateTransitionID.WallGrabToWallClimb]       = () => { return (InputManager.Instance.NormalizedInputY > 0); };
-        _conditions[(int)PlayerStateTransitionID.WallGrabToWallSlide]       = () => { return (InputManager.Instance.NormalizedInputY < 0 || !InputManager.Instance.GrabInput); };
-        
-        _conditions[(int)PlayerStateTransitionID.WallClimbToWallGrab]       = () => { return (InputManager.Instance.NormalizedInputY != 1); };
-        
-        //_conditions[(int)PlayerStateTransitionID.LedgeClimbToWallSlide]     = () => { return (InputManager.Instance.NormalizedInputY == -1 && _isHanging && !_isClimbing); };
-        //_conditions[(int)PlayerStateTransitionID.LedgeClimbToWallJump]      = () => { return (InputManager.Instance.JumpInput && !_isClimbing); };
-        
-        _conditions[(int)PlayerStateTransitionID.CrouchIdleToCrouchMove]    = () => { return (InputManager.Instance.NormalizedInputX != 0); };
-        _conditions[(int)PlayerStateTransitionID.CrouchIdleToIdle]          = () => { return (InputManager.Instance.NormalizedInputY != -1 && !IsTouchingCeiling()); };
-        
-        _conditions[(int)PlayerStateTransitionID.CrouchMoveToCrouchIdle]    = () => { return (InputManager.Instance.NormalizedInputX == 0); };
-        _conditions[(int)PlayerStateTransitionID.CrouchMoveToMove]          = () => { return (InputManager.Instance.NormalizedInputY != -1 && !IsTouchingCeiling()); };
     }
 
     public void SetNewGameData()

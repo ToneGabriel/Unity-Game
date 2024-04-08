@@ -29,7 +29,7 @@ public abstract class EnemyStunState : EnemyState
         base.Exit();
 
         _enemy.ResetStunResistnce();
-        _enemy.RBBodyType = RigidbodyType2D.Dynamic;
+        _enemy.SetBodyType(RigidbodyType2D.Dynamic);
     }
 
     public override void LogicUpdate()
@@ -42,7 +42,7 @@ public abstract class EnemyStunState : EnemyState
         if (_isGrounded && Time.time >= _stateStartTime + _stateData.StunKnockBackTime && !_isMovementStopped)         // sets velocity to 0 while stunned
         {
             _isMovementStopped = true;
-            _enemy.RBBodyType = RigidbodyType2D.Static;
+            _enemy.SetBodyType(RigidbodyType2D.Static);
         }
     }
 
@@ -50,8 +50,8 @@ public abstract class EnemyStunState : EnemyState
     {
         base.DoChecks();
 
-        _isGrounded = _enemy.IsGrounded();
-        _isPlayerInMeleeRange = _enemy.CheckPlayerInMeleeRange();
+        _isGrounded             = _enemy.IsGrounded();
+        _isPlayerInMeleeRange   = _enemy.CheckPlayerInMeleeRange();
         _isPlayerInMinAgroRange = _enemy.CheckPlayerInMinAgroRange();
     }
 }

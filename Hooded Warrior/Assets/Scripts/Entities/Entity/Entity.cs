@@ -14,7 +14,6 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     protected FiniteStateMachine                _stateMachine;              // initialized in derived classes
     protected State[]                           _states;                    // initialized in derived classes
-    protected Func<bool>[]                      _conditions;                // initialized in derived classes
     protected Vector2                           _workspaceVector2;
     #endregion
 
@@ -22,8 +21,6 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     public ref EntityInternalStatusComponents   GeneralStatus   { get { return ref _entityIntStatusComponents; } }
     public float                                RBVelocityX     { get { return _entityIntObjComponents.Rigidbody.velocity.x; } }
     public float                                RBVelocityY     { get { return _entityIntObjComponents.Rigidbody.velocity.y; } }
-    public float                                RBDrag          { set { _entityIntObjComponents.Rigidbody.drag = value; } }
-    public RigidbodyType2D                      RBBodyType      { set { _entityIntObjComponents.Rigidbody.bodyType = value; } }
     #endregion
 
     #region Unity functions
@@ -91,6 +88,16 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
         _entityIntObjComponents.Animator.SetFloat(animFloatName, value);
     }
 
+    public void SetDrag(float value)
+    {
+        _entityIntObjComponents.Rigidbody.drag = value;
+    }
+
+    public void SetBodyType(RigidbodyType2D value)
+    {
+        _entityIntObjComponents.Rigidbody.bodyType = value;
+    }
+
     public void SetVelocityZero()
     {
         _entityIntObjComponents.Rigidbody.velocity = Vector2.zero;
@@ -140,11 +147,6 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Checkers
-    public bool IsTransitionValid(int stateTransitionID)
-    {
-        return _conditions[stateTransitionID]();
-    }
-
     public bool IsGrounded()
     {
         return Physics2D.OverlapCircle( _entityExtObjComponents.GroundCheck.transform.position,
