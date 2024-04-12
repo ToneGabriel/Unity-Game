@@ -21,7 +21,7 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
         base.Enter();
 
         _isDodgeOver = false;
-        _enemy.SetVelocity(_stateData.DodgeSpeed, _stateData.DodgeAngle, -_enemy.GeneralStatus.FacingDirection);
+        _enemy.SetVelocity(_stateData.DodgeSpeed, _stateData.DodgeAngle, -_enemy.GetFacingDirection());
     }
 
     public override void Exit()

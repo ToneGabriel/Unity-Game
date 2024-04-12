@@ -10,6 +10,9 @@ public class LightOrbSpellData : ScriptableObject
     public float InnerLightMaxInnerRadius = 2f;
     public float OuterLightMaxInnerRadius = 10f;
 
+    public float OuterLightInnerRadiusChangRatio = 0.04f;
+    public float OuterLightOuterRadiusChangRatio = 0.11f;
+
     public WaitForSeconds LightPrepareTime = new WaitForSeconds(1f);
     public WaitForSeconds LightChangeTime = new WaitForSeconds(0.01f);
     public WaitForSeconds HoverTime = new WaitForSeconds(1.3f);

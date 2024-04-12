@@ -72,6 +72,13 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     }
     #endregion
 
+    #region Getters
+    public int GetFacingDirection()
+    {
+        return GeneralStatus.FacingDirection;
+    }
+    #endregion Getters
+
     #region Setters
     public void ChangeState(int stateID)
     {

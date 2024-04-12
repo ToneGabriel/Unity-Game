@@ -95,11 +95,11 @@ public abstract class Enemy : Entity                // Base Enemy class
     public virtual void OnDrawGizmos()
     {
         Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.right * _entityIntStatusComponents.FacingDirection * _entityData.EnvironmentCheckDistance));
+                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityIntStatusComponents.FacingDirection * Vector2.right));
         Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.down * _entityIntStatusComponents.FacingDirection * _entityData.EnvironmentCheckDistance));
+                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityIntStatusComponents.FacingDirection * Vector2.down));
         Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(Vector2.right * _entityIntStatusComponents.FacingDirection * _enemyData.CloseRangeActionDistance));
+                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(_enemyData.CloseRangeActionDistance * _entityIntStatusComponents.FacingDirection * Vector2.right));
     }
     #endregion
 }
