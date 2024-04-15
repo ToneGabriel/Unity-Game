@@ -13,8 +13,35 @@ public sealed class Player : Entity
     #endregion
 
     #region Component Getters
-    public ref PlayerInternalStatusComponents   AdvancedStatus  { get { return ref _playerIntStatusComponents; } }
-    public PlayerData                           PlayerData      { get { return _playerData; } }
+    public PlayerData PlayerData
+    {
+        get
+        {
+            GetPlayerData(out var ret);
+            return ret;
+        }
+    }
+
+    public PlayerInternalStatusComponents AdvancedStatus
+    {
+        get
+        {
+            GetAdvancedStatus(out var ret);
+            return ret;
+        }
+    }
+
+    private PlayerData GetPlayerData(out PlayerData val)
+    {
+        val = _playerData;
+        return val;
+    }
+
+    private PlayerInternalStatusComponents GetAdvancedStatus(out PlayerInternalStatusComponents val)
+    {
+        val = _playerIntStatusComponents;
+        return val;
+    }
     #endregion
 
     #region Others
@@ -54,8 +81,8 @@ public sealed class Player : Entity
     {
         base.Update();
 
-        SetAnimatorFloatParam(PlayerControllerParameters.VelocityY_f, RBVelocityY);
-        SetAnimatorFloatParam(PlayerControllerParameters.VelocityX_f, Mathf.Abs(RBVelocityX));
+        SetAnimatorFloatParam(PlayerControllerParameters.VelocityY_f, VelocityY);
+        SetAnimatorFloatParam(PlayerControllerParameters.VelocityX_f, Mathf.Abs(VelocityX));
     }
     #endregion
 
@@ -83,12 +110,6 @@ public sealed class Player : Entity
     public void SetDashArrowRotation(Quaternion rotation)
     {
         _playerExtObjComponents._dashDirectionIndicator.transform.rotation = rotation;
-    }
-
-    public void ApplyVelocityLimitY(float min, float max)   // prevent using too much velocity
-    {
-        _workspaceVector2.Set(RBVelocityX, Mathf.Clamp(RBVelocityY, min, max));
-        SetVelocity(_workspaceVector2);
     }
 
     public void SetColiderHeight(float height)

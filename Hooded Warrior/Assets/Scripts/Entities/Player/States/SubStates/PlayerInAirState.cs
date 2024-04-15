@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public sealed class PlayerInAirState : PlayerState
 {
@@ -26,8 +27,8 @@ public sealed class PlayerInAirState : PlayerState
         _isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
 
         // Save player position as soon as it detects ledge
-        if (_isTouchingWall && !_isTouchingLedge)
-            _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
+        //if (_isTouchingWall && !_isTouchingLedge)
+        //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
     }
 
     public override void LogicUpdate()
@@ -42,7 +43,7 @@ public sealed class PlayerInAirState : PlayerState
 
         CheckJumpMultiplier();
 
-        if (_isGrounded && _player.RBVelocityY < 0.01f)
+        if (_isGrounded && _player.VelocityY < 0.01f)
             _player.ChangeState((int)PlayerStateID.Land);
         else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
@@ -57,8 +58,10 @@ public sealed class PlayerInAirState : PlayerState
         else
         {
             _player.FlipIfShould(_inputX);
-            _player.SetVelocityX(_player.PlayerData.MovementVelocity * _inputX);
-            _player.ApplyVelocityLimitY(-_player.PlayerData.MaxVelocityY, _player.PlayerData.MaxVelocityY);
+            _player.SetVelocity(_player.PlayerData.MovementVelocity * _inputX,
+                                Mathf.Clamp(_player.VelocityY,
+                                            -_player.PlayerData.MaxVelocityY,
+                                            _player.PlayerData.MaxVelocityY));  // prevent falling too fast
         }
     }
 
@@ -72,10 +75,10 @@ public sealed class PlayerInAirState : PlayerState
         if (_isJumping)
             if (_jumpInputStop)
             {
-                _player.SetVelocityY(_player.RBVelocityY * _player.PlayerData.JumpHeightMultiplier);
+                _player.SetVelocityY(_player.VelocityY * _player.PlayerData.JumpHeightMultiplier);
                 _isJumping = false;
             }
-            else if (_player.RBVelocityY <= 0f)
+            else if (_player.VelocityY <= 0f)
                 _isJumping = false;
     }
 

@@ -30,7 +30,7 @@ public class PlayerData : ScriptableObject
     public float MaxHoldTime                = 1f;
     public float DashTime                   = 0.2f;
     public float DashVelocity               = 30f;
-    public float Drag                       = 10f;
+    public float DashDrag                   = 10f;
     public float DashEndYMultiplier         = 0.2f;
     public float DistanceBetweenAfterimages = 1f;
 

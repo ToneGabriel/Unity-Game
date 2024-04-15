@@ -9,8 +9,4 @@ public struct EntityInternalStatusComponents
     public float            CurrentStunResistance;
     public bool             IsDead;
     public bool             IsStuned;
-
-    public float            Drag;
-    public Vector2          Velocity;
-    public RigidbodyType2D  RigidbodyType;
 }

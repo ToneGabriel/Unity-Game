@@ -46,7 +46,7 @@ public abstract class PlayerTouchingWallState : PlayerState
         _isTouchingWall     = _player.IsTouchingWall();
         _isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
 
-        if (_isTouchingWall && !_isTouchingLedge)
-            _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
+        //if (_isTouchingWall && !_isTouchingLedge)
+        //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
     }
 }

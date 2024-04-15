@@ -33,8 +33,8 @@ public sealed class PlayerDashState : PlayerAbilityState
     {
         base.Exit();
 
-        if (_player.RBVelocityY > 0f)
-            _player.SetVelocityY(_player.RBVelocityY * _player.PlayerData.DashEndYMultiplier);
+        if (_player.VelocityY > 0f)
+            _player.SetVelocityY(_player.VelocityY * _player.PlayerData.DashEndYMultiplier);
     }
 
     public override void LogicUpdate()
@@ -56,10 +56,10 @@ public sealed class PlayerDashState : PlayerAbilityState
 
                 if (_dashInputStop || Time.unscaledTime >= _stateStartTime + _player.PlayerData.MaxHoldTime)
                 {
-                    _isHolding      = false;
                     GameManager.Instance.ChangeTimeScale(TimeScale.Normal);
+                    _isHolding      = false;
                     _stateStartTime = Time.time;
-                    _player.SetDrag(_player.PlayerData.Drag);
+                    _player.Drag    = _player.PlayerData.DashDrag;
                     _player.FlipIfShould(Mathf.RoundToInt(_dashDirection.x));
                     _player.SetDashArrowActive(false);
                     //_player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
@@ -75,7 +75,7 @@ public sealed class PlayerDashState : PlayerAbilityState
 
                 if (Time.time >= _stateStartTime + _player.PlayerData.DashTime)
                 {
-                    _player.SetDrag(0f);
+                    _player.Drag    = 0f;
                     _isAbilityDone  = true;
                     _lastDashTime   = Time.time;
                 }

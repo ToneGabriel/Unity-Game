@@ -16,7 +16,7 @@ public sealed class PlayerRollState : PlayerAbilityState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.PlayerData.RollVelocity * _player.GetFacingDirection());
+        _player.SetVelocityX(_player.PlayerData.RollVelocity * _player.GeneralStatus.FacingDirection);
     }
 
     public override void Exit()
