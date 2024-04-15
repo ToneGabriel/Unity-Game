@@ -1,14 +1,12 @@
 
 public enum BullStateID
 {
+    Move,   // default
     Idle,
-    Move,
     PlayerDetected,
     LookForPlayer,
     Charge,
     MeleeAttack,
     Stun,
-    Dead,
-
-    Count
+    Dead
 }

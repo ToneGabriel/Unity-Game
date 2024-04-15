@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()                                            // Set Game States
     {
-        _stateMachine.InitializeState(_states[(int)GameManagerStateID.StartMenu]);
+        _stateMachine.SetInitialState(_states[(int)GameManagerStateID.StartMenu]);
     }
     
     private void Update()

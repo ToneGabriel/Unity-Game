@@ -3,7 +3,7 @@ public sealed class FiniteStateMachine
 {
     public State CurrentState { get; private set; }
 
-    public void InitializeState(State newState)
+    public void SetInitialState(State newState)
     {
         CurrentState = newState;
         CurrentState.Enter();

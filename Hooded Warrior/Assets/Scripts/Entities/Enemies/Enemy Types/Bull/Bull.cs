@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Bull : Enemy
+public sealed class Bull : Enemy
 {
     #region States and Data
     [SerializeField] private Data_Idle _idleStateData;
@@ -21,26 +21,11 @@ public class Bull : Enemy
     protected override void Awake()
     {
         base.Awake();
-
-        // Initialize States
-        _stateMachine   = new FiniteStateMachine();
-        _states         = new State[(int)BullStateID.Count];
-
-        _states[(int)BullStateID.Idle]              = new BullIdleState(this, "idle", _idleStateData);
-        _states[(int)BullStateID.Move]              = new BullMoveState(this, "walk", _moveStateData);
-        _states[(int)BullStateID.PlayerDetected]    = new BullPlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
-        _states[(int)BullStateID.LookForPlayer]     = new BullLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData);
-        _states[(int)BullStateID.Charge]            = new BullChargeState(this, "charge", _chargeStateData);
-        _states[(int)BullStateID.MeleeAttack]       = new BullMeleeAttackState(this, "meleeAttack", _meleeAttackStateData);
-        _states[(int)BullStateID.Stun]              = new BullStunState(this, "stun", _stunStateData);
-        _states[(int)BullStateID.Dead]              = new BullDeadState(this, "dead", _deadStateData);
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        _stateMachine.InitializeState(_states[(int)BullStateID.Move]);
     }
     #endregion
 
@@ -70,7 +55,7 @@ public class Bull : Enemy
 
         if (_entityIntStatusComponents.IsDead)
             ChangeState((int)BullStateID.Dead);
-        else if (_entityIntStatusComponents.IsStuned && _stateMachine.CurrentState != _states[(int)BullStateID.Stun])
+        else if (_entityIntStatusComponents.IsStuned && !IsStateActive((int)BullStateID.Stun))
             ChangeState((int)BullStateID.Stun);
         else if (!_entityIntStatusComponents.IsStuned && VelocityX != 0)
             ChangeState((int)BullStateID.LookForPlayer);
@@ -81,6 +66,18 @@ public class Bull : Enemy
         base.OnDrawGizmos();
 
         //Gizmos.DrawWireSphere(meleeAttackPosition.transform.position, meleeAttackStateData.attackRadius);
+    }
+
+    protected override void InitializeStates()
+    {
+        AddNewState((int)BullStateID.Idle,              new BullIdleState(this, "idle", _idleStateData));
+        AddNewState((int)BullStateID.Move,              new BullMoveState(this, "walk", _moveStateData));
+        AddNewState((int)BullStateID.PlayerDetected,    new BullPlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
+        AddNewState((int)BullStateID.LookForPlayer,     new BullLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData));
+        AddNewState((int)BullStateID.Charge,            new BullChargeState(this, "charge", _chargeStateData));
+        AddNewState((int)BullStateID.MeleeAttack,       new BullMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
+        AddNewState((int)BullStateID.Stun,              new BullStunState(this, "stun", _stunStateData));
+        AddNewState((int)BullStateID.Dead,              new BullDeadState(this, "dead", _deadStateData));
     }
     #endregion
 }

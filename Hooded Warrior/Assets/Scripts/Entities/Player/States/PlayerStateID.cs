@@ -1,7 +1,7 @@
 
 public enum PlayerStateID
 {
-    Idle,
+    Idle,   // default
     Move,
     Jump,
     InAir,
@@ -17,7 +17,5 @@ public enum PlayerStateID
     Roll,
     PrimaryAttack,
     SecondaryDefend,
-    SpellCast,
-
-    Count
+    SpellCast
 }

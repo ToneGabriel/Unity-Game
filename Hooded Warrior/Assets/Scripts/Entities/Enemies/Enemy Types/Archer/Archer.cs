@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Archer : Enemy
+public sealed class Archer : Enemy
 {
     #region States and Data
     [SerializeField] private Data_Idle _idleStateData;
@@ -23,27 +23,11 @@ public class Archer : Enemy
     protected override void Awake()
     {
         base.Awake();
-
-        // Initialize States
-        _stateMachine   = new FiniteStateMachine();
-        _states         = new State[(int)ArcherStateID.Count];
-
-        _states[(int)ArcherStateID.Idle]            = new ArcherIdleState(this, "idle", _idleStateData);
-        _states[(int)ArcherStateID.Move]            = new ArcherMoveState(this, "walk", _moveStateData);
-        _states[(int)ArcherStateID.PlayerDetected]  = new ArcherPlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
-        _states[(int)ArcherStateID.LookForPlayer]   = new ArcherLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData);
-        _states[(int)ArcherStateID.Stun]            = new ArcherStunState(this, "stun", _stunStateData);
-        _states[(int)ArcherStateID.Dead]            = new ArcherDeadState(this, "dead", _deadStateData);
-        _states[(int)ArcherStateID.Dodge]           = new ArcherDodgeState(this, "dodge", _dodgeStateData);
-        _states[(int)ArcherStateID.MeleeAttack]     = new ArcherMeleeAttackState(this, "meleeAttack", _meleeAttackStateData);
-        _states[(int)ArcherStateID.RangedAttack]    = new ArcherRangedAttackState(this, "rangedAttack", _rangedAttackStateData);
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        _stateMachine.InitializeState(_states[(int)ArcherStateID.Move]);
     }
 
     protected override void Start()
@@ -88,7 +72,7 @@ public class Archer : Enemy
 
         if (_entityIntStatusComponents.IsDead)
             ChangeState((int)ArcherStateID.Dead);
-        else if (_entityIntStatusComponents.IsStuned && _stateMachine.CurrentState != _states[(int)ArcherStateID.Stun])
+        else if (_entityIntStatusComponents.IsStuned && !IsStateActive((int)ArcherStateID.Stun))
             ChangeState((int)ArcherStateID.Stun);
         else if (!_entityIntStatusComponents.IsStuned && _entityIntObjComponents.Rigidbody.velocity.x != 0)
             ChangeState((int)ArcherStateID.LookForPlayer);
@@ -101,6 +85,19 @@ public class Archer : Enemy
         base.OnDrawGizmos();
 
         Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _meleeAttackStateData.AttackRadius);
+    }
+
+    protected override void InitializeStates()
+    {
+        AddNewState((int)ArcherStateID.Idle,            new ArcherIdleState(this, "idle", _idleStateData));
+        AddNewState((int)ArcherStateID.Move,            new ArcherMoveState(this, "walk", _moveStateData));
+        AddNewState((int)ArcherStateID.PlayerDetected,  new ArcherPlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
+        AddNewState((int)ArcherStateID.LookForPlayer,   new ArcherLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData));
+        AddNewState((int)ArcherStateID.Stun,            new ArcherStunState(this, "stun", _stunStateData));
+        AddNewState((int)ArcherStateID.Dead,            new ArcherDeadState(this, "dead", _deadStateData));
+        AddNewState((int)ArcherStateID.Dodge,           new ArcherDodgeState(this, "dodge", _dodgeStateData));
+        AddNewState((int)ArcherStateID.MeleeAttack,     new ArcherMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
+        AddNewState((int)ArcherStateID.RangedAttack,    new ArcherRangedAttackState(this, "rangedAttack", _rangedAttackStateData));
     }
     #endregion
 }

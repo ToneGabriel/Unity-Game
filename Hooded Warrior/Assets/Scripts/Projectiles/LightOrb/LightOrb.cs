@@ -4,7 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 
 [PoolObject]
-public class LightOrb : MonoBehaviour
+public sealed class LightOrb : FSMMonoBehaviour
 {
     #region Components & Data
     [SerializeField] private Light2D            _innerLightComponent;
@@ -14,36 +14,33 @@ public class LightOrb : MonoBehaviour
     private Rigidbody2D                         _rigidbody;
     private GameObject                          _target;
 
-    private FiniteStateMachine                  _stateMachine;
-    private State[]                             _states;
-
     private float                               _spellCastTime;
     #endregion Components & Data
 
     #region Unity Functions
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _rigidbody  = GetComponent<Rigidbody2D>();
         _target     = null;
-
-        InitializeStates();
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        _stateMachine.InitializeState(_states[(int)LightOrbStateID.Born]);
+        base.OnEnable();
 
         _spellCastTime = Time.time;
     }
 
-    private void Update()
+    protected override void Update()
     {
-        _stateMachine.CurrentState.LogicUpdate();
+        base.Update();
     }
 
-    private void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        _stateMachine.CurrentState.PhysicsUpdate();
+        base.FixedUpdate();
     }
     #endregion Unity Functions
 
@@ -70,11 +67,6 @@ public class LightOrb : MonoBehaviour
     #endregion Checkers
 
     #region Setters
-    public void ChangeState(int stateID)
-    {
-        _stateMachine.ChangeState(_states[stateID]);
-    }
-
     public void SetTarget(GameObject target)
     {
         _target = target;
@@ -108,15 +100,12 @@ public class LightOrb : MonoBehaviour
     #endregion Setters
 
     #region Other
-    private void InitializeStates()
+    protected override void InitializeStates()
     {
-        _stateMachine = new FiniteStateMachine();
-        _states = new State[(int)LightOrbStateID._Count];
-
-        _states[(int)LightOrbStateID.Born] = new LightOrbBornState(this);
-        _states[(int)LightOrbStateID.Grow] = new LightOrbGrowState(this);
-        _states[(int)LightOrbStateID.Live] = new LightOrbLiveState(this);
-        _states[(int)LightOrbStateID.Die]  = new LightOrbDieState(this);
+        AddNewState((int)LightOrbStateID.Born, new LightOrbBornState(this));
+        AddNewState((int)LightOrbStateID.Grow, new LightOrbGrowState(this));
+        AddNewState((int)LightOrbStateID.Live, new LightOrbLiveState(this));
+        AddNewState((int)LightOrbStateID.Die,  new LightOrbDieState(this));
     }
 
     public void Die()

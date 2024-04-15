@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
+public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
 {
     #region Components & Data
     [SerializeField]
@@ -11,9 +11,6 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
 
     [SerializeField]
     protected EntityData                        _entityData;
-
-    protected FiniteStateMachine                _stateMachine;              // initialized in derived classes
-    protected State[]                           _states;                    // initialized in derived classes
     protected Vector2                           _workspaceVector2;
     #endregion
 
@@ -39,8 +36,10 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
     #endregion
 
     #region Unity functions
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         //_entityExtObjComponents.HealthBar.SetMaxHealth(_entityData.MaxHealth);
 
         _entityIntObjComponents.Rigidbody           = GetComponent<Rigidbody2D>();
@@ -51,48 +50,38 @@ public abstract class Entity : MonoBehaviour, ISaveable, IDamageble
         _entityIntStatusComponents.CurrentHealth    = _entityData.MaxHealth;
     }
 
-    protected virtual void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         //_entityExtObjComponents.HealthBar.SetHealthBar(_entityIntStatusComponents.CurrentHealth);
 
         _entityIntStatusComponents.IsDead    = false;
         _entityIntStatusComponents.IsStuned  = false;
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
+
         //ObjectPoolManager.Instance.RequestPool<HitParticleController>();
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
-        //if (GameManager.Instance.IsGamePaused)
-        //    return;
+        base.Update();
 
         //if (Time.time >= _entityIntStatusComponents.LastDamageTime + _entityData.StunRecoveryTime)
         //    ResetStunResistnce();
-
-        // Update real velocity based on status parameter
-        //_entityIntObjComponents.Rigidbody.velocity = GeneralStatus.Velocity;
-
-        _stateMachine.CurrentState.LogicUpdate();
     }
 
-    protected virtual void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        //if (GameManager.Instance.IsGamePaused)
-        //    return;
-
-        _stateMachine.CurrentState.PhysicsUpdate();
+        base.Update();
     }
     #endregion
 
     #region Setters
-    public void ChangeState(int stateID)
-    {
-        _stateMachine.ChangeState(_states[stateID]);
-    }
-
     public void SetAnimatorBoolParam(string animBoolName, bool value)
     {
         _entityIntObjComponents.Animator.SetBool(animBoolName, value);

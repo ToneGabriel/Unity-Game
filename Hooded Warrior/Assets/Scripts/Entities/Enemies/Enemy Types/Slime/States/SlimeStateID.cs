@@ -1,9 +1,7 @@
 
 public enum SlimeStateID
 {
+    Move,   // default
     Idle,
-    Move,
-    PlayerDetected,
-
-    Count
+    PlayerDetected
 }

@@ -1,15 +1,13 @@
 
 public enum BringerOfDeathStateID
 {
+    Move,   // default
     Idle,
-    Move,
     PlayerDetected,
     LookForPlayer,
     Charge,
     MeleeAttack,
     PortalRangedAttack,
     OrbRangedAttack,
-    Dead,
-
-    Count
+    Dead
 }

@@ -1,15 +1,13 @@
 
 public enum ArcherStateID
 {
+    Move,   // default
     Idle,
-    Move,
     PlayerDetected,
     LookForPlayer,
     Dodge,
     MeleeAttack,
     RangedAttack,
     Stun,
-    Dead,
-
-    Count
+    Dead
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BringerOfDeath : Enemy
+public sealed class BringerOfDeath : Enemy
 {
     #region States and Data
     [SerializeField] private Data_Idle _idleStateData;
@@ -24,27 +24,11 @@ public class BringerOfDeath : Enemy
     protected override void Awake()
     {
         base.Awake();
-
-        // Initialize States
-        _stateMachine   = new FiniteStateMachine();
-        _states         = new State[(int)BringerOfDeathStateID.Count];
-
-        _states[(int)BringerOfDeathStateID.Idle]                = new BringerOfDeathIdleState(this, "idle", _idleStateData);
-        _states[(int)BringerOfDeathStateID.Move]                = new BringerOfDeathMoveState(this, "walk", _moveStateData);
-        _states[(int)BringerOfDeathStateID.PlayerDetected]      = new BringerOfDeathPlayerDetectedState(this, "playerDetected", _playerDetectedStateData);
-        _states[(int)BringerOfDeathStateID.LookForPlayer]       = new BringerOfDeathLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData);
-        _states[(int)BringerOfDeathStateID.Charge]              = new BringerOfDeathChargeState(this, "charge", _chargeStateData);
-        _states[(int)BringerOfDeathStateID.Dead]                = new BringerOfDeathDeadState(this, "dead", _deadStateData);
-        _states[(int)BringerOfDeathStateID.MeleeAttack]         = new BringerOfDeathMeleeAttackState(this, "meleeAttack", _meleeAttackStateData);
-        _states[(int)BringerOfDeathStateID.PortalRangedAttack]  = new BringerOfDeathRangedAttackState(this, "portalRangedAttack", _portalRangedAttackStateData);
-        _states[(int)BringerOfDeathStateID.OrbRangedAttack]     = new BringerOfDeathRangedAttackState(this, "orbRangedAttack", _orbRangedAttackStateData);
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        _stateMachine.InitializeState(_states[(int)BringerOfDeathStateID.Move]);
     }
 
     protected override void Start()
@@ -109,6 +93,19 @@ public class BringerOfDeath : Enemy
         base.OnDrawGizmos();
 
         Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _meleeAttackStateData.AttackRadius);
+    }
+
+    protected override void InitializeStates()
+    {
+        AddNewState((int)BringerOfDeathStateID.Idle,                new BringerOfDeathIdleState(this, "idle", _idleStateData));
+        AddNewState((int)BringerOfDeathStateID.Move,                new BringerOfDeathMoveState(this, "walk", _moveStateData));
+        AddNewState((int)BringerOfDeathStateID.PlayerDetected,      new BringerOfDeathPlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
+        AddNewState((int)BringerOfDeathStateID.LookForPlayer,       new BringerOfDeathLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData));
+        AddNewState((int)BringerOfDeathStateID.Charge,              new BringerOfDeathChargeState(this, "charge", _chargeStateData));
+        AddNewState((int)BringerOfDeathStateID.Dead,                new BringerOfDeathDeadState(this, "dead", _deadStateData));
+        AddNewState((int)BringerOfDeathStateID.MeleeAttack,         new BringerOfDeathMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
+        AddNewState((int)BringerOfDeathStateID.PortalRangedAttack,  new BringerOfDeathRangedAttackState(this, "portalRangedAttack", _portalRangedAttackStateData));
+        AddNewState((int)BringerOfDeathStateID.OrbRangedAttack,     new BringerOfDeathRangedAttackState(this, "orbRangedAttack", _orbRangedAttackStateData));
     }
     #endregion
 }
