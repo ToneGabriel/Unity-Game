@@ -11,6 +11,7 @@ public class LightOrbGrowState : LightOrbBaseState
         if (_lightOrb.IsOrbLightAtMaxRadius())
             _lightOrb.ChangeState((int)LightOrbStateID.Live);
         else
-            _lightOrb.IncreaseLightRadius(0.04f, 0.11f);
+            _lightOrb.IncreaseLightRadius();
+            //_lightOrb.IncreaseLightRadius(0.04f, 0.11f);
     }
 }

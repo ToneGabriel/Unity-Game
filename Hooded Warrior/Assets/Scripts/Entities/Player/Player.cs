@@ -4,44 +4,15 @@ using UnityEngine;
 public sealed class Player : Entity
 {
     #region Components & Data
-    [SerializeField]
-    private PlayerExternalObjectComponents _playerExtObjComponents;
-    private PlayerInternalStatusComponents _playerIntStatusComponents;
+    [SerializeField] private PlayerExternComponents _playerExternComponents;
+    [SerializeField] private PlayerData             _playerData;
 
-    [SerializeField]
-    private PlayerData _playerData;
+    private PlayerActionComponents                  _playerIntStatusComponents;
     #endregion
 
     #region Component Getters
-    public PlayerData PlayerData
-    {
-        get
-        {
-            GetPlayerData(out var ret);
-            return ret;
-        }
-    }
-
-    public PlayerInternalStatusComponents AdvancedStatus
-    {
-        get
-        {
-            GetAdvancedStatus(out var ret);
-            return ret;
-        }
-    }
-
-    private PlayerData GetPlayerData(out PlayerData val)
-    {
-        val = _playerData;
-        return val;
-    }
-
-    private PlayerInternalStatusComponents GetAdvancedStatus(out PlayerInternalStatusComponents val)
-    {
-        val = _playerIntStatusComponents;
-        return val;
-    }
+    public PlayerData                               PlayerData      { get { return _playerData; } }
+    public ref PlayerActionComponents               AdvancedStatus  { get { return ref _playerIntStatusComponents; } }
     #endregion
 
     #region Others
@@ -100,33 +71,33 @@ public sealed class Player : Entity
 
     public void SetDashArrowActive(bool value)
     {
-        _playerExtObjComponents._dashDirectionIndicator.SetActive(value);
+        _playerExternComponents._dashDirectionIndicator.SetActive(value);
     }
 
     public void SetDashArrowRotation(Quaternion rotation)
     {
-        _playerExtObjComponents._dashDirectionIndicator.transform.rotation = rotation;
+        _playerExternComponents._dashDirectionIndicator.transform.rotation = rotation;
     }
 
     public void SetColiderHeight(float height)
     {
-        Vector2 center = _entityIntObjComponents.BoxCollider.offset;
-        _workspaceVector2.Set(_entityIntObjComponents.BoxCollider.size.x, height);
+        Vector2 center = _entityActionComponents.BoxCollider.offset;
+        _workspaceVector2.Set(_entityActionComponents.BoxCollider.size.x, height);
 
-        center.y += (height - _entityIntObjComponents.BoxCollider.size.y) / 2;
+        center.y += (height - _entityActionComponents.BoxCollider.size.y) / 2;
 
-        _entityIntObjComponents.BoxCollider.size   = _workspaceVector2;
-        _entityIntObjComponents.BoxCollider.offset = center;
+        _entityActionComponents.BoxCollider.size   = _workspaceVector2;
+        _entityActionComponents.BoxCollider.offset = center;
     }
 
     public GameObject GetLightOrbPosition()
     {
-        return _playerExtObjComponents._lightOrbPosition;
+        return _playerExternComponents._lightOrbPosition;
     }
 
     public void SetLightOrbPosition(Vector2 position)
     {
-        _playerExtObjComponents._lightOrbPosition.transform.localPosition = position;
+        _playerExternComponents._lightOrbPosition.transform.localPosition = position;
     }
     #endregion
 
@@ -143,7 +114,7 @@ public sealed class Player : Entity
 
     public void FlipIfShould(int inputX)
     {
-        if (inputX != 0 && inputX != _entityIntStatusComponents.FacingDirection)
+        if (inputX != 0 && inputX != _entityActionComponents.FacingDirection)
             Flip();
     }
 
@@ -163,7 +134,7 @@ public sealed class Player : Entity
     {
         base.Damage(attackDetails);
 
-        if (_entityIntStatusComponents.IsDead)
+        if (_entityActionComponents.IsDead)
         {
             gameObject.SetActive(false);
 
@@ -203,8 +174,8 @@ public sealed class Player : Entity
     {
         var data = (PlayerSaveData)state;
 
-        _entityIntStatusComponents.CurrentHealth = data.PlayerHealth;
-        _entityIntStatusComponents.FacingDirection = data.PlayerFacingDirection;
+        _entityActionComponents.CurrentHealth = data.PlayerHealth;
+        _entityActionComponents.FacingDirection = data.PlayerFacingDirection;
         transform.position = data.PlayerPosition.GetValues();
         transform.rotation = data.PlayerRotation.GetValues();
     }
@@ -213,8 +184,8 @@ public sealed class Player : Entity
     #region Other Functions
     public void SetNewGameData()
     {
-        _entityIntStatusComponents.FacingDirection = 1;
-        _entityIntStatusComponents.CurrentHealth = _entityData.MaxHealth;
+        _entityActionComponents.FacingDirection = 1;
+        _entityActionComponents.CurrentHealth = _entityData.MaxHealth;
         transform.SetPositionAndRotation(   GameManager.Instance.GameStartPlayerPosition.position,
                                             GameManager.Instance.GameStartPlayerPosition.rotation);
     }
@@ -252,22 +223,22 @@ public sealed class Player : Entity
 
     public Vector2 DetermineCornerPosition()
     {
-        RaycastHit2D xHit = Physics2D.Raycast(  _entityExtObjComponents.EnvironmentCheck.transform.position,
-                                                Vector2.right * _entityIntStatusComponents.FacingDirection,
+        RaycastHit2D xHit = Physics2D.Raycast(  _entitySensorComponents.EnvironmentCheck.transform.position,
+                                                Vector2.right * _entityActionComponents.FacingDirection,
                                                 _entityData.EnvironmentCheckDistance,
                                                 _entityData.WhatIsGround);
 
         float xDistance = xHit.distance;
-        _workspaceVector2.Set(xDistance * _entityIntStatusComponents.FacingDirection, 0f);
+        _workspaceVector2.Set(xDistance * _entityActionComponents.FacingDirection, 0f);
 
-        RaycastHit2D yHit = Physics2D.Raycast(  _entityExtObjComponents.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
+        RaycastHit2D yHit = Physics2D.Raycast(  _entitySensorComponents.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
                                                 Vector2.down,
-                                                _entityExtObjComponents.LedgeCheck.transform.position.y - _entityExtObjComponents.EnvironmentCheck.transform.position.y,
+                                                _entitySensorComponents.LedgeCheck.transform.position.y - _entitySensorComponents.EnvironmentCheck.transform.position.y,
                                                 _entityData.WhatIsGround);
 
         float yDistance = yHit.distance;
-        _workspaceVector2.Set(  _entityExtObjComponents.EnvironmentCheck.transform.position.x + xDistance * _entityIntStatusComponents.FacingDirection,
-                                _entityExtObjComponents.LedgeCheck.transform.position.y - yDistance);
+        _workspaceVector2.Set(  _entitySensorComponents.EnvironmentCheck.transform.position.x + xDistance * _entityActionComponents.FacingDirection,
+                                _entitySensorComponents.LedgeCheck.transform.position.y - yDistance);
         
         return _workspaceVector2;
     }

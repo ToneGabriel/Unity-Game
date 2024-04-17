@@ -23,7 +23,7 @@ public abstract class EnemyDodgeState : EnemyState, ICooldown
         _isDodgeOver = false;
         _enemy.SetVelocity( _stateData.DodgeSpeed,
                             _stateData.DodgeAngle,
-                            -_enemy.GeneralStatus.FacingDirection);
+                            -_enemy.FacingDirection);
     }
 
     public override void Exit()

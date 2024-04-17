@@ -70,13 +70,13 @@ public sealed class Archer : Enemy
     {
         base.Damage(attackdetails);
 
-        if (_entityIntStatusComponents.IsDead)
+        if (_entityActionComponents.IsDead)
             ChangeState((int)ArcherStateID.Dead);
-        else if (_entityIntStatusComponents.IsStuned && !IsStateActive((int)ArcherStateID.Stun))
+        else if (_entityActionComponents.IsStuned && !IsStateActive((int)ArcherStateID.Stun))
             ChangeState((int)ArcherStateID.Stun);
-        else if (!_entityIntStatusComponents.IsStuned && _entityIntObjComponents.Rigidbody.velocity.x != 0)
+        else if (!_entityActionComponents.IsStuned && _entityActionComponents.Rigidbody.velocity.x != 0)
             ChangeState((int)ArcherStateID.LookForPlayer);
-        else if (!_entityIntStatusComponents.IsStuned && CheckPlayerInMinAgroRange())
+        else if (!_entityActionComponents.IsStuned && CheckPlayerInMinAgroRange())
             ChangeState((int)ArcherStateID.RangedAttack);
     }
 

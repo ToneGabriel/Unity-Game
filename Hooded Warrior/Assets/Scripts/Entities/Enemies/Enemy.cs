@@ -2,8 +2,7 @@
 
 public abstract class Enemy : Entity                // Base Enemy class
 {
-    [Header("Enemy Basics")]
-    protected DataEnemy _enemyData;                // Reference to base enemy data
+    [SerializeField] protected EnemyData _enemyData;    // Reference to base enemy data
 
     #region Unity Functions
     protected override void Awake()
@@ -13,8 +12,8 @@ public abstract class Enemy : Entity                // Base Enemy class
 
     protected override void OnEnable()
     {
-        _entityIntStatusComponents.CurrentStunResistance = _entityData.StunResistance;
-        _entityIntStatusComponents.CurrentHealth = _entityData.MaxHealth;
+        _entityActionComponents.CurrentStunResistance   = _entityData.StunResistance;
+        _entityActionComponents.CurrentHealth           = _entityData.MaxHealth;
         
         base.OnEnable();
     }
@@ -23,7 +22,7 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         base.Update();
 
-        _entityIntObjComponents.Animator.SetFloat("velocityY", _entityIntObjComponents.Rigidbody.velocity.y);
+        _entityActionComponents.Animator.SetFloat("velocityY", _entityActionComponents.Rigidbody.velocity.y);
     }
 
     protected override void FixedUpdate()
@@ -35,22 +34,22 @@ public abstract class Enemy : Entity                // Base Enemy class
     #region Checkers
     public virtual bool CheckPlayerInMinAgroRange()                                     // Raycast to check agro enter range
     {
-        return Physics2D.Raycast(   _entityExtObjComponents.EnvironmentCheck.transform.position,
-                                    _entityExtObjComponents.EnvironmentCheck.transform.right,
+        return Physics2D.Raycast(   _entitySensorComponents.EnvironmentCheck.transform.position,
+                                    _entitySensorComponents.EnvironmentCheck.transform.right,
                                     _enemyData.MinAgroDistance, _enemyData.WhatIsPlayer);
     }
 
     public virtual bool CheckPlayerInMaxAgroRange()                                     // Raycast to check agro exit range
     {
-        return Physics2D.Raycast(   _entityExtObjComponents.EnvironmentCheck.transform.position,
-                                    _entityExtObjComponents.EnvironmentCheck.transform.right,
+        return Physics2D.Raycast(   _entitySensorComponents.EnvironmentCheck.transform.position,
+                                    _entitySensorComponents.EnvironmentCheck.transform.right,
                                     _enemyData.MaxAgroDistance, _enemyData.WhatIsPlayer);
     }
 
     public virtual bool CheckPlayerInMeleeRange()                                       // Raycast to check melee range
     {
-        return Physics2D.Raycast(   _entityExtObjComponents.EnvironmentCheck.transform.position,
-                                    _entityExtObjComponents.EnvironmentCheck.transform.right,
+        return Physics2D.Raycast(   _entitySensorComponents.EnvironmentCheck.transform.position,
+                                    _entitySensorComponents.EnvironmentCheck.transform.right,
                                     _enemyData.CloseRangeActionDistance, _enemyData.WhatIsPlayer);
     }
     #endregion
@@ -64,16 +63,16 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         base.AdditionalDamageActions(attackDetails);
 
-        _entityIntStatusComponents.LastDamageTime = Time.time;
-        _entityIntStatusComponents.CurrentStunResistance -= attackDetails.StunDamageAmmount;
+        _entityActionComponents.LastDamageTime = Time.time;
+        _entityActionComponents.CurrentStunResistance -= attackDetails.StunDamageAmmount;
     }
 
     public override void CheckStatus()
     {
         base.CheckStatus();
 
-        if (_entityIntStatusComponents.CurrentStunResistance <= 0)
-            _entityIntStatusComponents.IsStuned = true;
+        if (_entityActionComponents.CurrentStunResistance <= 0)
+            _entityActionComponents.IsStuned = true;
     }
     #endregion
 
@@ -87,19 +86,19 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         var data = (EnemySaveData)state;
 
-        _entityIntStatusComponents.IsDead = data.IsDead;
+        _entityActionComponents.IsDead = data.IsDead;
     }
     #endregion
 
     #region Other Functions
     public virtual void OnDrawGizmos()
     {
-        Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityIntStatusComponents.FacingDirection * Vector2.right));
-        Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityIntStatusComponents.FacingDirection * Vector2.down));
-        Gizmos.DrawLine(_entityExtObjComponents.EnvironmentCheck.transform.position,
-                        _entityExtObjComponents.EnvironmentCheck.transform.position + (Vector3)(_enemyData.CloseRangeActionDistance * _entityIntStatusComponents.FacingDirection * Vector2.right));
+        Gizmos.DrawLine(_entitySensorComponents.EnvironmentCheck.transform.position,
+                        _entitySensorComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityActionComponents.FacingDirection * Vector2.right));
+        Gizmos.DrawLine(_entitySensorComponents.EnvironmentCheck.transform.position,
+                        _entitySensorComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityActionComponents.FacingDirection * Vector2.down));
+        Gizmos.DrawLine(_entitySensorComponents.EnvironmentCheck.transform.position,
+                        _entitySensorComponents.EnvironmentCheck.transform.position + (Vector3)(_enemyData.CloseRangeActionDistance * _entityActionComponents.FacingDirection * Vector2.right));
     }
     #endregion
 }

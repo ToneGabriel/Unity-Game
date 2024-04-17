@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public struct PlayerInternalStatusComponents
+public struct PlayerActionComponents
 {
     public int      AmountOfJumpsLeft;
     public Vector2  LedgeDetectedposition;

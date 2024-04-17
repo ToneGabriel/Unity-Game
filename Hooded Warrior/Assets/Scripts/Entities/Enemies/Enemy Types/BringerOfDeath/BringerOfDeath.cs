@@ -82,7 +82,7 @@ public sealed class BringerOfDeath : Enemy
     {
         base.Damage(attackdetails);
 
-        if (_entityIntStatusComponents.IsDead)
+        if (_entityActionComponents.IsDead)
             ChangeState((int)BringerOfDeathStateID.Dead);
         else if (VelocityX != 0)
             ChangeState((int)BringerOfDeathStateID.LookForPlayer);

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 
 public class LightOrbBaseState : State
@@ -10,11 +7,6 @@ public class LightOrbBaseState : State
     public LightOrbBaseState(LightOrb lightOrb)
     {
         _lightOrb = lightOrb;
-    }
-
-    public override void LogicUpdate()
-    {
-        _lightOrb.CheckOrbTime();
     }
 
     public override void PhysicsUpdate()

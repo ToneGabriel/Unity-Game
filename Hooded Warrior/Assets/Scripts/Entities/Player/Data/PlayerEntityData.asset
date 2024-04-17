@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 715e79ef8beed024ebbbf142301a2a31, type: 3}
   m_Name: PlayerEntityData
   m_EditorClassIdentifier: 
-  MaxHealth: 1000
-  DamageHopSpeed: 5
-  DamageHopDirection: {x: 3, y: 2}
-  StunResistance: 3
-  StunRecoveryTime: 2
-  GroundCheckRadius: 0.3
-  EnvironmentCheckDistance: 0.5
-  LedgeCheckRadius: 0.3
-  WhatIsGround:
+  _maxHealth: 1000
+  _damageHopSpeed: 5
+  _damageHopDirection: {x: 3, y: 2}
+  _stunResistance: 3
+  _stunRecoveryTime: 2
+  _groundCheckRadius: 0.3
+  _environmentCheckDistance: 0.5
+  _ledgeCheckRadius: 0.3
+  _whatIsGround:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512

@@ -12,6 +12,6 @@ public class LightOrbDieState : LightOrbBaseState
         if (_lightOrb.IsOrbLightAtZeroRadius())
             _lightOrb.Die();
         else
-            _lightOrb.DecreaseLightRadius(0.04f, 0.11f);
+            _lightOrb.DecreaseLightRadius();
     }
 }

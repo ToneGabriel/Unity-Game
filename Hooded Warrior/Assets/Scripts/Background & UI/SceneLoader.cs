@@ -31,12 +31,12 @@ public class SceneLoader : MonoBehaviour, ISaveable
 
     private bool CanLoad()
     {
-        return !GameManager.Instance.IsLoadingData && !GameManager.Instance.Player.GeneralStatus.IsDead && !IsLoaded;
+        return !GameManager.Instance.IsLoadingData && !GameManager.Instance.Player.IsDead && !IsLoaded;
     }
 
     private bool CanUnload()
     {
-        return !GameManager.Instance.IsLoadingData && !GameManager.Instance.Player.GeneralStatus.IsDead;
+        return !GameManager.Instance.IsLoadingData && !GameManager.Instance.Player.IsDead;
     }
 
     private bool ColliderIsPlayer(Collider2D other)

@@ -8,6 +8,10 @@ public class LightSpell : Spell
     {
         base.TriggerSpellAttack();
 
-        Instantiate(_lightOrbPrefab, _castPosition.transform.position, _castPosition.transform.rotation);
+        LightOrb instance = ObjectPoolManager.Instance.GetFromPool<LightOrb>(_castPosition.transform.position, _castPosition.transform.rotation);
+        // TODO
+        //instance.SetTarget(null);
+
+        //Instantiate(_lightOrbPrefab, _castPosition.transform.position, _castPosition.transform.rotation);
     }
 }

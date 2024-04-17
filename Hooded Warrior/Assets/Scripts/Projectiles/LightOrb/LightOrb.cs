@@ -62,7 +62,7 @@ public sealed class LightOrb : FSMMonoBehaviour
 
     public bool IsReadyToDie()
     {
-        return false;
+        return (Time.time >= _spellCastTime + _lightOrbSpellData.SpellLifeTime);
     }
     #endregion Checkers
 
@@ -73,16 +73,16 @@ public sealed class LightOrb : FSMMonoBehaviour
         //_target = GameManager.Instance.Player.GetLightOrbPosition();
     }
 
-    public void IncreaseLightRadius(float innerRadius, float outerRadius)
+    public void IncreaseLightRadius()
     {
-        _outerLightComponent.pointLightInnerRadius += innerRadius;
-        _outerLightComponent.pointLightOuterRadius += outerRadius;
+        _outerLightComponent.pointLightInnerRadius += _lightOrbSpellData.OuterLightInnerRadiusChangeRatio;
+        _outerLightComponent.pointLightOuterRadius += _lightOrbSpellData.OuterLightOuterRadiusChangeRatio;
     }
 
-    public void DecreaseLightRadius(float innerRadius, float outerRadius)
+    public void DecreaseLightRadius()
     {
-        _outerLightComponent.pointLightInnerRadius -= innerRadius;
-        _outerLightComponent.pointLightOuterRadius -= outerRadius;
+        _outerLightComponent.pointLightInnerRadius -= _lightOrbSpellData.OuterLightInnerRadiusChangeRatio;
+        _outerLightComponent.pointLightOuterRadius -= _lightOrbSpellData.OuterLightOuterRadiusChangeRatio;
     }
 
     public void UpdatePosition()
@@ -111,15 +111,6 @@ public sealed class LightOrb : FSMMonoBehaviour
     public void Die()
     {
         ObjectPoolManager.Instance.ReturnToPool(this);
-    }
-
-    public void CheckOrbTime()
-    {
-        if ((Time.time >= _spellCastTime + _lightOrbSpellData.SpellLifeTime) || GameManager.Instance.Player.GeneralStatus.IsDead)
-            StartCoroutine(DecreaseOrbLightRadius());
-
-        if (GameManager.Instance.IsLoadingData)
-            Destroy(gameObject);
     }
     #endregion Other
 

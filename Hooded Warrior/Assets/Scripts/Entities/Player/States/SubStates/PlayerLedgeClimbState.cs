@@ -28,9 +28,9 @@ public sealed class PlayerLedgeClimbState : PlayerState
         _player.SetVelocityZero();
         _player.transform.position = _player.AdvancedStatus.LedgeDetectedposition;
         _cornerPosition = _player.DetermineCornerPosition();
-        _startPosition.Set( _cornerPosition.x - (_player.GeneralStatus.FacingDirection * _player.PlayerData.StartOffset.x),
+        _startPosition.Set( _cornerPosition.x - (_player.FacingDirection * _player.PlayerData.StartOffset.x),
                             _cornerPosition.y - _player.PlayerData.StartOffset.y);
-        _stopPosition.Set(  _cornerPosition.x + (_player.GeneralStatus.FacingDirection * _player.PlayerData.StopOffset.x),
+        _stopPosition.Set(  _cornerPosition.x + (_player.FacingDirection * _player.PlayerData.StopOffset.x),
                             _cornerPosition.y + _player.PlayerData.StopOffset.y);
 
         _player.transform.position = _startPosition;
@@ -64,7 +64,7 @@ public sealed class PlayerLedgeClimbState : PlayerState
             _player.SetVelocityZero();
             _player.transform.position = _startPosition;
 
-            if (_player.GeneralStatus.FacingDirection == _inputX && _isHanging && !_isClimbing)
+            if (_player.FacingDirection == _inputX && _isHanging && !_isClimbing)
             {
                 _isClimbing = true;
                 _player.SetAnimatorBoolParam(PlayerControllerParameters.ClimbLedge_b, true);

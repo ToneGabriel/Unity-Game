@@ -4,35 +4,20 @@ using UnityEngine;
 public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
 {
     #region Components & Data
-    [SerializeField]
-    protected EntityExternalObjectComponents    _entityExtObjComponents;
-    protected EntityInternalObjectComponents    _entityIntObjComponents;
-    protected EntityInternalStatusComponents    _entityIntStatusComponents;
+    [SerializeField] protected EntityExternComponents   _entitySensorComponents;
+    [SerializeField] protected EntityData               _entityData;
 
-    [SerializeField]
-    protected EntityData                        _entityData;
-    protected Vector2                           _workspaceVector2;
+    protected EntityActionComponents                    _entityActionComponents;
+    protected Vector2                                   _workspaceVector2;
     #endregion
 
     #region Component Getters & Setters
-    public float                                VelocityX       { get { return _entityIntObjComponents.Rigidbody.velocity.x; } }
-    public float                                VelocityY       { get { return _entityIntObjComponents.Rigidbody.velocity.y; } }
-    public float                                Drag            { set { _entityIntObjComponents.Rigidbody.drag = value; } }
-    public RigidbodyType2D                      RigidbodyType   { set { _entityIntObjComponents.Rigidbody.bodyType = value; } }
-    public EntityInternalStatusComponents       GeneralStatus
-    {
-        get
-        {
-            GetGeneralStatus(out var ret);
-            return ret;
-        }
-    }
-
-    private EntityInternalStatusComponents GetGeneralStatus(out EntityInternalStatusComponents val)
-    {
-        val = _entityIntStatusComponents;
-        return val;
-    }
+    public float            VelocityX       { get { return _entityActionComponents.Rigidbody.velocity.x; } }
+    public float            VelocityY       { get { return _entityActionComponents.Rigidbody.velocity.y; } }
+    public int              FacingDirection { get { return _entityActionComponents.FacingDirection; } }
+    public bool             IsDead          { get { return _entityActionComponents.IsDead; } }
+    public float            Drag            { set { _entityActionComponents.Rigidbody.drag = value; } }
+    public RigidbodyType2D  RigidbodyType   { set { _entityActionComponents.Rigidbody.bodyType = value; } }
     #endregion
 
     #region Unity functions
@@ -42,12 +27,11 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
 
         //_entityExtObjComponents.HealthBar.SetMaxHealth(_entityData.MaxHealth);
 
-        _entityIntObjComponents.Rigidbody           = GetComponent<Rigidbody2D>();
-        _entityIntObjComponents.Animator            = GetComponent<Animator>();
-        _entityIntObjComponents.BoxCollider         = GetComponent<BoxCollider2D>();
-
-        _entityIntStatusComponents.FacingDirection  = 1;
-        _entityIntStatusComponents.CurrentHealth    = _entityData.MaxHealth;
+        _entityActionComponents.Rigidbody           = GetComponent<Rigidbody2D>();
+        _entityActionComponents.Animator            = GetComponent<Animator>();
+        _entityActionComponents.BoxCollider         = GetComponent<BoxCollider2D>();
+        _entityActionComponents.FacingDirection     = 1;
+        _entityActionComponents.CurrentHealth       = _entityData.MaxHealth;
     }
 
     protected override void OnEnable()
@@ -56,8 +40,8 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
 
         //_entityExtObjComponents.HealthBar.SetHealthBar(_entityIntStatusComponents.CurrentHealth);
 
-        _entityIntStatusComponents.IsDead    = false;
-        _entityIntStatusComponents.IsStuned  = false;
+        _entityActionComponents.IsDead    = false;
+        _entityActionComponents.IsStuned  = false;
     }
 
     protected override void Start()
@@ -84,76 +68,64 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
     #region Setters
     public void SetAnimatorBoolParam(string animBoolName, bool value)
     {
-        _entityIntObjComponents.Animator.SetBool(animBoolName, value);
+        _entityActionComponents.Animator.SetBool(animBoolName, value);
     }
 
     public void SetAnimatorFloatParam(string animFloatName, float value)
     {
-        _entityIntObjComponents.Animator.SetFloat(animFloatName, value);
+        _entityActionComponents.Animator.SetFloat(animFloatName, value);
     }
 
     public void SetVelocityZero()
     {
-        _entityIntObjComponents.Rigidbody.velocity = Vector2.zero;
+        _entityActionComponents.Rigidbody.velocity = Vector2.zero;
     }
 
     public void SetVelocityX(float velocityX)
     {
-        //_workspaceVector2.Set(velocity, VelocityY);
-        //_entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
-
-        _entityIntObjComponents.Rigidbody.velocity.Set(velocityX, VelocityY);
+        _workspaceVector2.Set(velocityX, VelocityY);
+        _entityActionComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocityY(float velocityY)
     {
-        //_workspaceVector2.Set(VelocityX, velocity);
-        //_entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
-
-        _entityIntObjComponents.Rigidbody.velocity.Set(VelocityX, velocityY);
+        _workspaceVector2.Set(VelocityX, velocityY);
+        _entityActionComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocityX, float velocityY)
     {
-        //_workspaceVector2.Set(x, y);
-        //_entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
-
-        _entityIntObjComponents.Rigidbody.velocity.Set(velocityX, velocityY);
+        _workspaceVector2.Set(velocityX, velocityY);
+        _entityActionComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(Vector2 velocity)
     {
-        _entityIntObjComponents.Rigidbody.velocity = velocity;
+        _entityActionComponents.Rigidbody.velocity = velocity;
     }
 
     public void SetVelocity(float velocity, Vector2 direction)
     {
-        //_workspaceVector2 = direction * velocity;
-        //_entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
-
-        _entityIntObjComponents.Rigidbody.velocity = direction * velocity;
+        _workspaceVector2 = direction * velocity;
+        _entityActionComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void SetVelocity(float velocity, Vector2 angle, int direction)
     {
         angle.Normalize();
-        //_workspaceVector2.Set(angle.x * velocity * direction, angle.y * velocity);
-        //_entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
-
-        _entityIntObjComponents.Rigidbody.velocity.Set(angle.x * velocity * direction, angle.y * velocity);
+        _workspaceVector2.Set(angle.x * velocity * direction, angle.y * velocity);
+        _entityActionComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void SetVelocity(float velocity)                                     // Set velocity towards facing direction
+    public void SetVelocity(float velocity)     // Set velocity towards facing direction
     {
-        //_workspaceVector2.Set(_entityIntStatusComponents.FacingDirection * velocity, VelocityY);
-        //_entityIntObjComponents.Rigidbody.velocity = _workspaceVector2;
-
-        _entityIntObjComponents.Rigidbody.velocity.Set(_entityIntStatusComponents.FacingDirection * velocity, VelocityY);
+        _workspaceVector2.Set(_entityActionComponents.FacingDirection * velocity, VelocityY);
+        _entityActionComponents.Rigidbody.velocity = _workspaceVector2;
     }
 
     public void Flip()
     {
-        _entityIntStatusComponents.FacingDirection *= -1;
+        _entityActionComponents.FacingDirection *= -1;
         transform.Rotate(0f, -180f, 0f);
     }
     #endregion
@@ -161,21 +133,21 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
     #region Checkers
     public bool IsGrounded()
     {
-        return Physics2D.OverlapCircle( _entityExtObjComponents.GroundCheck.transform.position,
+        return Physics2D.OverlapCircle( _entitySensorComponents.GroundCheck.transform.position,
                                         _entityData.GroundCheckRadius,
                                         _entityData.WhatIsGround);
     }
 
     public bool IsTouchingCeiling()
     {
-        return Physics2D.OverlapCircle( _entityExtObjComponents.LedgeCheck.transform.position,
+        return Physics2D.OverlapCircle( _entitySensorComponents.LedgeCheck.transform.position,
                                         _entityData.GroundCheckRadius,
                                         _entityData.WhatIsGround);
     }
 
     public bool IsTouchingWall()
     {
-        return Physics2D.Raycast(   _entityExtObjComponents.EnvironmentCheck.transform.position,
+        return Physics2D.Raycast(   _entitySensorComponents.EnvironmentCheck.transform.position,
                                     transform.right,
                                     _entityData.EnvironmentCheckDistance,
                                     _entityData.WhatIsGround);
@@ -183,7 +155,7 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
 
     public bool IsTouchingLedge(Vector3 direction)
     {
-        return Physics2D.Raycast(   _entityExtObjComponents.LedgeCheck.transform.position,
+        return Physics2D.Raycast(   _entitySensorComponents.LedgeCheck.transform.position,
                                     direction,
                                     _entityData.EnvironmentCheckDistance,
                                     _entityData.WhatIsGround);
@@ -194,15 +166,15 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
     public virtual void Damage(AttackDetails attackDetails) 
     {
         if (attackDetails.Position.x < transform.position.x)
-            _entityIntStatusComponents.LastDamageDirection = -1;
+            _entityActionComponents.LastDamageDirection = -1;
         else
-            _entityIntStatusComponents.LastDamageDirection = 1;
+            _entityActionComponents.LastDamageDirection = 1;
 
         if(CanTakeDamage())
         {
             AdditionalDamageActions(attackDetails);
 
-            _entityIntStatusComponents.CurrentHealth -= attackDetails.DamageAmount;
+            _entityActionComponents.CurrentHealth -= attackDetails.DamageAmount;
             //_entityExtObjComponents.HealthBar.SetHealthBar(_entityIntStatusComponents.CurrentHealth);
             ObjectPoolManager.Instance.GetFromPool<HitParticleController>(transform.position, Quaternion.Euler(0f, 0f, UnityEngine.Random.Range(0f, 360f)));
 
@@ -215,28 +187,28 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
     public virtual void AdditionalDamageActions(AttackDetails attackDetails)
     {
         //DamageHop(_dataEntity.DamageHopDirection, _dataEntity.DamageHopSpeed);
-        if (_entityIntStatusComponents.LastDamageDirection != _entityIntStatusComponents.FacingDirection)
+        if (_entityActionComponents.LastDamageDirection != _entityActionComponents.FacingDirection)
             Flip();
     }
 
     public virtual void CheckStatus()
     {
-        if (_entityIntStatusComponents.CurrentHealth <= 0)
-            _entityIntStatusComponents.IsDead = true;
+        if (_entityActionComponents.CurrentHealth <= 0)
+            _entityActionComponents.IsDead = true;
     }
 
     public virtual void ResetStunResistnce()
     {
-        _entityIntStatusComponents.IsStuned = false;
-        _entityIntStatusComponents.CurrentStunResistance = _entityData.StunResistance;
+        _entityActionComponents.IsStuned = false;
+        _entityActionComponents.CurrentStunResistance = _entityData.StunResistance;
     }
 
     public void DamageHop(Vector2 direction, float velocity)
     {
-        if (_entityIntObjComponents.Rigidbody.bodyType == RigidbodyType2D.Dynamic)
+        if (_entityActionComponents.Rigidbody.bodyType == RigidbodyType2D.Dynamic)
         {
-            direction.Set(direction.x * _entityIntStatusComponents.LastDamageDirection * (-1), direction.y);
-            _entityIntObjComponents.Rigidbody.velocity = direction * velocity;
+            direction.Set(direction.x * _entityActionComponents.LastDamageDirection * (-1), direction.y);
+            _entityActionComponents.Rigidbody.velocity = direction * velocity;
         }
     }
     #endregion
