@@ -1,4 +1,3 @@
-using UnityEngine;
 
 public class LightOrbDieState : LightOrbBaseState
 {
@@ -9,9 +8,19 @@ public class LightOrbDieState : LightOrbBaseState
     {
         base.LogicUpdate();
 
-        if (_lightOrb.IsOrbLightAtZeroRadius())
-            _lightOrb.Die();
+        if (_lightOrb.OuterLightInnerRadius > 0f)
+        {
+            // decrease outer radius
+            _lightOrb.OuterLightInnerRadius -= _lightOrb.Data.OuterLightInnerRadiusChangeRatio;
+            _lightOrb.OuterLightOuterRadius -= _lightOrb.Data.OuterLightOuterRadiusChangeRatio;
+        }
+        else if (_lightOrb.InnerLightInnerRadius > 0f)
+        {
+            // decrease inner radius
+            _lightOrb.InnerLightInnerRadius -= _lightOrb.Data.InnerLightInnerRadiusChangeRatio;
+            _lightOrb.InnerLightOuterRadius -= _lightOrb.Data.InnerLightOuterRadiusChangeRatio;
+        }
         else
-            _lightOrb.DecreaseLightRadius();
+            _lightOrb.Die();
     }
 }

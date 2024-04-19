@@ -58,10 +58,10 @@ public sealed class PlayerInAirState : PlayerState
         else
         {
             _player.FlipIfShould(_inputX);
-            _player.SetVelocity(_player.PlayerData.MovementVelocity * _inputX,
+            _player.SetVelocity(_player.Data.MovementVelocity * _inputX,
                                 Mathf.Clamp(_player.VelocityY,
-                                            -_player.PlayerData.MaxVelocityY,
-                                            _player.PlayerData.MaxVelocityY));  // prevent falling too fast
+                                            -_player.Data.MaxVelocityY,
+                                            _player.Data.MaxVelocityY));  // prevent falling too fast
         }
     }
 
@@ -75,7 +75,7 @@ public sealed class PlayerInAirState : PlayerState
         if (_isJumping)
             if (_jumpInputStop)
             {
-                _player.SetVelocityY(_player.VelocityY * _player.PlayerData.JumpHeightMultiplier);
+                _player.SetVelocityY(_player.VelocityY * _player.Data.JumpHeightMultiplier);
                 _isJumping = false;
             }
             else if (_player.VelocityY <= 0f)

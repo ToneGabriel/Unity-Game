@@ -34,22 +34,22 @@ public abstract class Enemy : Entity                // Base Enemy class
     #region Checkers
     public virtual bool CheckPlayerInMinAgroRange()                                     // Raycast to check agro enter range
     {
-        return Physics2D.Raycast(   _entitySensorComponents.EnvironmentCheck.transform.position,
-                                    _entitySensorComponents.EnvironmentCheck.transform.right,
+        return Physics2D.Raycast(   _entityExternComponents.EnvironmentCheck.transform.position,
+                                    _entityExternComponents.EnvironmentCheck.transform.right,
                                     _enemyData.MinAgroDistance, _enemyData.WhatIsPlayer);
     }
 
     public virtual bool CheckPlayerInMaxAgroRange()                                     // Raycast to check agro exit range
     {
-        return Physics2D.Raycast(   _entitySensorComponents.EnvironmentCheck.transform.position,
-                                    _entitySensorComponents.EnvironmentCheck.transform.right,
+        return Physics2D.Raycast(   _entityExternComponents.EnvironmentCheck.transform.position,
+                                    _entityExternComponents.EnvironmentCheck.transform.right,
                                     _enemyData.MaxAgroDistance, _enemyData.WhatIsPlayer);
     }
 
     public virtual bool CheckPlayerInMeleeRange()                                       // Raycast to check melee range
     {
-        return Physics2D.Raycast(   _entitySensorComponents.EnvironmentCheck.transform.position,
-                                    _entitySensorComponents.EnvironmentCheck.transform.right,
+        return Physics2D.Raycast(   _entityExternComponents.EnvironmentCheck.transform.position,
+                                    _entityExternComponents.EnvironmentCheck.transform.right,
                                     _enemyData.CloseRangeActionDistance, _enemyData.WhatIsPlayer);
     }
     #endregion
@@ -93,12 +93,12 @@ public abstract class Enemy : Entity                // Base Enemy class
     #region Other Functions
     public virtual void OnDrawGizmos()
     {
-        Gizmos.DrawLine(_entitySensorComponents.EnvironmentCheck.transform.position,
-                        _entitySensorComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityActionComponents.FacingDirection * Vector2.right));
-        Gizmos.DrawLine(_entitySensorComponents.EnvironmentCheck.transform.position,
-                        _entitySensorComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityActionComponents.FacingDirection * Vector2.down));
-        Gizmos.DrawLine(_entitySensorComponents.EnvironmentCheck.transform.position,
-                        _entitySensorComponents.EnvironmentCheck.transform.position + (Vector3)(_enemyData.CloseRangeActionDistance * _entityActionComponents.FacingDirection * Vector2.right));
+        Gizmos.DrawLine(_entityExternComponents.EnvironmentCheck.transform.position,
+                        _entityExternComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityActionComponents.FacingDirection * Vector2.right));
+        Gizmos.DrawLine(_entityExternComponents.EnvironmentCheck.transform.position,
+                        _entityExternComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityActionComponents.FacingDirection * Vector2.down));
+        Gizmos.DrawLine(_entityExternComponents.EnvironmentCheck.transform.position,
+                        _entityExternComponents.EnvironmentCheck.transform.position + (Vector3)(_enemyData.CloseRangeActionDistance * _entityActionComponents.FacingDirection * Vector2.right));
     }
     #endregion
 }

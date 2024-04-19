@@ -9,7 +9,7 @@ public sealed class PlayerJumpState : PlayerAbilityState
         base.Enter();
 
         InputManager.Instance.UseJumpInput();
-        _player.SetVelocityY(_player.PlayerData.JumpVelocity);
+        _player.SetVelocityY(_player.Data.JumpVelocity);
         _player.DecreaseAmountOfJumpsLeft();
         _isAbilityDone = true;
         // TODO

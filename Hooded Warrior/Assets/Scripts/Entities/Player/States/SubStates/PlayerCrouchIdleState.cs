@@ -9,16 +9,16 @@ public sealed class PlayerCrouchIdleState : PlayerGroundedState
         base.Enter();
 
         _player.SetVelocityZero();
-        _player.SetColiderHeight(_player.PlayerData.CrouchColliderHeight);
-        _player.SetLightOrbPosition(_player.PlayerData.CrouchLightOrbPosition);
+        _player.SetColiderHeight(_player.Data.CrouchColliderHeight);
+        _player.SetLightOrbPosition(_player.Data.CrouchLightOrbPosition);
     }
 
     public override void Exit()
     {
         base.Exit();
 
-        _player.SetColiderHeight(_player.PlayerData.StandColliderHeight);
-        _player.SetLightOrbPosition(_player.PlayerData.StandLightOrbPosition);
+        _player.SetColiderHeight(_player.Data.StandColliderHeight);
+        _player.SetLightOrbPosition(_player.Data.StandLightOrbPosition);
     }
 
     public override void LogicUpdate()

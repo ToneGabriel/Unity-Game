@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
 {
     #region Components & Data
-    [SerializeField] protected EntityExternComponents   _entitySensorComponents;
+    [SerializeField] protected EntityExternComponents   _entityExternComponents;
     [SerializeField] protected EntityData               _entityData;
 
     protected EntityActionComponents                    _entityActionComponents;
@@ -133,21 +133,21 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
     #region Checkers
     public bool IsGrounded()
     {
-        return Physics2D.OverlapCircle( _entitySensorComponents.GroundCheck.transform.position,
+        return Physics2D.OverlapCircle( _entityExternComponents.GroundCheck.transform.position,
                                         _entityData.GroundCheckRadius,
                                         _entityData.WhatIsGround);
     }
 
     public bool IsTouchingCeiling()
     {
-        return Physics2D.OverlapCircle( _entitySensorComponents.LedgeCheck.transform.position,
+        return Physics2D.OverlapCircle( _entityExternComponents.LedgeCheck.transform.position,
                                         _entityData.GroundCheckRadius,
                                         _entityData.WhatIsGround);
     }
 
     public bool IsTouchingWall()
     {
-        return Physics2D.Raycast(   _entitySensorComponents.EnvironmentCheck.transform.position,
+        return Physics2D.Raycast(   _entityExternComponents.EnvironmentCheck.transform.position,
                                     transform.right,
                                     _entityData.EnvironmentCheckDistance,
                                     _entityData.WhatIsGround);
@@ -155,7 +155,7 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
 
     public bool IsTouchingLedge(Vector3 direction)
     {
-        return Physics2D.Raycast(   _entitySensorComponents.LedgeCheck.transform.position,
+        return Physics2D.Raycast(   _entityExternComponents.LedgeCheck.transform.position,
                                     direction,
                                     _entityData.EnvironmentCheckDistance,
                                     _entityData.WhatIsGround);

@@ -11,7 +11,7 @@ public sealed class Player : Entity
     #endregion
 
     #region Component Getters
-    public PlayerData                               PlayerData      { get { return _playerData; } }
+    public PlayerData                               Data            { get { return _playerData; } }
     public ref PlayerActionComponents               AdvancedStatus  { get { return ref _playerIntStatusComponents; } }
     #endregion
 
@@ -223,7 +223,7 @@ public sealed class Player : Entity
 
     public Vector2 DetermineCornerPosition()
     {
-        RaycastHit2D xHit = Physics2D.Raycast(  _entitySensorComponents.EnvironmentCheck.transform.position,
+        RaycastHit2D xHit = Physics2D.Raycast(  _entityExternComponents.EnvironmentCheck.transform.position,
                                                 Vector2.right * _entityActionComponents.FacingDirection,
                                                 _entityData.EnvironmentCheckDistance,
                                                 _entityData.WhatIsGround);
@@ -231,14 +231,14 @@ public sealed class Player : Entity
         float xDistance = xHit.distance;
         _workspaceVector2.Set(xDistance * _entityActionComponents.FacingDirection, 0f);
 
-        RaycastHit2D yHit = Physics2D.Raycast(  _entitySensorComponents.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
+        RaycastHit2D yHit = Physics2D.Raycast(  _entityExternComponents.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
                                                 Vector2.down,
-                                                _entitySensorComponents.LedgeCheck.transform.position.y - _entitySensorComponents.EnvironmentCheck.transform.position.y,
+                                                _entityExternComponents.LedgeCheck.transform.position.y - _entityExternComponents.EnvironmentCheck.transform.position.y,
                                                 _entityData.WhatIsGround);
 
         float yDistance = yHit.distance;
-        _workspaceVector2.Set(  _entitySensorComponents.EnvironmentCheck.transform.position.x + xDistance * _entityActionComponents.FacingDirection,
-                                _entitySensorComponents.LedgeCheck.transform.position.y - yDistance);
+        _workspaceVector2.Set(  _entityExternComponents.EnvironmentCheck.transform.position.x + xDistance * _entityActionComponents.FacingDirection,
+                                _entityExternComponents.LedgeCheck.transform.position.y - yDistance);
         
         return _workspaceVector2;
     }

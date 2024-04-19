@@ -10,8 +10,8 @@ public sealed partial class ObjectPoolManager
         private Queue<GameObject>   _inactiveObjects;   // actual pool
         private HashSet<GameObject> _activeObjects;     // monitor for faster cleanup and maintenance
 
-        private static int          _defaultCapacity    = 8;
-        private static int          _minCount           = 2;
+        private static readonly int _defaultCapacity    = 8;
+        private static readonly int _minCount           = 2;
 
         public ObjectPool(GameObject original)
         {
