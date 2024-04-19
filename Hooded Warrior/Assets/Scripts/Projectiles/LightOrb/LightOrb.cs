@@ -6,19 +6,19 @@ using UnityEngine.Rendering.Universal;
 public sealed class LightOrb : FSMMonoBehaviour
 {
     #region Components & Data
-    [SerializeField] private Light2D            _innerLightComponent;   // this is constant
+    [SerializeField] private Light2D            _innerLightComponent;
     [SerializeField] private Light2D            _outerLightComponent;
     [SerializeField] private LightOrbSpellData  _lightOrbSpellData;
 
     private Rigidbody2D                         _rigidbody;
     private GameObject                          _target;
-    private float                               _spellCastTime;
     #endregion Components & Data
 
     #region Component Getters & Setters
-    public LightOrbSpellData Data { get { return _lightOrbSpellData; } }
-
-    public Vector2 Velocity { set { _rigidbody.velocity = value; } }
+    public LightOrbSpellData Data
+    {
+        get { return _lightOrbSpellData; }
+    }
 
     public float InnerLightInnerRadius
     {
@@ -57,8 +57,6 @@ public sealed class LightOrb : FSMMonoBehaviour
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        _spellCastTime = Time.time;
     }
 
     protected override void Update()
@@ -71,13 +69,6 @@ public sealed class LightOrb : FSMMonoBehaviour
         base.FixedUpdate();
     }
     #endregion Unity Functions
-
-    #region Checkers
-    public bool IsReadyToDie()
-    {
-        return (Time.time >= _spellCastTime + _lightOrbSpellData.SpellLifeTime);
-    }
-    #endregion Checkers
 
     #region Setters
     public void SetTarget(GameObject target)
@@ -94,6 +85,11 @@ public sealed class LightOrb : FSMMonoBehaviour
     public void ApplyImpulse(Vector2 impulse)
     {
         _rigidbody.AddForce(impulse, ForceMode2D.Impulse);
+    }
+
+    public void SetVelocity(Vector2 velocity)
+    {
+        _rigidbody.velocity = velocity;
     }
 
     public void Die()

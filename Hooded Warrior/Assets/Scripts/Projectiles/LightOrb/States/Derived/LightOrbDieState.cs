@@ -1,5 +1,5 @@
 
-public class LightOrbDieState : LightOrbBaseState
+public sealed class LightOrbDieState : LightOrbBaseState
 {
     public LightOrbDieState(LightOrb lightOrb)
         : base(lightOrb) { }
@@ -10,13 +10,13 @@ public class LightOrbDieState : LightOrbBaseState
 
         if (_lightOrb.OuterLightInnerRadius > 0f)
         {
-            // decrease outer radius
+            // gradually decrease outer radius
             _lightOrb.OuterLightInnerRadius -= _lightOrb.Data.OuterLightInnerRadiusChangeRatio;
             _lightOrb.OuterLightOuterRadius -= _lightOrb.Data.OuterLightOuterRadiusChangeRatio;
         }
         else if (_lightOrb.InnerLightInnerRadius > 0f)
         {
-            // decrease inner radius
+            // gradually decrease inner radius
             _lightOrb.InnerLightInnerRadius -= _lightOrb.Data.InnerLightInnerRadiusChangeRatio;
             _lightOrb.InnerLightOuterRadius -= _lightOrb.Data.InnerLightOuterRadiusChangeRatio;
         }
