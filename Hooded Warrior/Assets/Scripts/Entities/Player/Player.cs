@@ -259,7 +259,7 @@ public sealed class Player : Entity
         //Gizmos.DrawLine(_ledgeCheck.transform.position, _ledgeCheck.transform.position + (Vector3)(Vector2.right * FacingDirection * _dataPlayer.EnvironmentCheckDistance));
     }
 
-    protected override void InitializeStates()
+    protected override void FSMInitializeStates()
     {
         AddNewState((int)PlayerStateID.Idle,            new PlayerIdleState(this, PlayerControllerParameters.Idle_b));
         AddNewState((int)PlayerStateID.Move,            new PlayerMoveState(this, PlayerControllerParameters.Move_b));
@@ -282,6 +282,16 @@ public sealed class Player : Entity
         //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
         //_secondaryDefendState.SetShield(_inventory.Shield);
         //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
+    }
+
+    protected override bool FSMUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FSMFixedUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
     }
     #endregion
 }

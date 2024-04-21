@@ -87,7 +87,7 @@ public sealed class Archer : Enemy
         Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _meleeAttackStateData.AttackRadius);
     }
 
-    protected override void InitializeStates()
+    protected override void FSMInitializeStates()
     {
         AddNewState((int)ArcherStateID.Idle,            new ArcherIdleState(this, "idle", _idleStateData));
         AddNewState((int)ArcherStateID.Move,            new ArcherMoveState(this, "walk", _moveStateData));
@@ -98,6 +98,16 @@ public sealed class Archer : Enemy
         AddNewState((int)ArcherStateID.Dodge,           new ArcherDodgeState(this, "dodge", _dodgeStateData));
         AddNewState((int)ArcherStateID.MeleeAttack,     new ArcherMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
         AddNewState((int)ArcherStateID.RangedAttack,    new ArcherRangedAttackState(this, "rangedAttack", _rangedAttackStateData));
+    }
+
+    protected override bool FSMUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FSMFixedUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
     }
     #endregion
 }

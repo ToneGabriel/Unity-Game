@@ -57,14 +57,14 @@ public class GameplayState : GameManagerState
     private void PauseGame()
     {
         _gameManager.IsGamePaused = true;
-        Time.timeScale = 0f;
+        Helpers.ChangeTimeScale(TimeScale.Frozen);
         _gameplayData.PausePrompt.SetActive(true);
     }
 
     private void ResumeGame()
     {
         _gameManager.IsGamePaused = false;
-        Time.timeScale = 1f;
+        Helpers.ChangeTimeScale(TimeScale.Normal);
         _gameplayData.PausePrompt.SetActive(false);
     }
 

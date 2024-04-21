@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-
-public class GameManager : MonoBehaviour
+public sealed class GameManager : FSMMonoBehaviour
 {
     public static GameManager Instance;
 
@@ -17,46 +16,31 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Game States
-    private FiniteStateMachine  _stateMachine;
-    private State[]             _states;
-
-    //public GameManagerFiniteStateMachine StateMachine { get; private set; }
-    //public StartMenuState StartMenuState { get; private set; }
-    //public LoadingScreenState LoadingScreenState { get; private set; }
-    //public GameplayState GameplayState { get; private set; }
-    //public ResetGameState ResetGameState { get; private set; }
-
-    public bool IsGamePaused { get; set; }                                       // True when game is paused
-    public bool IsLoadingData { get; set; }                                      // True when loading screen is active
+    public bool IsGamePaused { get; set; }                  // True when game is paused
+    public bool IsLoadingData { get; set; }                 // True when loading screen is active
     #endregion
 
     #region Unity functions
-    private void Awake()                                            // Singleton instance
+    protected override void Awake()                         // Singleton instance
     {
         if (Instance != null && Instance != this)
             Destroy(gameObject);
         else
         {
-            Instance        = this;
+            Instance = this;
 
-            _stateMachine   = new FiniteStateMachine();
-            _states         = new State[(int)GameManagerStateID.Count];
-
-            _states[(int)GameManagerStateID.StartMenu]      = new StartMenuState(Instance, _startMenuData);
-            _states[(int)GameManagerStateID.LoadingScreen]  = new LoadingScreenState(Instance, _loadingScreenData);
-            _states[(int)GameManagerStateID.Gameplay]       = new GameplayState(Instance, _gameplayData);
-            _states[(int)GameManagerStateID.ResetGame]      = new ResetGameState(Instance, _resetGameData);
+            base.Awake();   // Init here due to singleton
         }
     }
 
-    private void Start()                                            // Set Game States
+    protected override void OnEnable()
     {
-        _stateMachine.SetInitialState(_states[(int)GameManagerStateID.StartMenu]);
+        base.OnEnable();
     }
-    
-    private void Update()
+
+    protected override void Update()
     {
-        _stateMachine.CurrentState.LogicUpdate();
+        base.Update();
     }
     #endregion
 
@@ -67,14 +51,24 @@ public class GameManager : MonoBehaviour
         Player.SetNewGameData();
     }
 
-    public void ChangeState(int stateID)
+    protected override void FSMInitializeStates()
     {
-        _stateMachine.ChangeState(_states[stateID]);
+        AddNewState((int)GameManagerStateID.StartMenu,      new StartMenuState(Instance, _startMenuData));
+        AddNewState((int)GameManagerStateID.LoadingScreen,  new LoadingScreenState(Instance, _loadingScreenData));
+        AddNewState((int)GameManagerStateID.Gameplay,       new GameplayState(Instance, _gameplayData));
+        AddNewState((int)GameManagerStateID.ResetGame,      new ResetGameState(Instance, _resetGameData));
     }
-    #endregion
 
-    public void ChangeTimeScale(TimeScale value)
+    protected override bool FSMUpdateConditions()
     {
-        Time.timeScale = (int)value;
+        // always update
+        return true;
     }
+
+    protected override bool FSMFixedUpdateConditions()
+    {
+        // always update
+        return true;
+    }
+    #endregion Other
 }

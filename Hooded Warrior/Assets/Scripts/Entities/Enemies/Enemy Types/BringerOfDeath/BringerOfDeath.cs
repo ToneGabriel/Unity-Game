@@ -95,7 +95,7 @@ public sealed class BringerOfDeath : Enemy
         Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _meleeAttackStateData.AttackRadius);
     }
 
-    protected override void InitializeStates()
+    protected override void FSMInitializeStates()
     {
         AddNewState((int)BringerOfDeathStateID.Idle,                new BringerOfDeathIdleState(this, "idle", _idleStateData));
         AddNewState((int)BringerOfDeathStateID.Move,                new BringerOfDeathMoveState(this, "walk", _moveStateData));
@@ -106,6 +106,16 @@ public sealed class BringerOfDeath : Enemy
         AddNewState((int)BringerOfDeathStateID.MeleeAttack,         new BringerOfDeathMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
         AddNewState((int)BringerOfDeathStateID.PortalRangedAttack,  new BringerOfDeathRangedAttackState(this, "portalRangedAttack", _portalRangedAttackStateData));
         AddNewState((int)BringerOfDeathStateID.OrbRangedAttack,     new BringerOfDeathRangedAttackState(this, "orbRangedAttack", _orbRangedAttackStateData));
+    }
+
+    protected override bool FSMUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FSMFixedUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
     }
     #endregion
 }

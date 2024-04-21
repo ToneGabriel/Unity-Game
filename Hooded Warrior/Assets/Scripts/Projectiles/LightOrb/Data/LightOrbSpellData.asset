@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f8e1948198eff4ab4ac021361e46b2, type: 3}
   m_Name: LightOrbSpellData
   m_EditorClassIdentifier: 
-  SpellLifeTime: 20
-  SmoothSpeed: 0.05
-  FlutterAcceleration: 10
-  HoverCircleRange: 1.5
-  InnerLightMaxInnerRadius: 0.5
-  OuterLightMaxInnerRadius: 4
+  _spellLifeTime: 8
+  _smoothSpeed: 0.05
+  _flutterAcceleration: 10
+  _hoverCircleRange: 1.5
+  _hoverTime: 1.3
+  _innerLightMaxInnerRadius: 0.4
+  _innerLightInnerRadiusChangeRatio: 0.01
+  _innerLightOuterRadiusChangeRatio: 0.015
+  _outerLightMaxInnerRadius: 10
+  _outerLightInnerRadiusChangeRatio: 0.04
+  _outerLightOuterRadiusChangeRatio: 0.11

@@ -11,9 +11,9 @@ public class LightOrbSpellData : ScriptableObject
     [SerializeField] private float _hoverCircleRange                    = 1.5f;
     [SerializeField] private float _hoverTime                           = 1.3f;
 
-    [SerializeField] private float _innerLightMaxInnerRadius            = 2f;
-    [SerializeField] private float _innerLightInnerRadiusChangeRatio    = 0.04f; // TODO: change values
-    [SerializeField] private float _innerLightOuterRadiusChangeRatio    = 0.11f;
+    [SerializeField] private float _innerLightMaxInnerRadius            = 0.4f;
+    [SerializeField] private float _innerLightInnerRadiusChangeRatio    = 0.01f;
+    [SerializeField] private float _innerLightOuterRadiusChangeRatio    = 0.015f;
 
     [SerializeField] private float _outerLightMaxInnerRadius            = 10f;
     [SerializeField] private float _outerLightInnerRadiusChangeRatio    = 0.04f;

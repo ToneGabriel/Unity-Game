@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour, ISaveable
 {
@@ -15,7 +14,7 @@ public class SceneLoader : MonoBehaviour, ISaveable
     {
         if (CanLoad() && ColliderIsPlayer(other))
         {
-            SceneManager.LoadSceneAsync((int)SceneName, LoadSceneMode.Additive);
+            Helpers.LoadScene(SceneName);
             IsLoaded = true;
         }
     }
@@ -24,7 +23,7 @@ public class SceneLoader : MonoBehaviour, ISaveable
     {
         if (CanUnload() && ColliderIsPlayer(other))
         {
-            SceneManager.UnloadSceneAsync((int)SceneName);
+            Helpers.UnloadScene(SceneName);
             IsLoaded = false;
         }
     }

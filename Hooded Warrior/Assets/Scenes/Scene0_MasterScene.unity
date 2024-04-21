@@ -140,10 +140,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1892546115343215268, guid: c985cea481cf70a45a74e291cef502e1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1892546115343215291, guid: c985cea481cf70a45a74e291cef502e1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -190
@@ -1386,7 +1382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8160436565672437071 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2309129558112489881, guid: 7d97e2a65a45e734fa2522a09bddb2cf, type: 3}

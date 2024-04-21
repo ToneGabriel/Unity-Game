@@ -16,10 +16,20 @@ public sealed class Slime : Enemy
         base.OnEnable();
     }
 
-    protected override void InitializeStates()
+    protected override void FSMInitializeStates()
     {
         AddNewState((int)SlimeStateID.Idle,             new SlimeIdleState(this, "idle", _idleStateData));
         AddNewState((int)SlimeStateID.Move,             new SlimeMoveState(this, "walk", _moveStateData));
         AddNewState((int)SlimeStateID.PlayerDetected,   new SlimePlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
+    }
+
+    protected override bool FSMUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FSMFixedUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
     }
 }

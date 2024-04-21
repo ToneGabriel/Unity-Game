@@ -16,7 +16,7 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
         _stateMachine   = new FiniteStateMachine();
         _states         = new Dictionary<int, State>();
 
-        InitializeStates();
+        FSMInitializeStates();
     }
 
     protected virtual void OnEnable()
@@ -37,23 +37,27 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
 
     protected virtual void Update()
     {
-        //if (GameManager.Instance.IsGamePaused)
-        //    return;
+        if (!FSMUpdateConditions())
+            return;
 
         _stateMachine.CurrentState.LogicUpdate();
     }
 
     protected virtual void FixedUpdate()
     {
-        //if (GameManager.Instance.IsGamePaused)
-        //    return;
+        if (!FSMFixedUpdateConditions())
+            return;
 
         _stateMachine.CurrentState.PhysicsUpdate();
     }
     #endregion Unity Functions
 
     #region Late Init Functions
-    protected abstract void InitializeStates();                 // use AddNewState() in derived class
+    protected abstract void FSMInitializeStates();              // use AddNewState() in derived class
+
+    protected abstract bool FSMUpdateConditions();              // control update execution
+
+    protected abstract bool FSMFixedUpdateConditions();         // control fixedupdate execution
 
     protected void AddNewState(int stateID, State newState)     // called in derived class InitializeStates()
     {

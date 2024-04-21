@@ -23,7 +23,7 @@ public sealed class PlayerDashState : PlayerAbilityState
         InputManager.Instance.UseDashInput();
         //_dashDirection = Vector2.right * _player.FacingDirection;
 
-        GameManager.Instance.ChangeTimeScale(TimeScale.Frozen);
+        Helpers.ChangeTimeScale(TimeScale.Frozen);
         _stateStartTime = Time.unscaledTime;
 
         _player.SetDashArrowActive(true);
@@ -56,7 +56,7 @@ public sealed class PlayerDashState : PlayerAbilityState
 
                 if (_dashInputStop || Time.unscaledTime >= _stateStartTime + _player.Data.MaxHoldTime)
                 {
-                    GameManager.Instance.ChangeTimeScale(TimeScale.Normal);
+                    Helpers.ChangeTimeScale(TimeScale.Normal);
                     _isHolding      = false;
                     _stateStartTime = Time.time;
                     _player.Drag    = _player.Data.DashDrag;
