@@ -59,6 +59,11 @@ public sealed class GameManager : FSMMonoBehaviour
         AddNewState((int)GameManagerStateID.ResetGame,      new ResetGameState(Instance, _resetGameData));
     }
 
+    protected override void FSMInitializeTransitions()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override bool FSMUpdateConditions()
     {
         // always update

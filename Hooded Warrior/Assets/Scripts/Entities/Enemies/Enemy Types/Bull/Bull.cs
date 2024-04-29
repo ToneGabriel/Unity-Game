@@ -80,6 +80,11 @@ public sealed class Bull : Enemy
         AddNewState((int)BullStateID.Dead,              new BullDeadState(this, "dead", _deadStateData));
     }
 
+    protected override void FSMInitializeTransitions()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override bool FSMUpdateConditions()
     {
         return !GameManager.Instance.IsGamePaused;

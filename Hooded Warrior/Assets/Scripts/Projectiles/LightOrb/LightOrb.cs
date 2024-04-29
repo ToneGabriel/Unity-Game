@@ -106,6 +106,11 @@ public sealed class LightOrb : FSMMonoBehaviour
         AddNewState((int)LightOrbStateID.Die,  new LightOrbDieState(this));
     }
 
+    protected override void FSMInitializeTransitions()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override bool FSMUpdateConditions()
     {
         return !GameManager.Instance.IsGamePaused;

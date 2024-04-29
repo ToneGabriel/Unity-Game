@@ -284,6 +284,106 @@ public sealed class Player : Entity
         //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
     }
 
+    protected override void FSMInitializeTransitions()
+    {
+        // from Idle...
+        AddNewTransition((int)PlayerStateID.Idle, (int)PlayerStateID.Jump,          () => { return InputManager.Instance.JumpInput && CanJump(); });
+        AddNewTransition((int)PlayerStateID.Idle, (int)PlayerStateID.InAir,         () => { return !IsGrounded(); });
+        AddNewTransition((int)PlayerStateID.Idle, (int)PlayerStateID.WallGrab,      () => { return InputManager.Instance.GrabInput && IsTouchingWall() && IsTouchingLedge(transform.right); });
+        AddNewTransition((int)PlayerStateID.Idle, (int)PlayerStateID.Dash,          () => { return InputManager.Instance.DashInput && /*&& _player._dashState.CheckIfCanDash()*/ !IsTouchingCeiling(); });
+        AddNewTransition((int)PlayerStateID.Idle, (int)PlayerStateID.Move,          () => { return InputManager.Instance.NormalizedInputX != 0; });
+        AddNewTransition((int)PlayerStateID.Idle, (int)PlayerStateID.CrouchIdle,    () => { return InputManager.Instance.NormalizedInputY == -1; });
+
+        // from Move...
+        AddNewTransition((int)PlayerStateID.Move, (int)PlayerStateID.Jump,          () => { return InputManager.Instance.JumpInput && CanJump(); });
+        AddNewTransition((int)PlayerStateID.Move, (int)PlayerStateID.InAir,         () => { return !IsGrounded(); });
+        AddNewTransition((int)PlayerStateID.Move, (int)PlayerStateID.WallGrab,      () => { return InputManager.Instance.GrabInput && IsTouchingWall() && IsTouchingLedge(transform.right); });
+        AddNewTransition((int)PlayerStateID.Move, (int)PlayerStateID.Dash,          () => { return InputManager.Instance.DashInput && /*&& _player._dashState.CheckIfCanDash()*/ !IsTouchingCeiling(); });
+        AddNewTransition((int)PlayerStateID.Move, (int)PlayerStateID.Idle,          () => { return InputManager.Instance.NormalizedInputX == 0; });
+        AddNewTransition((int)PlayerStateID.Move, (int)PlayerStateID.CrouchMove,    () => { return InputManager.Instance.NormalizedInputY == -1; });
+        AddNewTransition((int)PlayerStateID.Move, (int)PlayerStateID.Roll,          () => { return InputManager.Instance.RollInput && IsGrounded(); });
+
+        // from Jump...
+        // TODO: _isAbilityDone
+        AddNewTransition((int)PlayerStateID.Jump, (int)PlayerStateID.CrouchIdle,    () => { return IsTouchingCeiling(); });
+        AddNewTransition((int)PlayerStateID.Jump, (int)PlayerStateID.Idle,          () => { return IsGrounded() && VelocityY < 0.01f; });
+        AddNewTransition((int)PlayerStateID.Jump, (int)PlayerStateID.InAir,         () => { return !IsGrounded(); });
+
+        // from InAir...
+        AddNewTransition((int)PlayerStateID.InAir, (int)PlayerStateID.Land,         () => { return IsGrounded() && VelocityY < 0.01f; });
+        AddNewTransition((int)PlayerStateID.InAir, (int)PlayerStateID.LedgeClimb,   () => { return IsTouchingWall() && !IsTouchingLedge(transform.right) && !IsGrounded(); });
+        AddNewTransition((int)PlayerStateID.InAir, (int)PlayerStateID.Jump,         () => { return InputManager.Instance.JumpInput && CanJump(); });
+        AddNewTransition((int)PlayerStateID.InAir, (int)PlayerStateID.WallGrab,     () => { return InputManager.Instance.GrabInput && IsTouchingWall() && IsTouchingLedge(transform.right); });
+        AddNewTransition((int)PlayerStateID.InAir, (int)PlayerStateID.WallSlide,    () => { return !InputManager.Instance.GrabInput && IsTouchingWall(); });
+        AddNewTransition((int)PlayerStateID.InAir, (int)PlayerStateID.Dash,         () => { return InputManager.Instance.DashInput && /*&& _player._dashState.CheckIfCanDash()*/ !IsTouchingCeiling(); });
+
+        // from Land...
+        //AddNewTransition((int)PlayerStateID.Land, (int)PlayerStateID.Jump, () => { return false; });
+        AddNewTransition((int)PlayerStateID.Land, (int)PlayerStateID.InAir, () => { return false; });
+        //AddNewTransition((int)PlayerStateID.Land, (int)PlayerStateID.WallGrab, () => { return false; });
+        //AddNewTransition((int)PlayerStateID.Land, (int)PlayerStateID.Dash, () => { return false; });
+        AddNewTransition((int)PlayerStateID.Land, (int)PlayerStateID.Move, () => { return false; });
+        AddNewTransition((int)PlayerStateID.Land, (int)PlayerStateID.Idle, () => { return false; });
+
+        // from WallSlide...
+        AddNewTransition((int)PlayerStateID.WallSlide, (int)PlayerStateID.Idle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallSlide, (int)PlayerStateID.InAir, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallSlide, (int)PlayerStateID.LedgeClimb, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallSlide, (int)PlayerStateID.WallGrab, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallSlide, (int)PlayerStateID.WallJump, () => { return false; });
+
+        // from WallGrab...
+        AddNewTransition((int)PlayerStateID.WallGrab, (int)PlayerStateID.Idle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallGrab, (int)PlayerStateID.InAir, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallGrab, (int)PlayerStateID.LedgeClimb, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallGrab, (int)PlayerStateID.WallClimb, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallGrab, (int)PlayerStateID.WallSlide, () => { return false; });
+
+        // from WallClimb...
+        AddNewTransition((int)PlayerStateID.WallClimb, (int)PlayerStateID.Idle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallClimb, (int)PlayerStateID.InAir, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallClimb, (int)PlayerStateID.LedgeClimb, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallClimb, (int)PlayerStateID.WallGrab, () => { return false; });
+
+        // from WallJump
+        AddNewTransition((int)PlayerStateID.WallJump, (int)PlayerStateID.CrouchIdle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallJump, (int)PlayerStateID.Idle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.WallJump, (int)PlayerStateID.InAir, () => { return false; });
+
+        // from LedgeClimb...
+        AddNewTransition((int)PlayerStateID.LedgeClimb, (int)PlayerStateID.WallSlide, () => { return false; });
+        AddNewTransition((int)PlayerStateID.LedgeClimb, (int)PlayerStateID.WallJump, () => { return false; });
+        // TODO: add climb
+
+        // from Dash...
+        AddNewTransition((int)PlayerStateID.Dash, (int)PlayerStateID.CrouchIdle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.Dash, (int)PlayerStateID.Idle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.Dash, (int)PlayerStateID.InAir, () => { return false; });
+
+        // from CrouchIdle...
+        AddNewTransition((int)PlayerStateID.CrouchIdle, (int)PlayerStateID.Jump, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchIdle, (int)PlayerStateID.InAir, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchIdle, (int)PlayerStateID.WallGrab, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchIdle, (int)PlayerStateID.Dash, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchIdle, (int)PlayerStateID.CrouchMove, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchIdle, (int)PlayerStateID.Idle, () => { return false; });
+
+        // from CrouchMove...
+        AddNewTransition((int)PlayerStateID.CrouchMove, (int)PlayerStateID.Jump, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchMove, (int)PlayerStateID.InAir, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchMove, (int)PlayerStateID.WallGrab, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchMove, (int)PlayerStateID.Dash, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchMove, (int)PlayerStateID.CrouchIdle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.CrouchMove, (int)PlayerStateID.Move, () => { return false; });
+
+        // from Roll...
+        AddNewTransition((int)PlayerStateID.Roll, (int)PlayerStateID.CrouchIdle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.Roll, (int)PlayerStateID.Idle, () => { return false; });
+        AddNewTransition((int)PlayerStateID.Roll, (int)PlayerStateID.InAir, () => { return false; });
+
+        // TODO: add more
+    }
+
     protected override bool FSMUpdateConditions()
     {
         return !GameManager.Instance.IsGamePaused;

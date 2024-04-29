@@ -108,6 +108,11 @@ public sealed class BringerOfDeath : Enemy
         AddNewState((int)BringerOfDeathStateID.OrbRangedAttack,     new BringerOfDeathRangedAttackState(this, "orbRangedAttack", _orbRangedAttackStateData));
     }
 
+    protected override void FSMInitializeTransitions()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override bool FSMUpdateConditions()
     {
         return !GameManager.Instance.IsGamePaused;

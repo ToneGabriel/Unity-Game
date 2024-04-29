@@ -100,6 +100,11 @@ public sealed class Archer : Enemy
         AddNewState((int)ArcherStateID.RangedAttack,    new ArcherRangedAttackState(this, "rangedAttack", _rangedAttackStateData));
     }
 
+    protected override void FSMInitializeTransitions()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override bool FSMUpdateConditions()
     {
         return !GameManager.Instance.IsGamePaused;

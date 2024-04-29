@@ -23,6 +23,11 @@ public sealed class Slime : Enemy
         AddNewState((int)SlimeStateID.PlayerDetected,   new SlimePlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
     }
 
+    protected override void FSMInitializeTransitions()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override bool FSMUpdateConditions()
     {
         return !GameManager.Instance.IsGamePaused;
