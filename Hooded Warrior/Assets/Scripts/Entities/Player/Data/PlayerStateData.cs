@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "newPlayerData", menuName = "Data/Player Data/Base Data")]
-public class PlayerData : ScriptableObject
+[CreateAssetMenu(fileName = "newPlayerStateData", menuName = "Data/Player Data/Base Data")]
+public class PlayerStateData : ScriptableObject
 {
     // Editor ==========================================
 

@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-public abstract class EnemyPlayerDetectedState : EnemyState
+public class EnemyPlayerDetectedState : EnemyState
 {
-    protected Data_PlayerDetected _stateData;
+    protected EnemyStateData _stateData;
     protected bool _isPLayerInMinAgroRange;
     protected bool _isPLayerInMaxAgroRange;
     protected bool _isPlayerInMeleeRange;
     protected bool _canMove;
 
-    public EnemyPlayerDetectedState(Enemy enemy, string animBoolName, Data_PlayerDetected stateData) 
+    public EnemyPlayerDetectedState(Enemy enemy, string animBoolName, EnemyStateData stateData) 
         : base(enemy, animBoolName)
     {
         _stateData = stateData;

@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
-public abstract class EnemyStunState : EnemyState
+public class EnemyStunState : EnemyState
 {
-    protected Data_Stun _stateData;
+    protected EnemyStateData _stateData;
     protected bool _isStunTimeOver;
     protected bool _isGrounded;
     protected bool _isMovementStopped;
     protected bool _isPlayerInMeleeRange;
     protected bool _isPlayerInMinAgroRange;
 
-    public EnemyStunState(Enemy enemy, string animBoolName, Data_Stun stateData) 
+    public EnemyStunState(Enemy enemy, string animBoolName, EnemyStateData stateData) 
         : base(enemy, animBoolName)
     {
         _stateData = stateData;

@@ -1,33 +1,67 @@
 ﻿using UnityEngine;
 
-public class ArcherMeleeAttackState : EnemyMeleeAttackState
+public class ArcherMeleeAttackState : EnemyState
 {
+    public bool IsOnCooldown { get; private set; }
+
     private Archer _archer;
+    private ArcherStateData _stateData;
+    private AttackDetails _attackDetails;
+    private bool _isPlayerInMinAgroRange;
 
-    public ArcherMeleeAttackState(Archer archer, string animBoolName, Data_MeleeAttack stateData) 
-        : base(archer, animBoolName, stateData)
+    public ArcherMeleeAttackState(Archer archer, string animBoolName, ArcherStateData stateData)
+        : base(archer, animBoolName)
     {
-        _archer = archer;
+        _archer     = archer;
+        _stateData  = stateData;
     }
 
-    public override void LogicUpdate()
+    public override void Enter()
     {
-        base.LogicUpdate();
+        base.Enter();
 
-        if(_isStateAnimationFinished)
-        {
-            if (_isPlayerInMinAgroRange)
-                _archer.ChangeState((int)ArcherStateID.PlayerDetected);
-            else
-                _archer.ChangeState((int)ArcherStateID.LookForPlayer);
-        }
+        _isStateAnimationFinished = false;
+        _archer.SetVelocityZero();
+
+        _attackDetails.DamageAmount = _stateData.MeleeAttackDamage;
+        _attackDetails.Position = _archer.transform.position;
     }
 
-    public override void TriggerMeleeAttack()
+    public override void Exit()
     {
-        base.TriggerMeleeAttack();
+        base.Exit();
 
-        Collider2D detectedObject = Physics2D.OverlapCircle(_archer.MeleeAttackPosition.transform.position, _stateData.AttackRadius, _stateData.WhatIsPlayer);
+        IsOnCooldown = true;
+        //CooldownManager.Instance.Subscribe(this);
+    }
+
+    protected override void DoChecks()
+    {
+        base.DoChecks();
+
+        _isPlayerInMinAgroRange = _archer.CheckPlayerInMinAgroRange();
+    }
+
+    public virtual void FinishMeleeAttack()
+    {
+        _isStateAnimationFinished = true;
+    }
+
+    public void CheckCooldown()
+    {
+        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.MeleeAttackCooldown)
+            ResetCooldown();
+    }
+
+    public void ResetCooldown()
+    {
+        IsOnCooldown = false;
+        //CooldownManager.Instance.UnSubscribe(this);
+    }
+
+    public void TriggerMeleeAttack()
+    {
+        Collider2D detectedObject = Physics2D.OverlapCircle(_archer.MeleeAttackPosition.transform.position, _stateData.MeleeAttackRadius, _stateData.WhatIsPlayer);
         if (detectedObject)
             detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
     }

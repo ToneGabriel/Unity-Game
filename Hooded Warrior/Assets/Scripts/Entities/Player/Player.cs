@@ -5,13 +5,13 @@ public sealed class Player : Entity
 {
     #region Components & Data
     [SerializeField] private PlayerExternComponents _playerExternComponents;
-    [SerializeField] private PlayerData             _playerData;
+    [SerializeField] private PlayerStateData        _playerData;
 
     private PlayerActionComponents                  _playerIntStatusComponents;
     #endregion
 
     #region Component Getters
-    public PlayerData                               Data            { get { return _playerData; } }
+    public PlayerStateData                          Data            { get { return _playerData; } }
     public ref PlayerActionComponents               AdvancedStatus  { get { return ref _playerIntStatusComponents; } }
     #endregion
 

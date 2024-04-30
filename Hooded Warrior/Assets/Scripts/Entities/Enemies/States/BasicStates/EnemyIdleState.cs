@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-public abstract class EnemyIdleState : EnemyState
+public class EnemyIdleState : EnemyState
 {
-    protected Data_Idle _stateData;
+    protected EnemyStateData _stateData;
     protected bool _flipAfterIdle;
     protected bool _isIdleTimeOver;
     protected bool _isPlayerInMinAgroRange;
     protected float _idleTime;
 
-    public EnemyIdleState(Enemy enemy, string animBoolName, Data_Idle stateData) 
+    public EnemyIdleState(Enemy enemy, string animBoolName, EnemyStateData stateData) 
         : base(enemy, animBoolName)
     {
         _stateData = stateData;

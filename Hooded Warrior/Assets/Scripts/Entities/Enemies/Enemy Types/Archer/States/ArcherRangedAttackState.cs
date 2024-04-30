@@ -1,31 +1,62 @@
-﻿
-public class ArcherRangedAttackState : EnemyRangedAttackState
+﻿using UnityEngine;
+
+public class ArcherRangedAttackState : EnemyState
 {
+    public bool IsOnCooldown { get; private set; }
+
     private Archer _archer;
+    private ArcherStateData _stateData;
+    private bool _isPlayerInMinAgroRange;
 
-    public ArcherRangedAttackState(Archer archer, string animBoolName, Data_RangedAttack stateData) 
-        : base(archer, animBoolName, stateData)
+    public ArcherRangedAttackState(Archer archer, string animBoolName, ArcherStateData stateData)
+        : base(archer, animBoolName)
     {
-        _archer = archer;
+        _archer     = archer;
+        _stateData  = stateData;
     }
 
-    public override void LogicUpdate()
+    public override void Enter()
     {
-        base.LogicUpdate();
+        base.Enter();
 
-        if(_isStateAnimationFinished)
-        {
-            if (_isPlayerInMinAgroRange)
-                _archer.ChangeState((int)ArcherStateID.PlayerDetected);
-            else
-                _archer.ChangeState((int)ArcherStateID.LookForPlayer);
-        }
+        _isStateAnimationFinished = false;
+        _archer.SetVelocityZero();
     }
 
-    public override void TriggerRangedAttack()
+    public override void Exit()
     {
-        base.TriggerRangedAttack();
+        base.Exit();
 
+        IsOnCooldown = true;
+        //CooldownManager.Instance.Subscribe(this);
+    }
+
+    protected override void DoChecks()
+    {
+        base.DoChecks();
+
+        _isPlayerInMinAgroRange = _archer.CheckPlayerInMinAgroRange();
+    }
+
+    public void CheckCooldown()
+    {
+        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.RangedAttackCooldown)
+            ResetCooldown();
+    }
+
+    public void ResetCooldown()
+    {
+        IsOnCooldown = false;
+        //CooldownManager.Instance.UnSubscribe(this);
+    }
+
+    public void FinishRangedAttack()
+    {
+        _isStateAnimationFinished = true;
+    }
+
+    public void TriggerRangedAttack()
+    {
         ObjectPoolManager.Instance.GetFromPool<Arrow>(  _archer.RangedAttackPosition.transform.position,
                                                         _archer.RangedAttackPosition.transform.rotation);
     }

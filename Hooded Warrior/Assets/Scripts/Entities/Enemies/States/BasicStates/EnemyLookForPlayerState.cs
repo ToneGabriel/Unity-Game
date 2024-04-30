@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public abstract class EnemyLookForPlayerState : EnemyState
+public class EnemyLookForPlayerState : EnemyState
 {
-    protected Data_LookForPlayer _stateData;
+    protected EnemyStateData _stateData;
     protected bool _turnImmediately;
     protected bool _isPLayerInMinAgroRange;
     protected bool _isAllTurnsDone;
@@ -10,7 +10,7 @@ public abstract class EnemyLookForPlayerState : EnemyState
     protected float _lastTurnTime;
     protected int _amountOfTurnsDone;
 
-    public EnemyLookForPlayerState(Enemy enemy, string animBoolName, Data_LookForPlayer stateData) 
+    public EnemyLookForPlayerState(Enemy enemy, string animBoolName, EnemyStateData stateData) 
         : base(enemy, animBoolName)
     {
         _stateData = stateData;
