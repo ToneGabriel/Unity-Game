@@ -48,13 +48,13 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
         // state logic
         _states[_currentStateID].LogicUpdate();
 
-        // check transitions
-        foreach (var trs in _transitions[_currentStateID])
-            if (trs.Value())  // condition for transition is true
-            {
-                ChangeState(trs.Key);
-                return;
-            }
+        //// check transitions
+        //foreach (var trs in _transitions[_currentStateID])
+        //    if (trs.Value())  // condition for transition is true
+        //    {
+        //        ChangeState(trs.Key);
+        //        return;
+        //    }
     }
 
     protected virtual void FixedUpdate()
