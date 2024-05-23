@@ -8,8 +8,8 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
     {
         base.Enter();
 
-        _player.SetColiderHeight(_player.Data.CrouchColliderHeight);
-        _player.SetLightOrbPosition(_player.Data.CrouchLightOrbPosition);
+        _player.SetColiderHeight(_player.StateData.CrouchColliderHeight);
+        _player.SetLightOrbPosition(_player.StateData.CrouchLightOrbPosition);
     }
 
     public override void LogicUpdate()
@@ -26,14 +26,14 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.Data.CrouchMovementVelocity * _inputX);
+        _player.SetVelocityX(_player.StateData.CrouchMovementVelocity * _inputX);
     }
 
     public override void Exit()
     {
         base.Exit();
 
-        _player.SetColiderHeight(_player.Data.StandColliderHeight);
-        _player.SetLightOrbPosition(_player.Data.StandLightOrbPosition);
+        _player.SetColiderHeight(_player.StateData.StandColliderHeight);
+        _player.SetLightOrbPosition(_player.StateData.StandLightOrbPosition);
     }
 }

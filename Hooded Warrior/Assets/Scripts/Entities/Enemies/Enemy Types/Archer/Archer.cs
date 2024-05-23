@@ -4,6 +4,8 @@ public sealed class Archer : Enemy
 {
     #region States and Data
     [SerializeField] private ArcherStateData _archerStateData;
+
+    public ArcherStateData AggroStateData { get { return _archerStateData; } }
     #endregion
 
     #region Components
@@ -81,59 +83,61 @@ public sealed class Archer : Enemy
 
     protected override void FSMInitializeStates()
     {
-        AddNewState((int)ArcherStateID.Idle,            new EnemyIdleState(this, "idle", _archerStateData));
-        AddNewState((int)ArcherStateID.Move,            new EnemyMoveState(this, "walk", _archerStateData));
-        AddNewState((int)ArcherStateID.PlayerDetected,  new EnemyPlayerDetectedState(this, "playerDetected", _archerStateData));
-        AddNewState((int)ArcherStateID.LookForPlayer,   new EnemyLookForPlayerState(this, "lookForPlayer", _archerStateData));
-        AddNewState((int)ArcherStateID.Stun,            new EnemyStunState(this, "stun", _archerStateData));
-        AddNewState((int)ArcherStateID.Dead,            new EnemyDeadState(this, "dead", _archerStateData));
+        base.FSMInitializeStates();
+
+        //AddNewState((int)ArcherStateID.Idle,            new EnemyIdleState(this, "idle", _archerStateData));
+        //AddNewState((int)ArcherStateID.Move,            new EnemyMoveState(this, "walk", _archerStateData));
+        //AddNewState((int)ArcherStateID.PlayerDetected,  new EnemyPlayerDetectedState(this, "playerDetected", _archerStateData));
+        //AddNewState((int)ArcherStateID.LookForPlayer,   new EnemyLookForPlayerState(this, "lookForPlayer", _archerStateData));
+        //AddNewState((int)ArcherStateID.Stun,            new EnemyStunState(this, "stun", _archerStateData));
+        //AddNewState((int)ArcherStateID.Dead,            new EnemyDeadState(this, "dead", _archerStateData));
         
-        AddNewState((int)ArcherStateID.Dodge,           new ArcherDodgeState(this, "dodge", _archerStateData));
-        AddNewState((int)ArcherStateID.MeleeAttack,     new ArcherMeleeAttackState(this, "meleeAttack", _archerStateData));
-        AddNewState((int)ArcherStateID.RangedAttack,    new ArcherRangedAttackState(this, "rangedAttack", _archerStateData));
+        AddNewState((int)EnemyModeID.Aggro, (int)ArcherStateID.Dodge,           new ArcherDodgeState(this, "dodge", _archerStateData));
+        AddNewState((int)EnemyModeID.Aggro, (int)ArcherStateID.MeleeAttack,     new ArcherMeleeAttackState(this, "meleeAttack", _archerStateData));
+        AddNewState((int)EnemyModeID.Aggro, (int)ArcherStateID.RangedAttack,    new ArcherRangedAttackState(this, "rangedAttack", _archerStateData));
     }
 
-    protected override void FSMInitializeTransitions()
-    {
-        // from Idle...
-        AddNewTransition((int)ArcherStateID.Idle, (int)ArcherStateID.Move,                      () => { return false; }); // is idle time over
-        AddNewTransition((int)ArcherStateID.Idle, (int)ArcherStateID.PlayerDetected,            () => { return CheckPlayerInMinAgroRange(); });
+    //protected override void FSMInitializeTransitions()
+    //{
+    //    // from Idle...
+    //    AddNewTransition((int)ArcherStateID.Idle, (int)ArcherStateID.Move,                      () => { return false; }); // is idle time over
+    //    AddNewTransition((int)ArcherStateID.Idle, (int)ArcherStateID.PlayerDetected,            () => { return CheckPlayerInMinAgroRange(); });
 
-        // from Move...
-        AddNewTransition((int)ArcherStateID.Move, (int)ArcherStateID.Idle,                      () => { return IsTouchingWall() || IsTouchingLedge(-transform.up); });
-        AddNewTransition((int)ArcherStateID.Move, (int)ArcherStateID.PlayerDetected,            () => { return CheckPlayerInMinAgroRange(); });
+    //    // from Move...
+    //    AddNewTransition((int)ArcherStateID.Move, (int)ArcherStateID.Idle,                      () => { return IsTouchingWall() || IsTouchingLedge(-transform.up); });
+    //    AddNewTransition((int)ArcherStateID.Move, (int)ArcherStateID.PlayerDetected,            () => { return CheckPlayerInMinAgroRange(); });
 
-        // from PlayerDetected...
-        AddNewTransition((int)ArcherStateID.PlayerDetected, (int)ArcherStateID.Dodge,           () => { return CheckPlayerInMeleeRange(); });
-        AddNewTransition((int)ArcherStateID.PlayerDetected, (int)ArcherStateID.MeleeAttack,     () => { return false; });
-        AddNewTransition((int)ArcherStateID.PlayerDetected, (int)ArcherStateID.RangedAttack,    () => { return false; });
-        AddNewTransition((int)ArcherStateID.PlayerDetected, (int)ArcherStateID.LookForPlayer,   () => { return !CheckPlayerInMaxAgroRange(); });
+    //    // from PlayerDetected...
+    //    AddNewTransition((int)ArcherStateID.PlayerDetected, (int)ArcherStateID.Dodge,           () => { return CheckPlayerInMeleeRange(); });
+    //    AddNewTransition((int)ArcherStateID.PlayerDetected, (int)ArcherStateID.MeleeAttack,     () => { return false; });
+    //    AddNewTransition((int)ArcherStateID.PlayerDetected, (int)ArcherStateID.RangedAttack,    () => { return false; });
+    //    AddNewTransition((int)ArcherStateID.PlayerDetected, (int)ArcherStateID.LookForPlayer,   () => { return !CheckPlayerInMaxAgroRange(); });
 
-        // from LookForPlayer...
-        AddNewTransition((int)ArcherStateID.LookForPlayer, (int)ArcherStateID.PlayerDetected,   () => { return CheckPlayerInMinAgroRange(); });
-        AddNewTransition((int)ArcherStateID.LookForPlayer, (int)ArcherStateID.Move,             () => { return false; });   // _isAllTurnsTimeDone
+    //    // from LookForPlayer...
+    //    AddNewTransition((int)ArcherStateID.LookForPlayer, (int)ArcherStateID.PlayerDetected,   () => { return CheckPlayerInMinAgroRange(); });
+    //    AddNewTransition((int)ArcherStateID.LookForPlayer, (int)ArcherStateID.Move,             () => { return false; });   // _isAllTurnsTimeDone
 
-        // from Stun...
-        AddNewTransition((int)ArcherStateID.Stun, (int)ArcherStateID.MeleeAttack,               () => { return CheckPlayerInMeleeRange(); });
-        AddNewTransition((int)ArcherStateID.Stun, (int)ArcherStateID.PlayerDetected,            () => { return CheckPlayerInMinAgroRange(); });
-        AddNewTransition((int)ArcherStateID.Stun, (int)ArcherStateID.LookForPlayer,             () => { return !CheckPlayerInMeleeRange() && !CheckPlayerInMinAgroRange(); });
+    //    // from Stun...
+    //    AddNewTransition((int)ArcherStateID.Stun, (int)ArcherStateID.MeleeAttack,               () => { return CheckPlayerInMeleeRange(); });
+    //    AddNewTransition((int)ArcherStateID.Stun, (int)ArcherStateID.PlayerDetected,            () => { return CheckPlayerInMinAgroRange(); });
+    //    AddNewTransition((int)ArcherStateID.Stun, (int)ArcherStateID.LookForPlayer,             () => { return !CheckPlayerInMeleeRange() && !CheckPlayerInMinAgroRange(); });
 
-        // from Dead...
-        // None
+    //    // from Dead...
+    //    // None
 
-        // from Dodge...
-        AddNewTransition((int)ArcherStateID.Dodge, (int)ArcherStateID.MeleeAttack,              () => { return CheckPlayerInMeleeRange(); });
-        AddNewTransition((int)ArcherStateID.Dodge, (int)ArcherStateID.RangedAttack,             () => { return CheckPlayerInMaxAgroRange() && !CheckPlayerInMeleeRange(); });
-        AddNewTransition((int)ArcherStateID.Dodge, (int)ArcherStateID.LookForPlayer,            () => { return !CheckPlayerInMaxAgroRange(); });
+    //    // from Dodge...
+    //    AddNewTransition((int)ArcherStateID.Dodge, (int)ArcherStateID.MeleeAttack,              () => { return CheckPlayerInMeleeRange(); });
+    //    AddNewTransition((int)ArcherStateID.Dodge, (int)ArcherStateID.RangedAttack,             () => { return CheckPlayerInMaxAgroRange() && !CheckPlayerInMeleeRange(); });
+    //    AddNewTransition((int)ArcherStateID.Dodge, (int)ArcherStateID.LookForPlayer,            () => { return !CheckPlayerInMaxAgroRange(); });
 
-        // from MeleeAttack...
-        AddNewTransition((int)ArcherStateID.MeleeAttack, (int)ArcherStateID.PlayerDetected,     () => { return CheckPlayerInMinAgroRange(); });
-        AddNewTransition((int)ArcherStateID.MeleeAttack, (int)ArcherStateID.LookForPlayer,      () => { return !CheckPlayerInMinAgroRange(); });
+    //    // from MeleeAttack...
+    //    AddNewTransition((int)ArcherStateID.MeleeAttack, (int)ArcherStateID.PlayerDetected,     () => { return CheckPlayerInMinAgroRange(); });
+    //    AddNewTransition((int)ArcherStateID.MeleeAttack, (int)ArcherStateID.LookForPlayer,      () => { return !CheckPlayerInMinAgroRange(); });
 
-        // from RangedAttack...
-        AddNewTransition((int)ArcherStateID.RangedAttack, (int)ArcherStateID.PlayerDetected,    () => { return CheckPlayerInMinAgroRange(); });
-        AddNewTransition((int)ArcherStateID.RangedAttack, (int)ArcherStateID.LookForPlayer,     () => { return !CheckPlayerInMinAgroRange(); });
-    }
+    //    // from RangedAttack...
+    //    AddNewTransition((int)ArcherStateID.RangedAttack, (int)ArcherStateID.PlayerDetected,    () => { return CheckPlayerInMinAgroRange(); });
+    //    AddNewTransition((int)ArcherStateID.RangedAttack, (int)ArcherStateID.LookForPlayer,     () => { return !CheckPlayerInMinAgroRange(); });
+    //}
 
     protected override bool FSMUpdateConditions()
     {

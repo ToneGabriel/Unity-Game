@@ -10,8 +10,8 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
         base.Enter();
 
         _player.ResetAndDecreaseAmountOfJumpsLeft();
-        _player.SetVelocity(_player.Data.WallJumpVelocity,
-                            _player.Data.WallJumpAngle,
+        _player.SetVelocity(_player.StateData.WallJumpVelocity,
+                            _player.StateData.WallJumpAngle,
                             -_player.FacingDirection);
         _player.Flip();
     }
@@ -20,7 +20,7 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _stateStartTime + _player.Data.WallJumpTime)
+        if (Time.time >= _stateStartTime + _player.StateData.WallJumpTime)
             _isAbilityDone = true;
     }
 }

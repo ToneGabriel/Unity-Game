@@ -28,10 +28,10 @@ public sealed class PlayerLedgeClimbState : PlayerState
         _player.SetVelocityZero();
         _player.transform.position = _player.AdvancedStatus.LedgeDetectedposition;
         _cornerPosition = _player.DetermineCornerPosition();
-        _startPosition.Set( _cornerPosition.x - (_player.FacingDirection * _player.Data.StartOffset.x),
-                            _cornerPosition.y - _player.Data.StartOffset.y);
-        _stopPosition.Set(  _cornerPosition.x + (_player.FacingDirection * _player.Data.StopOffset.x),
-                            _cornerPosition.y + _player.Data.StopOffset.y);
+        _startPosition.Set( _cornerPosition.x - (_player.FacingDirection * _player.StateData.StartOffset.x),
+                            _cornerPosition.y - _player.StateData.StartOffset.y);
+        _stopPosition.Set(  _cornerPosition.x + (_player.FacingDirection * _player.StateData.StopOffset.x),
+                            _cornerPosition.y + _player.StateData.StopOffset.y);
 
         _player.transform.position = _startPosition;
     }

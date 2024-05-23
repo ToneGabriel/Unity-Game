@@ -3,6 +3,10 @@
 public abstract class Enemy : Entity                // Base Enemy class
 {
     [SerializeField] protected EnemyData _enemyData;    // Reference to base enemy data
+    [SerializeField] protected EnemyStateData _enemyStateData;
+
+    public EnemyStateData NonAggroStateData { get { return _enemyStateData; } }
+
 
     #region Unity Functions
     protected override void Awake()
@@ -30,6 +34,17 @@ public abstract class Enemy : Entity                // Base Enemy class
         base.FixedUpdate();
     }
     #endregion
+
+    protected override void FSMInitializeModes()
+    {
+        AddNewMode((int)EnemyModeID.NonAggro);
+        AddNewMode((int)EnemyModeID.Aggro);
+    }
+
+    protected override void FSMInitializeStates()
+    {
+        //AddNewState((int)EnemyModeID.NonAggro, (int)EnemyStateID.Idle, new EnemyIdleState(this, "idle", _archerStateData));
+    }
 
     #region Checkers
     public virtual bool CheckPlayerInMinAgroRange()                                     // Raycast to check agro enter range

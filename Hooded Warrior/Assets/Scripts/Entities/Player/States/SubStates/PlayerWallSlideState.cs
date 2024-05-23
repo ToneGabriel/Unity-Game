@@ -8,8 +8,8 @@ public sealed class PlayerWallSlideState : PlayerTouchingWallState
     {
         base.LogicUpdate();
 
-        _player.SetVelocityY(-_player.Data.WallSlideVelocity);
-        _player.SetVelocityX(_player.Data.MovementVelocity * _inputX);
+        _player.SetVelocityY(-_player.StateData.WallSlideVelocity);
+        _player.SetVelocityX(_player.StateData.MovementVelocity * _inputX);
 
         if (_grabInput && _inputY == 0)
             _player.ChangeState((int)PlayerStateID.WallGrab);

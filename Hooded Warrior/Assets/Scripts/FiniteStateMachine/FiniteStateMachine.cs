@@ -1,18 +1,84 @@
+using System.Collections.Generic;
+using System;
 
-public sealed class FiniteStateMachine
+// Composition
+// Controlled by FSMMonoBehaviour
+public sealed class FiniteStateMachine : State
 {
-    public State CurrentState { get; private set; }
+    private int                     _defaultStateID;
+    private int                     _currentStateID;
+    private Dictionary<int, State>  _states;
 
-    public void SetInitialState(State newState)
+    public FiniteStateMachine()
     {
-        CurrentState = newState;
-        CurrentState.Enter();
+        _defaultStateID = -1;
+        _currentStateID = -1;
+        _states         = new Dictionary<int, State>();
     }
 
-    public void ChangeState(State newState)
+    public override void AddNewState(int stateID, State newState)
     {
-        CurrentState.Exit();
-        CurrentState = newState;
-        CurrentState.Enter();
+        if (_states.ContainsKey(stateID))
+            throw new ArgumentException("The state with current ID already exists!");
+
+        _states.Add(stateID, newState);
+    }
+
+    public override void ChangeState(int stateID)
+    {
+        if (!_states.ContainsKey(stateID))
+            throw new ArgumentException("No state with current ID exists!");
+
+        _states[_currentStateID].Exit();
+        _currentStateID = stateID;
+        _states[_currentStateID].Enter();
+    }
+
+    public void SetDefaultState(int stateID = 0)
+    {
+        if (!_states.ContainsKey(stateID))
+            throw new ArgumentException("No state with current ID exists!");
+
+        _defaultStateID = stateID;
+    }
+
+    public bool IsStateActive(int stateID)
+    {
+        return _states[_currentStateID] == _states[stateID];
+    }
+
+    public State GetState(int stateID)
+    {
+        if (!_states.ContainsKey(stateID))
+            throw new ArgumentException("No state with current ID exists!");
+
+        return _states[stateID];
+    }
+
+    public State CurrentState()
+    {
+        return _states[_currentStateID];
+    }
+
+    public override void Enter()
+    {
+        _currentStateID = _defaultStateID;
+        _states[_currentStateID].Enter();
+    }
+
+    public override void Exit()
+    {
+        _states[_currentStateID].Exit();
+        _currentStateID = _defaultStateID;
+    }
+
+    public override void LogicUpdate()
+    {
+        _states[_currentStateID].LogicUpdate();
+    }
+
+    public override void PhysicsUpdate()
+    {
+        _states[_currentStateID].PhysicsUpdate();
     }
 }
