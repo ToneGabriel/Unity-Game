@@ -2,17 +2,13 @@
 
 public class EnemyIdleState : EnemyState
 {
-    protected EnemyStateData _stateData;
     protected bool _flipAfterIdle;
     protected bool _isIdleTimeOver;
     protected bool _isPlayerInMinAgroRange;
     protected float _idleTime;
 
-    public EnemyIdleState(Enemy enemy, string animBoolName, EnemyStateData stateData) 
-        : base(enemy, animBoolName)
-    {
-        _stateData = stateData;
-    }
+    public EnemyIdleState(Enemy enemy, string animBoolName) 
+        : base(enemy, animBoolName) {}
 
     public override void Enter()
     {
@@ -53,6 +49,7 @@ public class EnemyIdleState : EnemyState
 
     private void SetRandomIdleTime()
     {
-        _idleTime = Random.Range(_stateData.MinIdleTime, _stateData.MaxIdleTime);
+        _idleTime = Random.Range(   _enemy.NonAggroStateData.MinIdleTime,
+                                    _enemy.NonAggroStateData.MaxIdleTime);
     }
 }

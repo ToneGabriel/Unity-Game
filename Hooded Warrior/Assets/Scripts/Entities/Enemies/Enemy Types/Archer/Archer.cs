@@ -81,20 +81,17 @@ public sealed class Archer : Enemy
         Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _archerStateData.MeleeAttackRadius);
     }
 
-    protected override void FSMInitializeStates()
+    protected override void FSMInitializeModes()
     {
-        base.FSMInitializeStates();
+        AddNewMode((int)EnemyModeID.NonAggro, new EnemyNonAggroMode(this,
+                                                                    "idle",
+                                                                    "move",
+                                                                    "playerDetected"));
 
-        //AddNewState((int)ArcherStateID.Idle,            new EnemyIdleState(this, "idle", _archerStateData));
-        //AddNewState((int)ArcherStateID.Move,            new EnemyMoveState(this, "walk", _archerStateData));
-        //AddNewState((int)ArcherStateID.PlayerDetected,  new EnemyPlayerDetectedState(this, "playerDetected", _archerStateData));
-        //AddNewState((int)ArcherStateID.LookForPlayer,   new EnemyLookForPlayerState(this, "lookForPlayer", _archerStateData));
-        //AddNewState((int)ArcherStateID.Stun,            new EnemyStunState(this, "stun", _archerStateData));
-        //AddNewState((int)ArcherStateID.Dead,            new EnemyDeadState(this, "dead", _archerStateData));
-        
-        AddNewState((int)EnemyModeID.Aggro, (int)ArcherStateID.Dodge,           new ArcherDodgeState(this, "dodge", _archerStateData));
-        AddNewState((int)EnemyModeID.Aggro, (int)ArcherStateID.MeleeAttack,     new ArcherMeleeAttackState(this, "meleeAttack", _archerStateData));
-        AddNewState((int)EnemyModeID.Aggro, (int)ArcherStateID.RangedAttack,    new ArcherRangedAttackState(this, "rangedAttack", _archerStateData));
+        AddNewMode((int)EnemyModeID.Aggro, new ArcherAggroMode( this,
+                                                                "dodge",
+                                                                "meleeAttack",
+                                                                "rangedAttack"));
     }
 
     //protected override void FSMInitializeTransitions()

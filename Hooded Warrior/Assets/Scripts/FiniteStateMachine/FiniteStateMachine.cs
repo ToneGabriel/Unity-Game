@@ -3,11 +3,11 @@ using System;
 
 // Composition
 // Controlled by FSMMonoBehaviour
-public sealed class FiniteStateMachine : State
+public class FiniteStateMachine : State
 {
-    private int                     _defaultStateID;
-    private int                     _currentStateID;
-    private Dictionary<int, State>  _states;
+    protected int                       _defaultStateID;
+    protected int                       _currentStateID;
+    protected Dictionary<int, State>    _states;
 
     public FiniteStateMachine()
     {

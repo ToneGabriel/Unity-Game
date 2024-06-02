@@ -4,14 +4,10 @@ public abstract class EnemyRangedAttackState : EnemyState, ICooldown
 {
     public bool IsOnCooldown { get; private set; }
     
-    protected Data_RangedAttack _stateData;
     protected bool _isPlayerInMinAgroRange;
 
-    public EnemyRangedAttackState(Enemy enemy, string animBoolName, Data_RangedAttack stateData) 
-        : base(enemy, animBoolName)
-    {
-        _stateData = stateData;
-    }
+    public EnemyRangedAttackState(Enemy enemy, string animBoolName)
+        : base(enemy, animBoolName) { }
 
     public override void Enter()
     {
@@ -38,8 +34,8 @@ public abstract class EnemyRangedAttackState : EnemyState, ICooldown
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.AttackCooldown)
-            ResetCooldown();
+        //if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.AttackCooldown)
+        //    ResetCooldown();
     }
 
     public void ResetCooldown()

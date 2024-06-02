@@ -5,15 +5,13 @@ public class ArcherMeleeAttackState : EnemyState
     public bool IsOnCooldown { get; private set; }
 
     private Archer _archer;
-    private ArcherStateData _stateData;
     private AttackDetails _attackDetails;
     private bool _isPlayerInMinAgroRange;
 
-    public ArcherMeleeAttackState(Archer archer, string animBoolName, ArcherStateData stateData)
+    public ArcherMeleeAttackState(Archer archer, string animBoolName)
         : base(archer, animBoolName)
     {
-        _archer     = archer;
-        _stateData  = stateData;
+        _archer = archer;
     }
 
     public override void Enter()
@@ -23,7 +21,7 @@ public class ArcherMeleeAttackState : EnemyState
         _isStateAnimationFinished = false;
         _archer.SetVelocityZero();
 
-        _attackDetails.DamageAmount = _stateData.MeleeAttackDamage;
+        _attackDetails.DamageAmount = _archer.AggroStateData.MeleeAttackDamage;
         _attackDetails.Position = _archer.transform.position;
     }
 
@@ -49,7 +47,7 @@ public class ArcherMeleeAttackState : EnemyState
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.MeleeAttackCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroStateData.MeleeAttackCooldown)
             ResetCooldown();
     }
 
@@ -61,7 +59,9 @@ public class ArcherMeleeAttackState : EnemyState
 
     public void TriggerMeleeAttack()
     {
-        Collider2D detectedObject = Physics2D.OverlapCircle(_archer.MeleeAttackPosition.transform.position, _stateData.MeleeAttackRadius, _stateData.WhatIsPlayer);
+        Collider2D detectedObject = Physics2D.OverlapCircle(_archer.MeleeAttackPosition.transform.position,
+                                                            _archer.AggroStateData.MeleeAttackRadius,
+                                                            _archer.AggroStateData.WhatIsPlayer);
         if (detectedObject)
             detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
     }

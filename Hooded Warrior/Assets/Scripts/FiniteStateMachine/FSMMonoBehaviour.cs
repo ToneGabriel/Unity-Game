@@ -14,7 +14,6 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
         _fsm = new FiniteStateMachine();
 
         FSMInitializeModes();
-        FSMInitializeStates();
     }
 
     protected virtual void OnEnable()
@@ -58,23 +57,22 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
     #endregion Unity Functions
 
     #region Late Init Functions
-    protected abstract void FSMInitializeModes();               // use AddNewMode() in derived class
-    
-    protected abstract void FSMInitializeStates();              // use AddNewState() in derived class
+    protected abstract void FSMInitializeModes();       // use AddNewMode() in derived class
 
-    protected abstract bool FSMUpdateConditions();              // control update execution
+    protected abstract bool FSMUpdateConditions();      // control update execution
 
-    protected abstract bool FSMFixedUpdateConditions();         // control fixedupdate execution
+    protected abstract bool FSMFixedUpdateConditions(); // control fixedupdate execution
 
-    public void AddNewMode(int modeID)                                  // called in derived class InitializeModes()
+    public void AddNewMode(int modeID, FiniteStateMachine newMode = null)   // called in derived class InitializeModes()
     {
-        _fsm.AddNewState(modeID, new FiniteStateMachine());             
+        _fsm.AddNewState(modeID, newMode ?? new FiniteStateMachine());
+        // newMode != null ? newMode : new FiniteStateMachine()
     }
 
-    public void AddNewState(int modeID, int stateID, State newState)    // called in derived class InitializeStates()
+    public void AddNewState(int destModeID, int stateID, State newState)    // called in derived class InitializeStates()
     {
         // get mode and add new state to it
-        _fsm.GetState(modeID).AddNewState(stateID, newState);
+        _fsm.GetState(destModeID).AddNewState(stateID, newState);
     }
 
     //protected void AddNewTransition(int fromStateID, int toStateID, Func<bool> condition)

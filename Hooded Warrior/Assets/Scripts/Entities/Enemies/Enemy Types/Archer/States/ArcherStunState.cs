@@ -3,8 +3,8 @@ public class ArcherStunState : EnemyStunState
 {
     private Archer _archer;
 
-    public ArcherStunState(Archer archer, string animBoolName, Data_Stun stateData) 
-        : base(archer, animBoolName, stateData)
+    public ArcherStunState(Archer archer, string animBoolName) 
+        : base(archer, animBoolName)
     {
         _archer = archer;
     }

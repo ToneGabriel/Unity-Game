@@ -4,14 +4,12 @@ public abstract class EnemyMeleeAttackState : EnemyState, ICooldown
 {
     public bool IsOnCooldown { get; private set; }
 
-    protected Data_MeleeAttack _stateData;
     protected AttackDetails _attackDetails;
     protected bool _isPlayerInMinAgroRange;
 
-    public EnemyMeleeAttackState(Enemy enemy, string animBoolName, Data_MeleeAttack stateData) 
+    public EnemyMeleeAttackState(Enemy enemy, string animBoolName) 
         : base(enemy, animBoolName)
     {
-        _stateData = stateData;
     }
 
     public override void Enter()
@@ -21,7 +19,7 @@ public abstract class EnemyMeleeAttackState : EnemyState, ICooldown
         _isStateAnimationFinished = false;
         _enemy.SetVelocityZero();
 
-        _attackDetails.DamageAmount = _stateData.AttackDamage;
+        //_attackDetails.DamageAmount = _stateData.AttackDamage;
         _attackDetails.Position = _enemy.transform.position;
     }
 
@@ -49,8 +47,8 @@ public abstract class EnemyMeleeAttackState : EnemyState, ICooldown
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.AttackCooldown)
-            ResetCooldown();
+        //if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.AttackCooldown)
+        //    ResetCooldown();
     }
 
     public void ResetCooldown()

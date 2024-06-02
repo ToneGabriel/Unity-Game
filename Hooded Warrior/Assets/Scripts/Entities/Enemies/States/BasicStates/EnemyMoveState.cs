@@ -1,22 +1,18 @@
 ﻿
 public class EnemyMoveState : EnemyState
 {
-    protected EnemyStateData _stateData;
     protected bool _isDetectingWall;
     protected bool _isDetectingLedge;
     protected bool _isPlayerInMinAgroRange;
 
-    public EnemyMoveState(Enemy enemy, string animBoolName, EnemyStateData stateData)
-        : base(enemy, animBoolName)
-    {
-        _stateData = stateData;
-    }
+    public EnemyMoveState(Enemy enemy, string animBoolName)
+        : base(enemy, animBoolName) {}
 
     public override void Enter()
     {
         base.Enter();
 
-        _enemy.SetVelocity(_stateData.MovementSpeed);                             // Set velocity
+        _enemy.SetVelocity(_enemy.NonAggroStateData.MovementSpeed);                 // Set velocity
     }
 
     protected override void DoChecks()                                              // Check Ranges

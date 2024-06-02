@@ -99,16 +99,11 @@ public sealed class LightOrb : FSMMonoBehaviour
     #endregion Setters
 
     #region Other
-    protected override void FSMInitializeStates()
+    protected override void FSMInitializeModes()
     {
-        AddNewState((int)LightOrbStateID.Born, new LightOrbBornState(this));
-        AddNewState((int)LightOrbStateID.Live, new LightOrbLiveState(this));
-        AddNewState((int)LightOrbStateID.Die,  new LightOrbDieState(this));
-    }
-
-    protected override void FSMInitializeTransitions()
-    {
-        throw new System.NotImplementedException();
+        //AddNewState((int)LightOrbStateID.Born, new LightOrbBornState(this));
+        //AddNewState((int)LightOrbStateID.Live, new LightOrbLiveState(this));
+        //AddNewState((int)LightOrbStateID.Die,  new LightOrbDieState(this));
     }
 
     protected override bool FSMUpdateConditions()

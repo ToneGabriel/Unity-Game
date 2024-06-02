@@ -5,17 +5,15 @@ public class ArcherDodgeState : EnemyState
     public bool IsOnCooldown { get; private set; }
 
     private Archer _archer;
-    private ArcherStateData _stateData;
     private bool _isPlayerInMeleeRange;
     private bool _isPlayerInMaxAgroRange;
     private bool _isGrounded;
     private bool _isDodgeOver;
 
-    public ArcherDodgeState(Archer archer, string animBoolName, ArcherStateData stateData)
+    public ArcherDodgeState(Archer archer, string animBoolName)
         : base(archer, animBoolName)
     {
-        _archer     = archer;
-        _stateData  = stateData;
+        _archer = archer;
     }
 
     public override void Enter()
@@ -23,8 +21,8 @@ public class ArcherDodgeState : EnemyState
         base.Enter();
 
         _isDodgeOver = false;
-        _archer.SetVelocity(_stateData.DodgeSpeed,
-                            _stateData.DodgeAngle,
+        _archer.SetVelocity(_archer.AggroStateData.DodgeSpeed,
+                            _archer.AggroStateData.DodgeAngle,
                             -_archer.FacingDirection);
     }
 
@@ -40,7 +38,7 @@ public class ArcherDodgeState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _stateStartTime + _stateData.DodgeTime && _isGrounded)
+        if (Time.time >= _stateStartTime + _archer.AggroStateData.DodgeTime && _isGrounded)
             _isDodgeOver = true;
     }
 
@@ -55,7 +53,7 @@ public class ArcherDodgeState : EnemyState
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.DodgeCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroStateData.DodgeCooldown)
             ResetCooldown();
     }
 

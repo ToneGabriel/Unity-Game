@@ -262,27 +262,24 @@ public sealed class Player : Entity
     protected override void FSMInitializeModes()
     {
         AddNewMode(0);  // only 1 mode
-    }
 
-    protected override void FSMInitializeStates()
-    {
-        AddNewState(0, (int)PlayerStateID.Idle,            new PlayerIdleState(this, PlayerControllerParameters.Idle_b));
-        AddNewState(0, (int)PlayerStateID.Move,            new PlayerMoveState(this, PlayerControllerParameters.Move_b));
-        AddNewState(0, (int)PlayerStateID.Jump,            new PlayerJumpState(this, PlayerControllerParameters.InAir_b));
-        AddNewState(0, (int)PlayerStateID.InAir,           new PlayerInAirState(this, PlayerControllerParameters.InAir_b));
-        AddNewState(0, (int)PlayerStateID.Land,            new PlayerLandState(this, PlayerControllerParameters.Land_b));
-        AddNewState(0, (int)PlayerStateID.WallSlide,       new PlayerWallSlideState(this, PlayerControllerParameters.WallSlide_b));
-        AddNewState(0, (int)PlayerStateID.WallGrab,        new PlayerWallGrabState(this, PlayerControllerParameters.WallGrab_b));
-        AddNewState(0, (int)PlayerStateID.WallClimb,       new PlayerWallClimbState(this, PlayerControllerParameters.WallClimb_b));
-        AddNewState(0, (int)PlayerStateID.WallJump,        new PlayerWallJumpState(this, PlayerControllerParameters.InAir_b));
-        AddNewState(0, (int)PlayerStateID.LedgeClimb,      new PlayerLedgeClimbState(this, PlayerControllerParameters.LedgeClimbState_b));
-        AddNewState(0, (int)PlayerStateID.Dash,            new PlayerDashState(this, PlayerControllerParameters.InAir_b));
-        AddNewState(0, (int)PlayerStateID.CrouchIdle,      new PlayerCrouchIdleState(this, PlayerControllerParameters.CrouchIdle_b));
-        AddNewState(0, (int)PlayerStateID.CrouchMove,      new PlayerCrouchMoveState(this, PlayerControllerParameters.CrouchMove_b));
-        AddNewState(0, (int)PlayerStateID.Roll,            new PlayerRollState(this, PlayerControllerParameters.Roll_b));
-        AddNewState(0, (int)PlayerStateID.PrimaryAttack,   new PlayerAttackState(this, PlayerControllerParameters.Combat_b));
-        AddNewState(0, (int)PlayerStateID.SecondaryDefend, new PlayerDefendState(this, PlayerControllerParameters.Combat_b));
-        AddNewState(0, (int)PlayerStateID.SpellCast,       new PlayerSpellState(this, PlayerControllerParameters.Combat_b));
+        //AddNewState(0, (int)PlayerStateID.Idle,            new PlayerIdleState(this, PlayerControllerParameters.Idle_b));
+        //AddNewState(0, (int)PlayerStateID.Move,            new PlayerMoveState(this, PlayerControllerParameters.Move_b));
+        //AddNewState(0, (int)PlayerStateID.Jump,            new PlayerJumpState(this, PlayerControllerParameters.InAir_b));
+        //AddNewState(0, (int)PlayerStateID.InAir,           new PlayerInAirState(this, PlayerControllerParameters.InAir_b));
+        //AddNewState(0, (int)PlayerStateID.Land,            new PlayerLandState(this, PlayerControllerParameters.Land_b));
+        //AddNewState(0, (int)PlayerStateID.WallSlide,       new PlayerWallSlideState(this, PlayerControllerParameters.WallSlide_b));
+        //AddNewState(0, (int)PlayerStateID.WallGrab,        new PlayerWallGrabState(this, PlayerControllerParameters.WallGrab_b));
+        //AddNewState(0, (int)PlayerStateID.WallClimb,       new PlayerWallClimbState(this, PlayerControllerParameters.WallClimb_b));
+        //AddNewState(0, (int)PlayerStateID.WallJump,        new PlayerWallJumpState(this, PlayerControllerParameters.InAir_b));
+        //AddNewState(0, (int)PlayerStateID.LedgeClimb,      new PlayerLedgeClimbState(this, PlayerControllerParameters.LedgeClimbState_b));
+        //AddNewState(0, (int)PlayerStateID.Dash,            new PlayerDashState(this, PlayerControllerParameters.InAir_b));
+        //AddNewState(0, (int)PlayerStateID.CrouchIdle,      new PlayerCrouchIdleState(this, PlayerControllerParameters.CrouchIdle_b));
+        //AddNewState(0, (int)PlayerStateID.CrouchMove,      new PlayerCrouchMoveState(this, PlayerControllerParameters.CrouchMove_b));
+        //AddNewState(0, (int)PlayerStateID.Roll,            new PlayerRollState(this, PlayerControllerParameters.Roll_b));
+        //AddNewState(0, (int)PlayerStateID.PrimaryAttack,   new PlayerAttackState(this, PlayerControllerParameters.Combat_b));
+        //AddNewState(0, (int)PlayerStateID.SecondaryDefend, new PlayerDefendState(this, PlayerControllerParameters.Combat_b));
+        //AddNewState(0, (int)PlayerStateID.SpellCast,       new PlayerSpellState(this, PlayerControllerParameters.Combat_b));
 
         //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
         //_secondaryDefendState.SetShield(_inventory.Shield);

@@ -5,14 +5,12 @@ public class ArcherRangedAttackState : EnemyState
     public bool IsOnCooldown { get; private set; }
 
     private Archer _archer;
-    private ArcherStateData _stateData;
     private bool _isPlayerInMinAgroRange;
 
-    public ArcherRangedAttackState(Archer archer, string animBoolName, ArcherStateData stateData)
+    public ArcherRangedAttackState(Archer archer, string animBoolName)
         : base(archer, animBoolName)
     {
-        _archer     = archer;
-        _stateData  = stateData;
+        _archer = archer;
     }
 
     public override void Enter()
@@ -40,7 +38,7 @@ public class ArcherRangedAttackState : EnemyState
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _stateData.RangedAttackCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroStateData.RangedAttackCooldown)
             ResetCooldown();
     }
 

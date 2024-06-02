@@ -3,8 +3,8 @@ public class BringerOfDeathRangedAttackState : EnemyRangedAttackState
 {
     private BringerOfDeath _bod;
 
-    public BringerOfDeathRangedAttackState(BringerOfDeath bod, string animBoolName, Data_RangedAttack stateData)
-        : base(bod, animBoolName, stateData)
+    public BringerOfDeathRangedAttackState(BringerOfDeath bod, string animBoolName)
+        : base(bod, animBoolName)
     {
         _bod = bod;
     }

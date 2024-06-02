@@ -2,17 +2,13 @@
 
 public class EnemyPlayerDetectedState : EnemyState
 {
-    protected EnemyStateData _stateData;
     protected bool _isPLayerInMinAgroRange;
     protected bool _isPLayerInMaxAgroRange;
     protected bool _isPlayerInMeleeRange;
     protected bool _canMove;
 
-    public EnemyPlayerDetectedState(Enemy enemy, string animBoolName, EnemyStateData stateData) 
-        : base(enemy, animBoolName)
-    {
-        _stateData = stateData;
-    }
+    public EnemyPlayerDetectedState(Enemy enemy, string animBoolName) 
+        : base(enemy, animBoolName) {}
 
     public override void Enter()
     {
@@ -26,8 +22,13 @@ public class EnemyPlayerDetectedState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _stateStartTime + _stateData.LookTime)                 // Counts time before taking action
+        if (Time.time >= _stateStartTime + _enemy.NonAggroStateData.LookTime)       // Counts time before taking action
             _canMove = true;
+
+        if (false)
+            _enemy.ChangeMode((int)EnemyModeID.Aggro);
+        else if (false)
+            _enemy.ChangeState((int)EnemyStateID.Move);
     }
 
     protected override void DoChecks()                                             // Check Ranges
