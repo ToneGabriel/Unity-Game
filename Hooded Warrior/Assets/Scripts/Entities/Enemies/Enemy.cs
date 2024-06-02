@@ -2,10 +2,10 @@
 
 public abstract class Enemy : Entity                // Base Enemy class
 {
-    [SerializeField] protected EnemyData        _enemyData;
-    [SerializeField] protected EnemyStateData   _enemyStateData;
+    [SerializeField] protected EnemyData            _enemyData;
+    [SerializeField] protected EnemyPatrolModeData  _enemyPatrolModeData;
 
-    public EnemyStateData NonAggroStateData { get { return _enemyStateData; } }
+    public EnemyPatrolModeData PatrolData { get { return _enemyPatrolModeData; } }
 
 
     #region Unity Functions

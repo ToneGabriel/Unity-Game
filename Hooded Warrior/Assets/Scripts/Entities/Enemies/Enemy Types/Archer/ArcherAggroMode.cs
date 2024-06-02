@@ -1,20 +1,43 @@
+using UnityEngine;
 
-public class ArcherAggroMode : FiniteStateMachine
+public sealed class ArcherAggroMode : FiniteStateMachine
 {
-    public ArcherAggroMode(Archer archer, string dodge, string meleeAttack, string rangedAttack)
-        : base()
+    [SerializeField] private Archer                 _target;
+    [SerializeField] private ArcherAggroModeData    _aggroData;
+
+    // TODO: change
+    public override string[] AnimatorParameterNames
     {
-        AddNewState((int)ArcherStateID.Dodge,           new ArcherDodgeState(archer, dodge));
-        AddNewState((int)ArcherStateID.MeleeAttack,     new ArcherMeleeAttackState(archer, meleeAttack));
-        AddNewState((int)ArcherStateID.RangedAttack,    new ArcherRangedAttackState(archer, rangedAttack));
-
-        //AddNewState((int)ArcherStateID.Idle,            new EnemyIdleState(this, "idle", _archerStateData));
-        //AddNewState((int)ArcherStateID.Move,            new EnemyMoveState(this, "walk", _archerStateData));
-        //AddNewState((int)ArcherStateID.PlayerDetected,  new EnemyPlayerDetectedState(this, "playerDetected", _archerStateData));
-        //AddNewState((int)ArcherStateID.LookForPlayer,   new EnemyLookForPlayerState(this, "lookForPlayer", _archerStateData));
-        //AddNewState((int)ArcherStateID.Stun,            new EnemyStunState(this, "stun", _archerStateData));
-        //AddNewState((int)ArcherStateID.Dead,            new EnemyDeadState(this, "dead", _archerStateData));
-
-        _defaultStateID = (int)ArcherStateID.LookForPlayer;
+        get
+        {
+            return new string[] {   "Idle_b" ,
+                                    "Move_b",
+                                    "PlayerDetected_b" };
+        }
     }
+
+    protected override void Awake()
+    {
+        string[] animParams = AnimatorParameterNames;
+
+        CreateStateArray((int)EnemyPatrolModeStateID.Count);
+
+        // TODO: add look for player
+
+        //AddNewState((int)ArcherAggroModeStateID.Dodge,          GetComponentInChildren<ArcherDodgeState>());
+        //AddNewState((int)ArcherAggroModeStateID.MeleeAttack,    GetComponentInChildren<ArcherMeleeAttackState>());
+        //AddNewState((int)ArcherAggroModeStateID.RangedAttack,   GetComponentInChildren<ArcherRangedAttackState>());
+
+        SetDefaultState((int)ArcherAggroModeStateID.LookForPlayer);
+    }
+}
+
+public enum ArcherAggroModeStateID
+{
+    LookForPlayer,
+    Dodge,
+    MeleeAttack,
+    RangedAttack,
+
+    Count
 }

@@ -38,7 +38,7 @@ public class ArcherRangedAttackState : EnemyState
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroStateData.RangedAttackCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroData.RangedAttackCooldown)
             ResetCooldown();
     }
 

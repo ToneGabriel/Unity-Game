@@ -49,7 +49,7 @@ public class EnemyIdleState : EnemyState
 
     private void SetRandomIdleTime()
     {
-        _idleTime = Random.Range(   _enemy.NonAggroStateData.MinIdleTime,
-                                    _enemy.NonAggroStateData.MaxIdleTime);
+        _idleTime = Random.Range(   _enemy.PatrolData.MinIdleTime,
+                                    _enemy.PatrolData.MaxIdleTime);
     }
 }

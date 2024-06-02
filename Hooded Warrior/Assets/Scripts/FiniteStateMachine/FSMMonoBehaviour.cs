@@ -11,7 +11,7 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
     #region Unity Functions
     protected virtual void Awake()
     {
-        _fsm = new FiniteStateMachine();
+        //_fsm = new FiniteStateMachine();
 
         FSMInitializeModes();
     }
@@ -24,7 +24,7 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
         //if (!_states.ContainsKey(0))
         //    throw new ArgumentException("No default state with current ID == 0 exists!");
 
-        _fsm.SetDefaultState();
+
 
         //_currentStateID = 0;
         //_states[_currentStateID].Enter();
@@ -41,8 +41,8 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
         if (!FSMUpdateConditions())
             return;
 
-        // state logic
-        _fsm.LogicUpdate();
+        //// state logic
+        //_fsm.LogicUpdate();
     }
 
     protected virtual void FixedUpdate()
@@ -51,8 +51,8 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
         if (!FSMFixedUpdateConditions())
             return;
 
-        // state logic
-        _fsm.PhysicsUpdate();
+        //// state logic
+        //_fsm.PhysicsUpdate();
     }
     #endregion Unity Functions
 
@@ -65,14 +65,14 @@ public abstract class FSMMonoBehaviour : MonoBehaviour
 
     public void AddNewMode(int modeID, FiniteStateMachine newMode = null)   // called in derived class InitializeModes()
     {
-        _fsm.AddNewState(modeID, newMode ?? new FiniteStateMachine());
+        //_fsm.AddNewState(modeID, newMode ?? new FiniteStateMachine());
         // newMode != null ? newMode : new FiniteStateMachine()
     }
 
     public void AddNewState(int destModeID, int stateID, State newState)    // called in derived class InitializeStates()
     {
         // get mode and add new state to it
-        _fsm.GetState(destModeID).AddNewState(stateID, newState);
+        //_fsm.GetState(destModeID).AddNewState(stateID, newState);
     }
 
     //protected void AddNewTransition(int fromStateID, int toStateID, Func<bool> condition)

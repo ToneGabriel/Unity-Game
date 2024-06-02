@@ -22,13 +22,13 @@ public class EnemyPlayerDetectedState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _stateStartTime + _enemy.NonAggroStateData.LookTime)       // Counts time before taking action
+        if (Time.time >= _stateStartTime + _enemy.PatrolData.LookTime)       // Counts time before taking action
             _canMove = true;
 
         if (false)
             _enemy.ChangeMode((int)EnemyModeID.Aggro);
         else if (false)
-            _enemy.ChangeState((int)EnemyStateID.Move);
+            _enemy.ChangeState((int)EnemyPatrolModeStateID.Move);
     }
 
     protected override void DoChecks()                                             // Check Ranges

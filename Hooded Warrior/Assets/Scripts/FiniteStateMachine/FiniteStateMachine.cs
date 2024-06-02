@@ -1,58 +1,98 @@
-using System.Collections.Generic;
 using System;
+using UnityEngine;
 
-// Composition
-// Controlled by FSMMonoBehaviour
-public class FiniteStateMachine : State
+
+public abstract class FiniteStateMachine : MonoBehaviour
 {
-    protected int                       _defaultStateID;
-    protected int                       _currentStateID;
-    protected Dictionary<int, State>    _states;
+    private int     _defaultStateID = -1;
+    private int     _currentStateID = -1;
+    private State[] _states         = null;
 
-    public FiniteStateMachine()
+    public abstract string[] AnimatorParameterNames { get; }
+
+    protected virtual void Awake() { }
+
+    protected virtual void Start()
     {
-        _defaultStateID = -1;
-        _currentStateID = -1;
-        _states         = new Dictionary<int, State>();
+        // Check integrity
+
+        foreach (var state in _states)
+            if (state == null)
+                throw new Exception();
+
+        if (_defaultStateID == -1)
+            throw new Exception();
     }
 
-    public override void AddNewState(int stateID, State newState)
+    protected virtual void OnEnable()
     {
-        if (_states.ContainsKey(stateID))
-            throw new ArgumentException("The state with current ID already exists!");
-
-        _states.Add(stateID, newState);
+        _currentStateID = _defaultStateID;
+        _states[_currentStateID].Enter();
     }
 
-    public override void ChangeState(int stateID)
+    protected virtual void OnDisable()
     {
-        if (!_states.ContainsKey(stateID))
-            throw new ArgumentException("No state with current ID exists!");
+        _states[_currentStateID].Exit();
+        _currentStateID = _defaultStateID;
+    }
+
+    protected virtual void Update()
+    {
+        _states[_currentStateID].LogicUpdate();
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        _states[_currentStateID].PhysicsUpdate();
+    }
+
+    protected void CreateStateArray(int size)
+    {
+        if (_states != null)
+            throw new Exception();
+
+        if (size <= 0)
+            throw new Exception();
+
+        _states = new State[size];
+    }
+
+    protected void AddNewState(int stateID, State state)
+    {
+        if (_states == null)
+            throw new Exception();
+
+        if (state == null)
+            throw new Exception();
+
+        if (0 > stateID || _states.Length <= stateID || _states[stateID] != null)
+            throw new Exception();
+
+        _states[stateID] = state;
+    }
+
+    protected void SetDefaultState(int stateID)
+    {
+        if (0 > stateID || _states.Length <= stateID || _states[stateID] == null)
+            throw new Exception();
+
+        _defaultStateID = stateID;
+    }
+
+    public void ChangeState(int stateID)
+    {
+        CheckStateID(stateID);
 
         _states[_currentStateID].Exit();
         _currentStateID = stateID;
         _states[_currentStateID].Enter();
     }
 
-    public void SetDefaultState(int stateID = 0)
-    {
-        if (!_states.ContainsKey(stateID))
-            throw new ArgumentException("No state with current ID exists!");
-
-        _defaultStateID = stateID;
-    }
-
     public bool IsStateActive(int stateID)
     {
+        CheckStateID(stateID);
+
         return _states[_currentStateID] == _states[stateID];
-    }
-
-    public State GetState(int stateID)
-    {
-        if (!_states.ContainsKey(stateID))
-            throw new ArgumentException("No state with current ID exists!");
-
-        return _states[stateID];
     }
 
     public State CurrentState()
@@ -60,25 +100,9 @@ public class FiniteStateMachine : State
         return _states[_currentStateID];
     }
 
-    public override void Enter()
+    private void CheckStateID(int stateID)
     {
-        _currentStateID = _defaultStateID;
-        _states[_currentStateID].Enter();
-    }
-
-    public override void Exit()
-    {
-        _states[_currentStateID].Exit();
-        _currentStateID = _defaultStateID;
-    }
-
-    public override void LogicUpdate()
-    {
-        _states[_currentStateID].LogicUpdate();
-    }
-
-    public override void PhysicsUpdate()
-    {
-        _states[_currentStateID].PhysicsUpdate();
+        if (0 > stateID || _states.Length <= stateID)
+            throw new ArgumentException("No state with ID exists!");
     }
 }

@@ -15,15 +15,15 @@ public class ArcherStunState : EnemyStunState
         
         if (_isStunTimeOver)
         {
-            if (_isPlayerInMeleeRange)
-                _archer.ChangeState((int)ArcherStateID.MeleeAttack);
-            else if (_isPlayerInMinAgroRange)
-                _archer.ChangeState((int)ArcherStateID.PlayerDetected);
-            else
-            {
-                //_archer.LookForPlayerState.SetTurnImmediately(true);
-                _archer.ChangeState((int)ArcherStateID.LookForPlayer);
-            }
+            //if (_isPlayerInMeleeRange)
+            //    _archer.ChangeState((int)ArcherAggroModeStateID.MeleeAttack);
+            //else if (_isPlayerInMinAgroRange)
+            //    _archer.ChangeState((int)ArcherAggroModeStateID.PlayerDetected);
+            //else
+            //{
+            //    //_archer.LookForPlayerState.SetTurnImmediately(true);
+            //    _archer.ChangeState((int)ArcherAggroModeStateID.LookForPlayer);
+            //}
         }
     }
 }

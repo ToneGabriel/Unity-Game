@@ -12,7 +12,7 @@ public class EnemyMoveState : EnemyState
     {
         base.Enter();
 
-        _enemy.SetVelocity(_enemy.NonAggroStateData.MovementSpeed);                 // Set velocity
+        _enemy.SetVelocity(_enemy.PatrolData.MovementSpeed);                 // Set velocity
     }
 
     protected override void DoChecks()                                              // Check Ranges

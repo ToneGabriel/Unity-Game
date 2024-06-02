@@ -2,7 +2,7 @@
 
 public class EnemyLookForPlayerState : EnemyState
 {
-    protected EnemyStateData _stateData;
+    protected EnemyPatrolModeData _stateData;
     protected bool _turnImmediately;
     protected bool _isPLayerInMinAgroRange;
     protected bool _isAllTurnsDone;
@@ -10,7 +10,7 @@ public class EnemyLookForPlayerState : EnemyState
     protected float _lastTurnTime;
     protected int _amountOfTurnsDone;
 
-    public EnemyLookForPlayerState(Enemy enemy, string animBoolName, EnemyStateData stateData) 
+    public EnemyLookForPlayerState(Enemy enemy, string animBoolName, EnemyPatrolModeData stateData) 
         : base(enemy, animBoolName)
     {
         _stateData = stateData;

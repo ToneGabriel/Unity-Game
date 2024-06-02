@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "newArcherStateData", menuName = "Data/Enemy Data/State Data/Archer State Data")]
-public class ArcherStateData : ScriptableObject
+[CreateAssetMenu(fileName = "newArcherAggroModeData", menuName = "Data/Enemy Data/State Data/Archer State Data")]
+public class ArcherAggroModeData : ScriptableObject
 {
     // Editor ==========================================
 

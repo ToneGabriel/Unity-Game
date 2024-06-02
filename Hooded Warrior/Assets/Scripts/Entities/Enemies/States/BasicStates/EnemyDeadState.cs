@@ -13,8 +13,8 @@ public class EnemyDeadState : EnemyState
     {
         base.Enter();
 
-        GameObject.Instantiate(_enemy.NonAggroStateData.DeathBloodParticle, _enemy.transform.position, _enemy.NonAggroStateData.DeathBloodParticle.transform.rotation);
-        GameObject.Instantiate(_enemy.NonAggroStateData.DeathChunkParticle, _enemy.transform.position, _enemy.NonAggroStateData.DeathChunkParticle.transform.rotation);
+        GameObject.Instantiate(_enemy.PatrolData.DeathBloodParticle, _enemy.transform.position, _enemy.PatrolData.DeathBloodParticle.transform.rotation);
+        GameObject.Instantiate(_enemy.PatrolData.DeathChunkParticle, _enemy.transform.position, _enemy.PatrolData.DeathChunkParticle.transform.rotation);
     }
 
     public virtual void FinishDeathAnimation()              // Called on death animation frame

@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "newEnemyStateData", menuName = "Data/Enemy Data/State Data/Enemy State Data")]
-public class EnemyStateData : ScriptableObject
+[CreateAssetMenu(fileName = "newEnemyPatrolModeData", menuName = "Data/Enemy Data/State Data/Enemy State Data")]
+public class EnemyPatrolModeData : ScriptableObject
 {
     // Editor ==========================================
 

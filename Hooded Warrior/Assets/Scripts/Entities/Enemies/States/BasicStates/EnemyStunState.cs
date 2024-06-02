@@ -19,7 +19,7 @@ public class EnemyStunState : EnemyState
 
         _isStunTimeOver = false;
         _isMovementStopped = false;
-        _enemy.DamageHop(_enemy.NonAggroStateData.StunKnockBackDirection, _enemy.NonAggroStateData.StunKnockBackSpeed);     // knock back  
+        _enemy.DamageHop(_enemy.PatrolData.StunKnockBackDirection, _enemy.PatrolData.StunKnockBackSpeed);     // knock back  
     }
 
     public override void Exit()
@@ -34,10 +34,10 @@ public class EnemyStunState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _stateStartTime + _enemy.NonAggroStateData.StunTime)                                                        // Counts stun time
+        if (Time.time >= _stateStartTime + _enemy.PatrolData.StunTime)                                                        // Counts stun time
             _isStunTimeOver = true;
 
-        if (_isGrounded && Time.time >= _stateStartTime + _enemy.NonAggroStateData.StunKnockBackTime && !_isMovementStopped)         // sets velocity to 0 while stunned
+        if (_isGrounded && Time.time >= _stateStartTime + _enemy.PatrolData.StunKnockBackTime && !_isMovementStopped)         // sets velocity to 0 while stunned
         {
             _isMovementStopped      = true;
             _enemy.RigidbodyType    = RigidbodyType2D.Static;

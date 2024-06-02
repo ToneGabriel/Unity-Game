@@ -3,9 +3,9 @@
 public sealed class Archer : Enemy
 {
     #region States and Data
-    [SerializeField] private ArcherStateData _archerStateData;
+    [SerializeField] private ArcherAggroModeData _archerAggroModeData;
 
-    public ArcherStateData AggroStateData { get { return _archerStateData; } }
+    public ArcherAggroModeData AggroData { get { return _archerAggroModeData; } }
     #endregion
 
     #region Components
@@ -64,34 +64,26 @@ public sealed class Archer : Enemy
     {
         base.Damage(attackdetails);
 
-        if (_entityActionComponents.IsDead)
-            ChangeState((int)ArcherStateID.Dead);
-        else if (_entityActionComponents.IsStuned && !IsStateActive((int)ArcherStateID.Stun))
-            ChangeState((int)ArcherStateID.Stun);
-        else if (!_entityActionComponents.IsStuned && _entityActionComponents.Rigidbody.velocity.x != 0)
-            ChangeState((int)ArcherStateID.LookForPlayer);
-        else if (!_entityActionComponents.IsStuned && CheckPlayerInMinAgroRange())
-            ChangeState((int)ArcherStateID.RangedAttack);
+        //if (_entityActionComponents.IsDead)
+        //    ChangeState((int)ArcherAggroModeStateID.Dead);
+        //else if (_entityActionComponents.IsStuned && !IsStateActive((int)ArcherAggroModeStateID.Stun))
+        //    ChangeState((int)ArcherAggroModeStateID.Stun);
+        //else if (!_entityActionComponents.IsStuned && _entityActionComponents.Rigidbody.velocity.x != 0)
+        //    ChangeState((int)ArcherAggroModeStateID.LookForPlayer);
+        //else if (!_entityActionComponents.IsStuned && CheckPlayerInMinAgroRange())
+        //    ChangeState((int)ArcherAggroModeStateID.RangedAttack);
     }
 
     public override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
 
-        Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _archerStateData.MeleeAttackRadius);
+        Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _archerAggroModeData.MeleeAttackRadius);
     }
 
     protected override void FSMInitializeModes()
     {
-        AddNewMode((int)EnemyModeID.NonAggro, new EnemyNonAggroMode(this,
-                                                                    "idle",
-                                                                    "move",
-                                                                    "playerDetected"));
 
-        AddNewMode((int)EnemyModeID.Aggro, new ArcherAggroMode( this,
-                                                                "dodge",
-                                                                "meleeAttack",
-                                                                "rangedAttack"));
     }
 
     //protected override void FSMInitializeTransitions()

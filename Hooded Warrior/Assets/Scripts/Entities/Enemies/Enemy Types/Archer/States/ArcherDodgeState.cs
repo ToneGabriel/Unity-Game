@@ -21,8 +21,8 @@ public class ArcherDodgeState : EnemyState
         base.Enter();
 
         _isDodgeOver = false;
-        _archer.SetVelocity(_archer.AggroStateData.DodgeSpeed,
-                            _archer.AggroStateData.DodgeAngle,
+        _archer.SetVelocity(_archer.AggroData.DodgeSpeed,
+                            _archer.AggroData.DodgeAngle,
                             -_archer.FacingDirection);
     }
 
@@ -38,7 +38,7 @@ public class ArcherDodgeState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _stateStartTime + _archer.AggroStateData.DodgeTime && _isGrounded)
+        if (Time.time >= _stateStartTime + _archer.AggroData.DodgeTime && _isGrounded)
             _isDodgeOver = true;
     }
 
@@ -53,7 +53,7 @@ public class ArcherDodgeState : EnemyState
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroStateData.DodgeCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroData.DodgeCooldown)
             ResetCooldown();
     }
 
