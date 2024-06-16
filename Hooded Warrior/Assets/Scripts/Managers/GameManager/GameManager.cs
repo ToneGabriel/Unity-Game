@@ -51,12 +51,14 @@ public sealed class GameManager : FSMMonoBehaviour
         Player.SetNewGameData();
     }
 
-    protected override void FSMInitializeStates()
+    protected override void FSMInitializeModes()
     {
-        AddNewState((int)GameManagerStateID.StartMenu,      new StartMenuState(Instance, _startMenuData));
-        AddNewState((int)GameManagerStateID.LoadingScreen,  new LoadingScreenState(Instance, _loadingScreenData));
-        AddNewState((int)GameManagerStateID.Gameplay,       new GameplayState(Instance, _gameplayData));
-        AddNewState((int)GameManagerStateID.ResetGame,      new ResetGameState(Instance, _resetGameData));
+        AddNewMode(0);
+
+        AddNewState(0, (int)GameManagerStateID.StartMenu,      new StartMenuState(Instance, _startMenuData));
+        AddNewState(0, (int)GameManagerStateID.LoadingScreen,  new LoadingScreenState(Instance, _loadingScreenData));
+        AddNewState(0, (int)GameManagerStateID.Gameplay,       new GameplayState(Instance, _gameplayData));
+        AddNewState(0, (int)GameManagerStateID.ResetGame,      new ResetGameState(Instance, _resetGameData));
     }
 
     protected override bool FSMUpdateConditions()

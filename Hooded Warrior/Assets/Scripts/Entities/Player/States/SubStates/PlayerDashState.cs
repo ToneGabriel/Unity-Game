@@ -34,7 +34,7 @@ public sealed class PlayerDashState : PlayerAbilityState
         base.Exit();
 
         if (_player.VelocityY > 0f)
-            _player.SetVelocityY(_player.VelocityY * _player.Data.DashEndYMultiplier);
+            _player.SetVelocityY(_player.VelocityY * _player.StateData.DashEndYMultiplier);
     }
 
     public override void LogicUpdate()
@@ -54,12 +54,12 @@ public sealed class PlayerDashState : PlayerAbilityState
                 float angle = Vector2.SignedAngle(Vector2.right, _dashDirection);
                 _player.SetDashArrowRotation(Quaternion.Euler(0f, 0f, angle - 45));
 
-                if (_dashInputStop || Time.unscaledTime >= _stateStartTime + _player.Data.MaxHoldTime)
+                if (_dashInputStop || Time.unscaledTime >= _stateStartTime + _player.StateData.MaxHoldTime)
                 {
                     Helpers.ChangeTimeScale(TimeScale.Normal);
                     _isHolding      = false;
                     _stateStartTime = Time.time;
-                    _player.Drag    = _player.Data.DashDrag;
+                    _player.Drag    = _player.StateData.DashDrag;
                     _player.FlipIfShould(Mathf.RoundToInt(_dashDirection.x));
                     _player.SetDashArrowActive(false);
                     //_player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
@@ -68,12 +68,12 @@ public sealed class PlayerDashState : PlayerAbilityState
             }
             else
             {
-                _player.SetVelocity(_player.Data.DashVelocity, _dashDirection);
+                _player.SetVelocity(_player.StateData.DashVelocity, _dashDirection);
 
-                if (Vector2.Distance(_player.transform.position, _lastAIPosition) >= _player.Data.DistanceBetweenAfterimages)
+                if (Vector2.Distance(_player.transform.position, _lastAIPosition) >= _player.StateData.DistanceBetweenAfterimages)
                     PlaceAfterImage();
 
-                if (Time.time >= _stateStartTime + _player.Data.DashTime)
+                if (Time.time >= _stateStartTime + _player.StateData.DashTime)
                 {
                     _player.Drag    = 0f;
                     _isAbilityDone  = true;
@@ -90,7 +90,7 @@ public sealed class PlayerDashState : PlayerAbilityState
 
     public bool CheckIfCanDash()
     {
-        return CanDash && Time.time >= _lastDashTime + _player.Data.DashCooldown;
+        return CanDash && Time.time >= _lastDashTime + _player.StateData.DashCooldown;
     }
 
     public void ResetCanDash()

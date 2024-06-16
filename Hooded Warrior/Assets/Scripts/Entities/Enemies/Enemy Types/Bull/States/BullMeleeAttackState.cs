@@ -4,8 +4,8 @@ public class BullMeleeAttackState : EnemyMeleeAttackState
 {
     private Bull _bull;
 
-    public BullMeleeAttackState(Bull bull, string animBoolName, Data_MeleeAttack stateData) 
-        : base(bull, animBoolName, stateData)
+    public BullMeleeAttackState(Bull bull, string animBoolName) 
+        : base(bull, animBoolName)
     {
         _bull = bull;
     }
@@ -27,8 +27,8 @@ public class BullMeleeAttackState : EnemyMeleeAttackState
     {
         base.TriggerMeleeAttack();
 
-        Collider2D detectedObject = Physics2D.OverlapCircle(_bull.MeleeAttackPosition.transform.position, _stateData.AttackRadius, _stateData.WhatIsPlayer);
-        if(detectedObject)
-            detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
+        //Collider2D detectedObject = Physics2D.OverlapCircle(_bull.MeleeAttackPosition.transform.position, _stateData.AttackRadius, _stateData.WhatIsPlayer);
+        //if(detectedObject)
+        //    detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
     }
 }

@@ -38,17 +38,32 @@ public class AnimatorParameterGenerator : Editor
         return null;
     }
 
+    //private static void UpdateParameters(AnimatorController animatorController)
+    //{
+    //    // Generate the new content for AnimatorParameters class
+    //    string newClassName = $"{animatorController.name}Parameters";
+    //    string newContent   = "public static class " + newClassName + "\n{\n";
+
+    //    foreach (var parameter in animatorController.parameters)
+    //        newContent += $"    public static readonly string {parameter.name} = \"{parameter.name}\";\n";
+
+    //    newContent += "}\n";
+
+    //    Helpers.GenerateFile(newClassName, newContent);
+    //}
+
     private static void UpdateParameters(AnimatorController animatorController)
     {
         // Generate the new content for AnimatorParameters class
-        string newClassName = $"{animatorController.name}Parameters";
-        string newContent   = "public static class " + newClassName + "\n{\n";
+        string newEnumName = $"{animatorController.name}ParametersEnum";
+        string newContent = "public enum " + newEnumName + "\n{\n";
+        var animatorParameters = animatorController.parameters;
 
-        foreach (var parameter in animatorController.parameters)
-            newContent += $"    public static readonly string {parameter.name} = \"{parameter.name}\";\n";
+        foreach (var parameter in animatorParameters)
+            newContent += $"    {parameter.name} = {Animator.StringToHash(parameter.name)},\n";
 
         newContent += "}\n";
 
-        Helpers.GenerateFile(newClassName, newContent);
+        Helpers.GenerateFile(newEnumName, newContent);
     }
 }

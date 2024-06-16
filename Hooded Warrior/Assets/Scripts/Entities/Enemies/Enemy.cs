@@ -2,7 +2,7 @@
 
 public abstract class Enemy : Entity                // Base Enemy class
 {
-    [SerializeField] protected EnemyData _enemyData;    // Reference to base enemy data
+    [SerializeField] protected EnemyData _enemyData;
 
     #region Unity Functions
     protected override void Awake()

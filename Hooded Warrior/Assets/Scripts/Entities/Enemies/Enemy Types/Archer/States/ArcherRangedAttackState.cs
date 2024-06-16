@@ -1,31 +1,56 @@
-﻿
-public class ArcherRangedAttackState : EnemyRangedAttackState
+﻿using UnityEngine;
+
+public class ArcherRangedAttackState : ArcherAggroState
 {
-    private Archer _archer;
+    public bool IsOnCooldown { get; private set; }
 
-    public ArcherRangedAttackState(Archer archer, string animBoolName, Data_RangedAttack stateData) 
-        : base(archer, animBoolName, stateData)
+    private bool _isPlayerInMinAgroRange;
+
+    public ArcherRangedAttackState(Archer archer, ArcherAggroModeData data, string animBoolName)
+        : base(archer, data, animBoolName) { }
+
+    public override void Enter()
     {
-        _archer = archer;
+        base.Enter();
+
+        _isStateAnimationFinished = false;
+        _archer.SetVelocityZero();
     }
 
-    public override void LogicUpdate()
+    public override void Exit()
     {
-        base.LogicUpdate();
+        base.Exit();
 
-        if(_isStateAnimationFinished)
-        {
-            if (_isPlayerInMinAgroRange)
-                _archer.ChangeState((int)ArcherStateID.PlayerDetected);
-            else
-                _archer.ChangeState((int)ArcherStateID.LookForPlayer);
-        }
+        IsOnCooldown = true;
+        //CooldownManager.Instance.Subscribe(this);
     }
 
-    public override void TriggerRangedAttack()
+    protected override void DoChecks()
     {
-        base.TriggerRangedAttack();
+        base.DoChecks();
 
+        _isPlayerInMinAgroRange = _archer.CheckPlayerInMinAgroRange();
+    }
+
+    public void CheckCooldown()
+    {
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archerAggroModeData.RangedAttackCooldown)
+            ResetCooldown();
+    }
+
+    public void ResetCooldown()
+    {
+        IsOnCooldown = false;
+        //CooldownManager.Instance.UnSubscribe(this);
+    }
+
+    public void FinishRangedAttack()
+    {
+        _isStateAnimationFinished = true;
+    }
+
+    public void TriggerRangedAttack()
+    {
         ObjectPoolManager.Instance.GetFromPool<Arrow>(  _archer.RangedAttackPosition.transform.position,
                                                         _archer.RangedAttackPosition.transform.rotation);
     }

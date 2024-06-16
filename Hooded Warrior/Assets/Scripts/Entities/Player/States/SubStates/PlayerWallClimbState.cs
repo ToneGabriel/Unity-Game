@@ -9,7 +9,7 @@ public sealed class PlayerWallClimbState : PlayerTouchingWallState
     {
         base.LogicUpdate();
 
-        _player.SetVelocityY(_player.Data.WallClimbVelocity);
+        _player.SetVelocityY(_player.StateData.WallClimbVelocity);
 
         if (_inputY != 1)
             _player.ChangeState((int)PlayerStateID.WallGrab);

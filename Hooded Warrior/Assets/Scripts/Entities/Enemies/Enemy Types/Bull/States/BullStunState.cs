@@ -3,8 +3,8 @@ public class BullStunState : EnemyStunState
 {
     private Bull _bull;
 
-    public BullStunState(Bull bull, string animBoolName, Data_Stun stateData)
-        : base(bull, animBoolName, stateData)
+    public BullStunState(Bull bull, string animBoolName)
+        : base(bull, animBoolName)
     {
         _bull = bull;
     }

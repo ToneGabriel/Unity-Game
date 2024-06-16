@@ -4,10 +4,6 @@ using System.Linq;
 using UnityEngine;
 
 
-// Use this attribute on components that are pooled
-[AttributeUsage(AttributeTargets.Class)]
-public class PoolObjectAttribute : Attribute { }
-
 
 // Manages groups of small objects and cycles them as the game asks and dispozes them
 // RequestPool should be used when the object that uses GetFromPool is spawned

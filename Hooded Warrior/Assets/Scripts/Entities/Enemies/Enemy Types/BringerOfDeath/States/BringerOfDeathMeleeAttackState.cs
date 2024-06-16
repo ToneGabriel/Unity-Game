@@ -4,8 +4,8 @@ public class BringerOfDeathMeleeAttackState : EnemyMeleeAttackState
 {
     private BringerOfDeath _bod;
 
-    public BringerOfDeathMeleeAttackState(BringerOfDeath bod, string animBoolName, Data_MeleeAttack stateData)
-        : base(bod, animBoolName, stateData)
+    public BringerOfDeathMeleeAttackState(BringerOfDeath bod, string animBoolName)
+        : base(bod, animBoolName)
     {
         _bod = bod;
     }
@@ -27,8 +27,8 @@ public class BringerOfDeathMeleeAttackState : EnemyMeleeAttackState
     {
         base.TriggerMeleeAttack();
 
-        Collider2D detectedObject = Physics2D.OverlapCircle(_bod.MeleeAttackPosition.transform.position, _stateData.AttackRadius, _stateData.WhatIsPlayer);
-        if (detectedObject)
-            detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
+        //Collider2D detectedObject = Physics2D.OverlapCircle(_bod.MeleeAttackPosition.transform.position, _stateData.AttackRadius, _stateData.WhatIsPlayer);
+        //if (detectedObject)
+        //    detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
     }
 }

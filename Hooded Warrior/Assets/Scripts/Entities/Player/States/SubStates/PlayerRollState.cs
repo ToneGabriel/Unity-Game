@@ -8,15 +8,15 @@ public sealed class PlayerRollState : PlayerAbilityState
     {
         base.Enter();
 
-        _player.SetColiderHeight(_player.Data.CrouchColliderHeight);
-        _player.SetLightOrbPosition(_player.Data.CrouchLightOrbPosition);
+        _player.SetColiderHeight(_player.StateData.CrouchColliderHeight);
+        _player.SetLightOrbPosition(_player.StateData.CrouchLightOrbPosition);
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.Data.RollVelocity * _player.FacingDirection);
+        _player.SetVelocityX(_player.StateData.RollVelocity * _player.FacingDirection);
     }
 
     public override void Exit()
@@ -24,8 +24,8 @@ public sealed class PlayerRollState : PlayerAbilityState
         base.Exit();
 
         _player.SetVelocityZero();
-        _player.SetColiderHeight(_player.Data.StandColliderHeight);
-        _player.SetLightOrbPosition(_player.Data.StandLightOrbPosition);
+        _player.SetColiderHeight(_player.StateData.StandColliderHeight);
+        _player.SetLightOrbPosition(_player.StateData.StandLightOrbPosition);
     }
 
     public override void AnimationFinishTrigger()
