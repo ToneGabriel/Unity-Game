@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyStunState : EnemyState
+public class EnemyStunState : EnemyPatrolState
 {
     protected bool _isStunTimeOver;
     protected bool _isGrounded;

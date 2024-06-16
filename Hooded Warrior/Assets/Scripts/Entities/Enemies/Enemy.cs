@@ -2,11 +2,7 @@
 
 public abstract class Enemy : Entity                // Base Enemy class
 {
-    [SerializeField] protected EnemyData            _enemyData;
-    [SerializeField] protected EnemyPatrolModeData  _enemyPatrolModeData;
-
-    public EnemyPatrolModeData PatrolData { get { return _enemyPatrolModeData; } }
-
+    [SerializeField] protected EnemyData _enemyData;
 
     #region Unity Functions
     protected override void Awake()

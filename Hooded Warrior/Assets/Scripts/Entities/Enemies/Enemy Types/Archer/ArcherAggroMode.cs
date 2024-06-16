@@ -5,39 +5,46 @@ public sealed class ArcherAggroMode : FiniteStateMachine
     [SerializeField] private Archer                 _target;
     [SerializeField] private ArcherAggroModeData    _aggroData;
 
-    // TODO: change
-    public override string[] AnimatorParameterNames
-    {
-        get
-        {
-            return new string[] {   "Idle_b" ,
-                                    "Move_b",
-                                    "PlayerDetected_b" };
-        }
-    }
+    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     protected override void Awake()
     {
-        string[] animParams = AnimatorParameterNames;
-
-        CreateStateArray((int)EnemyPatrolModeStateID.Count);
+        CreateStateArray((int)StateID.Count);
 
         // TODO: add look for player
 
-        //AddNewState((int)ArcherAggroModeStateID.Dodge,          GetComponentInChildren<ArcherDodgeState>());
-        //AddNewState((int)ArcherAggroModeStateID.MeleeAttack,    GetComponentInChildren<ArcherMeleeAttackState>());
-        //AddNewState((int)ArcherAggroModeStateID.RangedAttack,   GetComponentInChildren<ArcherRangedAttackState>());
+        AddNewState((int)StateID.Dodge,          new ArcherDodgeState(_target, _aggroData, AnimatorParameters.Dodge_b));
+        AddNewState((int)StateID.MeleeAttack,    new ArcherMeleeAttackState(_target, _aggroData, AnimatorParameters.MeleeAttack_b));
+        AddNewState((int)StateID.RangedAttack,   new ArcherRangedAttackState(_target, _aggroData, AnimatorParameters.RangedAttack_b));
 
-        SetDefaultState((int)ArcherAggroModeStateID.LookForPlayer);
+        SetDefaultState((int)StateID.LookForPlayer);
     }
-}
 
-public enum ArcherAggroModeStateID
-{
-    LookForPlayer,
-    Dodge,
-    MeleeAttack,
-    RangedAttack,
+    public enum StateID
+    {
+        LookForPlayer,
+        Dodge,
+        MeleeAttack,
+        RangedAttack,
 
-    Count
+        Count
+    }
+
+    private static class AnimatorParameters
+    {
+        public static readonly string LookForPlayer_b   = "LookForPlayer_b";
+        public static readonly string Dodge_b           = "Dodge_b";
+        public static readonly string MeleeAttack_b     = "MeleeAttack_b";
+        public static readonly string RangedAttack_b    = "RangedAttack_b";
+
+        public static string[] GetAnimatorParameterNames()
+        {
+            return new string[] {
+                                    LookForPlayer_b,
+                                    Dodge_b,
+                                    MeleeAttack_b,
+                                    RangedAttack_b,
+                                };
+        }
+    }
 }

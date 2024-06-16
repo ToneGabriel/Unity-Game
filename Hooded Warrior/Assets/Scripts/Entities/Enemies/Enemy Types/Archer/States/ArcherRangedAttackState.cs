@@ -1,17 +1,13 @@
 ﻿using UnityEngine;
 
-public class ArcherRangedAttackState : EnemyState
+public class ArcherRangedAttackState : ArcherAggroState
 {
     public bool IsOnCooldown { get; private set; }
 
-    private Archer _archer;
     private bool _isPlayerInMinAgroRange;
 
-    public ArcherRangedAttackState(Archer archer, string animBoolName)
-        : base(archer, animBoolName)
-    {
-        _archer = archer;
-    }
+    public ArcherRangedAttackState(Archer archer, ArcherAggroModeData data, string animBoolName)
+        : base(archer, data, animBoolName) { }
 
     public override void Enter()
     {
@@ -38,7 +34,7 @@ public class ArcherRangedAttackState : EnemyState
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroData.RangedAttackCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archerAggroModeData.RangedAttackCooldown)
             ResetCooldown();
     }
 

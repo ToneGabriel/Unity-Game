@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class EnemyChargeState : EnemyState
+public abstract class EnemyChargeState : EnemyPatrolState
 {
     protected Data_Charge _stateData;
     protected bool _isPlayerInMinAgroRange;

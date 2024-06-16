@@ -1,18 +1,14 @@
 ﻿using UnityEngine;
 
-public class ArcherMeleeAttackState : EnemyState
+public class ArcherMeleeAttackState : ArcherAggroState
 {
     public bool IsOnCooldown { get; private set; }
 
-    private Archer _archer;
     private AttackDetails _attackDetails;
     private bool _isPlayerInMinAgroRange;
 
-    public ArcherMeleeAttackState(Archer archer, string animBoolName)
-        : base(archer, animBoolName)
-    {
-        _archer = archer;
-    }
+    public ArcherMeleeAttackState(Archer archer, ArcherAggroModeData data, string animBoolName)
+        : base(archer, data, animBoolName) { }
 
     public override void Enter()
     {
@@ -21,7 +17,7 @@ public class ArcherMeleeAttackState : EnemyState
         _isStateAnimationFinished = false;
         _archer.SetVelocityZero();
 
-        _attackDetails.DamageAmount = _archer.AggroData.MeleeAttackDamage;
+        _attackDetails.DamageAmount = _archerAggroModeData.MeleeAttackDamage;
         _attackDetails.Position = _archer.transform.position;
     }
 
@@ -47,7 +43,7 @@ public class ArcherMeleeAttackState : EnemyState
 
     public void CheckCooldown()
     {
-        if (IsOnCooldown && Time.time >= _stateStartTime + _archer.AggroData.MeleeAttackCooldown)
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archerAggroModeData.MeleeAttackCooldown)
             ResetCooldown();
     }
 
@@ -60,8 +56,8 @@ public class ArcherMeleeAttackState : EnemyState
     public void TriggerMeleeAttack()
     {
         Collider2D detectedObject = Physics2D.OverlapCircle(_archer.MeleeAttackPosition.transform.position,
-                                                            _archer.AggroData.MeleeAttackRadius,
-                                                            _archer.AggroData.WhatIsPlayer);
+                                                            _archerAggroModeData.MeleeAttackRadius,
+                                                            _archerAggroModeData.WhatIsPlayer);
         if (detectedObject)
             detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
     }

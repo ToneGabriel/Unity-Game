@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-public class EnemyPlayerDetectedState : EnemyState
+public class EnemyPlayerDetectedState : EnemyPatrolState
 {
     protected bool _isPLayerInMinAgroRange;
     protected bool _isPLayerInMaxAgroRange;
     protected bool _isPlayerInMeleeRange;
     protected bool _canMove;
 
-    public EnemyPlayerDetectedState(Enemy enemy, string animBoolName) 
-        : base(enemy, animBoolName) {}
+    public EnemyPlayerDetectedState(Enemy enemy, EnemyPatrolModeData data, string animBoolName) 
+        : base(enemy, data, animBoolName) {}
 
     public override void Enter()
     {
@@ -22,13 +22,13 @@ public class EnemyPlayerDetectedState : EnemyState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _stateStartTime + _enemy.PatrolData.LookTime)       // Counts time before taking action
+        if (Time.time >= _stateStartTime + _data.LookTime)       // Counts time before taking action
             _canMove = true;
 
         if (false)
             _enemy.ChangeMode((int)EnemyModeID.Aggro);
         else if (false)
-            _enemy.ChangeState((int)EnemyPatrolModeStateID.Move);
+            _enemy.ChangeState((int)EnemyPatrolMode.StateID.Move);
     }
 
     protected override void DoChecks()                                             // Check Ranges

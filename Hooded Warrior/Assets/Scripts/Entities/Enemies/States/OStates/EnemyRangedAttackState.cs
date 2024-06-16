@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class EnemyRangedAttackState : EnemyState, ICooldown
+public abstract class EnemyRangedAttackState : EnemyPatrolState, ICooldown
 {
     public bool IsOnCooldown { get; private set; }
     

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyLookForPlayerState : EnemyState
+public class EnemyLookForPlayerState : EnemyPatrolState
 {
     protected EnemyPatrolModeData _stateData;
     protected bool _turnImmediately;

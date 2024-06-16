@@ -2,12 +2,6 @@
 
 public sealed class Archer : Enemy
 {
-    #region States and Data
-    [SerializeField] private ArcherAggroModeData _archerAggroModeData;
-
-    public ArcherAggroModeData AggroData { get { return _archerAggroModeData; } }
-    #endregion
-
     #region Components
     public GameObject MeleeAttackPosition;
     public GameObject RangedAttackPosition;
@@ -78,7 +72,7 @@ public sealed class Archer : Enemy
     {
         base.OnDrawGizmos();
 
-        Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _archerAggroModeData.MeleeAttackRadius);
+        //Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _archerAggroModeData.MeleeAttackRadius);
     }
 
     protected override void FSMInitializeModes()

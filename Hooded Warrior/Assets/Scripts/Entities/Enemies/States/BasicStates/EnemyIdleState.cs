@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-public class EnemyIdleState : EnemyState
+public class EnemyIdleState : EnemyPatrolState
 {
     protected bool _flipAfterIdle;
     protected bool _isIdleTimeOver;
     protected bool _isPlayerInMinAgroRange;
     protected float _idleTime;
 
-    public EnemyIdleState(Enemy enemy, string animBoolName) 
-        : base(enemy, animBoolName) {}
+    public EnemyIdleState(Enemy enemy, EnemyPatrolModeData data, string animBoolName) 
+        : base(enemy, data, animBoolName) { }
 
     public override void Enter()
     {
@@ -49,7 +49,6 @@ public class EnemyIdleState : EnemyState
 
     private void SetRandomIdleTime()
     {
-        _idleTime = Random.Range(   _enemy.PatrolData.MinIdleTime,
-                                    _enemy.PatrolData.MaxIdleTime);
+        _idleTime = Random.Range(_data.MinIdleTime, _data.MaxIdleTime);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyDeadState : EnemyState
+public class EnemyDeadState : EnemyPatrolState
 {
 
     public EnemyDeadState(Enemy enemy, string animBoolName) 
