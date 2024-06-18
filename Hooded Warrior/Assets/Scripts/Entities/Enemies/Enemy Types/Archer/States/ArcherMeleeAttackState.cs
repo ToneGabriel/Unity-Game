@@ -1,21 +1,28 @@
 ﻿using UnityEngine;
 
-public class ArcherMeleeAttackState : ArcherAggroState
+public class ArcherMeleeAttackState : EntityModeState
 {
     public bool IsOnCooldown { get; private set; }
+
+    private ArcherAggroMode     _archerAggroMode;
+    private ArcherAggroModeData _archerAggroModeData;
 
     private AttackDetails _attackDetails;
     private bool _isPlayerInMinAgroRange;
 
-    public ArcherMeleeAttackState(Archer archer, ArcherAggroModeData data, string animBoolName)
-        : base(archer, data, animBoolName) { }
+    public ArcherMeleeAttackState(ArcherAggroMode mode, ArcherAggroModeData data, string animBoolName)
+        : base(mode, animBoolName)
+    {
+        _archerAggroMode        = mode;
+        _archerAggroModeData    = data;
+    }
 
     public override void Enter()
     {
         base.Enter();
 
         _isStateAnimationFinished = false;
-        _archer.SetVelocityZero();
+        _archerAggroMode.SetVelocityZero();
 
         _attackDetails.DamageAmount = _archerAggroModeData.MeleeAttackDamage;
         _attackDetails.Position = _archer.transform.position;
@@ -33,7 +40,7 @@ public class ArcherMeleeAttackState : ArcherAggroState
     {
         base.DoChecks();
 
-        _isPlayerInMinAgroRange = _archer.CheckPlayerInMinAgroRange();
+        _isPlayerInMinAgroRange = _archerAggroMode.CheckPlayerInMinAgroRange();
     }
 
     public virtual void FinishMeleeAttack()

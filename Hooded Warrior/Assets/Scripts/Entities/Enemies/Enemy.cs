@@ -2,7 +2,7 @@
 
 public abstract class Enemy : Entity                // Base Enemy class
 {
-    [SerializeField] protected EnemyData _enemyData;
+    public EnemyData EnemyBaseData;
 
     #region Unity Functions
     protected override void Awake()
@@ -12,8 +12,8 @@ public abstract class Enemy : Entity                // Base Enemy class
 
     protected override void OnEnable()
     {
-        _entityActionComponents.CurrentStunResistance   = _entityData.StunResistance;
-        _entityActionComponents.CurrentHealth           = _entityData.MaxHealth;
+        EntityInternComponents.CurrentStunResistance   = _data.StunResistance;
+        EntityInternComponents.CurrentHealth           = _data.MaxHealth;
         
         base.OnEnable();
     }
@@ -22,35 +22,12 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         base.Update();
 
-        _entityActionComponents.Animator.SetFloat("velocityY", _entityActionComponents.Rigidbody.velocity.y);
+        EntityInternComponents.Animator.SetFloat("velocityY", EntityInternComponents.Rigidbody.velocity.y);
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-    }
-    #endregion
-
-    #region Checkers
-    public virtual bool CheckPlayerInMinAgroRange()                                     // Raycast to check agro enter range
-    {
-        return Physics2D.Raycast(   _entityExternComponents.EnvironmentCheck.transform.position,
-                                    _entityExternComponents.EnvironmentCheck.transform.right,
-                                    _enemyData.MinAgroDistance, _enemyData.WhatIsPlayer);
-    }
-
-    public virtual bool CheckPlayerInMaxAgroRange()                                     // Raycast to check agro exit range
-    {
-        return Physics2D.Raycast(   _entityExternComponents.EnvironmentCheck.transform.position,
-                                    _entityExternComponents.EnvironmentCheck.transform.right,
-                                    _enemyData.MaxAgroDistance, _enemyData.WhatIsPlayer);
-    }
-
-    public virtual bool CheckPlayerInMeleeRange()                                       // Raycast to check melee range
-    {
-        return Physics2D.Raycast(   _entityExternComponents.EnvironmentCheck.transform.position,
-                                    _entityExternComponents.EnvironmentCheck.transform.right,
-                                    _enemyData.CloseRangeActionDistance, _enemyData.WhatIsPlayer);
     }
     #endregion
 
@@ -63,16 +40,16 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         base.AdditionalDamageActions(attackDetails);
 
-        _entityActionComponents.LastDamageTime = Time.time;
-        _entityActionComponents.CurrentStunResistance -= attackDetails.StunDamageAmmount;
+        EntityInternComponents.LastDamageTime = Time.time;
+        EntityInternComponents.CurrentStunResistance -= attackDetails.StunDamageAmmount;
     }
 
     public override void CheckStatus()
     {
         base.CheckStatus();
 
-        if (_entityActionComponents.CurrentStunResistance <= 0)
-            _entityActionComponents.IsStuned = true;
+        if (EntityInternComponents.CurrentStunResistance <= 0)
+            EntityInternComponents.IsStuned = true;
     }
     #endregion
 
@@ -86,19 +63,19 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         var data = (EnemySaveData)state;
 
-        _entityActionComponents.IsDead = data.IsDead;
+        EntityInternComponents.IsDead = data.IsDead;
     }
     #endregion
 
     #region Other Functions
     public virtual void OnDrawGizmos()
     {
-        Gizmos.DrawLine(_entityExternComponents.EnvironmentCheck.transform.position,
-                        _entityExternComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityActionComponents.FacingDirection * Vector2.right));
-        Gizmos.DrawLine(_entityExternComponents.EnvironmentCheck.transform.position,
-                        _entityExternComponents.EnvironmentCheck.transform.position + (Vector3)(_entityData.EnvironmentCheckDistance * _entityActionComponents.FacingDirection * Vector2.down));
-        Gizmos.DrawLine(_entityExternComponents.EnvironmentCheck.transform.position,
-                        _entityExternComponents.EnvironmentCheck.transform.position + (Vector3)(_enemyData.CloseRangeActionDistance * _entityActionComponents.FacingDirection * Vector2.right));
+    //    Gizmos.DrawLine(_sensors.EnvironmentCheck.transform.position,
+    //                    _sensors.EnvironmentCheck.transform.position + (Vector3)(_data.EnvironmentCheckDistance * EntityInternComponents.FacingDirection * Vector2.right));
+    //    Gizmos.DrawLine(_sensors.EnvironmentCheck.transform.position,
+    //                    _sensors.EnvironmentCheck.transform.position + (Vector3)(_data.EnvironmentCheckDistance * EntityInternComponents.FacingDirection * Vector2.down));
+    //    Gizmos.DrawLine(_sensors.EnvironmentCheck.transform.position,
+    //                    _sensors.EnvironmentCheck.transform.position + (Vector3)(EnemyBaseData.CloseRangeActionDistance * EntityInternComponents.FacingDirection * Vector2.right));
     }
     #endregion
 }

@@ -1,25 +1,32 @@
 ﻿using UnityEngine;
 
-public class ArcherDodgeState : ArcherAggroState
+public class ArcherDodgeState : EntityModeState
 {
     public bool IsOnCooldown { get; private set; }
+
+    private ArcherAggroMode     _archerAggroMode;
+    private ArcherAggroModeData _archerAggroModeData;
 
     private bool _isPlayerInMeleeRange;
     private bool _isPlayerInMaxAgroRange;
     private bool _isGrounded;
     private bool _isDodgeOver;
 
-    public ArcherDodgeState(Archer archer, ArcherAggroModeData data, string animBoolName)
-        : base(archer, data, animBoolName) { }
+    public ArcherDodgeState(ArcherAggroMode mode, ArcherAggroModeData data, string animBoolName)
+        : base(mode, animBoolName)
+    {
+        _archerAggroMode        = mode;
+        _archerAggroModeData    = data;
+    }
 
     public override void Enter()
     {
         base.Enter();
 
         _isDodgeOver = false;
-        _archer.SetVelocity(_archerAggroModeData.DodgeSpeed,
-                            _archerAggroModeData.DodgeAngle,
-                            -_archer.FacingDirection);
+        _archerAggroMode.SetVelocity(   _archerAggroModeData.DodgeSpeed,
+                                        _archerAggroModeData.DodgeAngle,
+                                        -_archerAggroMode.FacingDirection);
     }
 
     public override void Exit()
@@ -42,9 +49,9 @@ public class ArcherDodgeState : ArcherAggroState
     {
         base.DoChecks();
 
-        _isPlayerInMeleeRange = _archer.CheckPlayerInMeleeRange();
-        _isPlayerInMaxAgroRange = _archer.CheckPlayerInMaxAgroRange();
-        _isGrounded = _archer.IsGrounded();
+        _isPlayerInMeleeRange = _archerAggroMode.CheckPlayerInMeleeRange();
+        _isPlayerInMaxAgroRange = _archerAggroMode.CheckPlayerInMaxAgroRange();
+        _isGrounded = _archerAggroMode.IsGrounded();
     }
 
     public void CheckCooldown()

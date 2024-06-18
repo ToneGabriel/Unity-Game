@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 
-public class EnemyLookForPlayerState : EnemyPatrolState
+public sealed class EnemyLookForPlayerState : EntityModeState
 {
-    protected EnemyPatrolModeData _stateData;
-    protected bool _turnImmediately;
-    protected bool _isPLayerInMinAgroRange;
-    protected bool _isAllTurnsDone;
-    protected bool _isAllTurnsTimeDone;
-    protected float _lastTurnTime;
-    protected int _amountOfTurnsDone;
+    private EnemyPatrolMode     _enemyPatrolMode;
+    private EnemyPatrolModeData _enemyPatrolModeData;
 
-    public EnemyLookForPlayerState(Enemy enemy, string animBoolName, EnemyPatrolModeData stateData) 
-        : base(enemy, animBoolName)
+    private bool _turnImmediately;
+    private bool _isPLayerInMinAgroRange;
+    private bool _isAllTurnsDone;
+    private bool _isAllTurnsTimeDone;
+    private float _lastTurnTime;
+    private int _amountOfTurnsDone;
+
+    public EnemyLookForPlayerState(EnemyPatrolMode mode, EnemyPatrolModeData data, string animBoolName)
+        : base(mode, animBoolName)
     {
-        _stateData = stateData;
+        _enemyPatrolMode        = mode;
+        _enemyPatrolModeData    = data;
     }
 
     public override void Enter()
@@ -24,7 +27,7 @@ public class EnemyLookForPlayerState : EnemyPatrolState
         _isAllTurnsTimeDone = false;
         _lastTurnTime = _stateStartTime;
         _amountOfTurnsDone = 0;
-        _enemy.SetVelocityZero();
+        _enemyPatrolMode.SetVelocityZero();
     }
 
     public override void LogicUpdate()                                          // Counts turns and time between turns
@@ -33,22 +36,22 @@ public class EnemyLookForPlayerState : EnemyPatrolState
 
         if (_turnImmediately)
         {
-            _enemy.Flip();
+            _enemyPatrolMode.Flip();
             _lastTurnTime = Time.time;
             _amountOfTurnsDone++;
             _turnImmediately = false;
         }
-        else if (Time.time >= _lastTurnTime + _stateData.TimeBetweenTurns && !_isAllTurnsDone)
+        else if (Time.time >= _lastTurnTime + _enemyPatrolModeData.TimeBetweenTurns && !_isAllTurnsDone)
         {
-            _enemy.Flip();
+            _enemyPatrolMode.Flip();
             _lastTurnTime = Time.time;
             _amountOfTurnsDone++;
         }
 
-        if (_amountOfTurnsDone >= _stateData.AmountOfTurns)
+        if (_amountOfTurnsDone >= _enemyPatrolModeData.AmountOfTurns)
             _isAllTurnsDone = true;
 
-        if (Time.time >= _lastTurnTime + _stateData.TimeBetweenTurns && _isAllTurnsDone)
+        if (Time.time >= _lastTurnTime + _enemyPatrolModeData.TimeBetweenTurns && _isAllTurnsDone)
             _isAllTurnsTimeDone = true;
     }
 
@@ -56,7 +59,7 @@ public class EnemyLookForPlayerState : EnemyPatrolState
     {
         base.DoChecks();
 
-        _isPLayerInMinAgroRange = _enemy.CheckPlayerInMinAgroRange();
+        _isPLayerInMinAgroRange = _enemyPatrolMode.CheckPlayerInMinAgroRange();
     }
 
     public void SetTurnImmediately(bool flip)

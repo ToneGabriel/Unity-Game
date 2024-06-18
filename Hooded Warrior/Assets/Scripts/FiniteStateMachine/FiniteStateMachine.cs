@@ -2,15 +2,13 @@ using System;
 using UnityEngine;
 
 
-public abstract class FiniteStateMachine : MonoBehaviour
+public abstract class FiniteStateMachine : State
 {
     private int     _defaultStateID = -1;
     private int     _currentStateID = -1;
     private State[] _states         = null;
 
     public abstract string[] AnimatorParameterNames { get; }
-
-    protected virtual void Awake() { }
 
     protected virtual void Start()
     {
@@ -24,24 +22,24 @@ public abstract class FiniteStateMachine : MonoBehaviour
             throw new Exception();
     }
 
-    protected virtual void OnEnable()
+    public override void Enter()
     {
         _currentStateID = _defaultStateID;
         _states[_currentStateID].Enter();
     }
 
-    protected virtual void OnDisable()
+    public override void Exit()
     {
         _states[_currentStateID].Exit();
         _currentStateID = _defaultStateID;
     }
 
-    protected virtual void Update()
+    public override void LogicUpdate()
     {
         _states[_currentStateID].LogicUpdate();
     }
 
-    protected virtual void FixedUpdate()
+    public override void PhysicsUpdate()
     {
         _states[_currentStateID].PhysicsUpdate();
     }
@@ -57,7 +55,7 @@ public abstract class FiniteStateMachine : MonoBehaviour
         _states = new State[size];
     }
 
-    protected void AddNewState(int stateID, State state)
+    public override void AddNewState(int stateID, State state)
     {
         if (_states == null)
             throw new Exception();
@@ -79,7 +77,7 @@ public abstract class FiniteStateMachine : MonoBehaviour
         _defaultStateID = stateID;
     }
 
-    public void ChangeState(int stateID)
+    public override void ChangeState(int stateID)
     {
         CheckStateID(stateID);
 

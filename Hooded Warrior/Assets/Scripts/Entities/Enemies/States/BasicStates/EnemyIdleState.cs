@@ -1,20 +1,27 @@
 ﻿using UnityEngine;
 
-public class EnemyIdleState : EnemyPatrolState
+public sealed class EnemyIdleState : EntityModeState
 {
-    protected bool _flipAfterIdle;
-    protected bool _isIdleTimeOver;
-    protected bool _isPlayerInMinAgroRange;
-    protected float _idleTime;
+    private EnemyPatrolMode     _enemyPatrolMode;
+    private EnemyPatrolModeData _enemyPatrolModeData;
 
-    public EnemyIdleState(Enemy enemy, EnemyPatrolModeData data, string animBoolName) 
-        : base(enemy, data, animBoolName) { }
+    private bool _flipAfterIdle;
+    private bool _isIdleTimeOver;
+    private bool _isPlayerInMinAgroRange;
+    private float _idleTime;
+
+    public EnemyIdleState(EnemyPatrolMode mode, EnemyPatrolModeData data, string animBoolName) 
+        : base(mode, animBoolName)
+    {
+        _enemyPatrolMode        = mode;
+        _enemyPatrolModeData    = data;
+    }
 
     public override void Enter()
     {
         base.Enter();
 
-        _enemy.SetVelocityZero();
+        _enemyPatrolMode.SetVelocityZero();
         _isIdleTimeOver = false;
         SetRandomIdleTime();
     }
@@ -24,7 +31,7 @@ public class EnemyIdleState : EnemyPatrolState
         base.Exit();
 
         if (_flipAfterIdle)
-            _enemy.Flip();
+            _enemyPatrolMode.Flip();
     }
 
     public override void LogicUpdate()                                      // Counts idle time
@@ -32,14 +39,16 @@ public class EnemyIdleState : EnemyPatrolState
         base.LogicUpdate();
 
         if (Time.time >= _stateStartTime + _idleTime)
-            _isIdleTimeOver = true;
+            _enemyPatrolMode.ChangeState((int)EnemyPatrolMode.StateID.Move);
+        else if (_enemyPatrolMode.CheckPlayerInMinAgroRange())
+            _enemyPatrolMode.ChangeState((int)EnemyPatrolMode.StateID.PlayerDetected);
     }
 
     protected override void DoChecks()                                         // Check ranges
     {
         base.DoChecks();
 
-        _isPlayerInMinAgroRange = _enemy.CheckPlayerInMinAgroRange();
+        _isPlayerInMinAgroRange = _enemyPatrolMode.CheckPlayerInMinAgroRange();
     }
 
     public void SetFlipAfterIdle(bool flip)
@@ -49,6 +58,6 @@ public class EnemyIdleState : EnemyPatrolState
 
     private void SetRandomIdleTime()
     {
-        _idleTime = Random.Range(_data.MinIdleTime, _data.MaxIdleTime);
+        _idleTime = Random.Range(_enemyPatrolModeData.MinIdleTime, _enemyPatrolModeData.MaxIdleTime);
     }
 }

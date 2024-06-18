@@ -1,20 +1,27 @@
 ﻿using UnityEngine;
 
-public class ArcherRangedAttackState : ArcherAggroState
+public class ArcherRangedAttackState : EntityModeState
 {
     public bool IsOnCooldown { get; private set; }
 
+    private ArcherAggroMode     _archerAggroMode;
+    private ArcherAggroModeData _archerAggroModeData;
+
     private bool _isPlayerInMinAgroRange;
 
-    public ArcherRangedAttackState(Archer archer, ArcherAggroModeData data, string animBoolName)
-        : base(archer, data, animBoolName) { }
+    public ArcherRangedAttackState(ArcherAggroMode mode, ArcherAggroModeData data, string animBoolName)
+        : base(mode, animBoolName)
+    {
+        _archerAggroMode        = mode;
+        _archerAggroModeData    = data;
+    }
 
     public override void Enter()
     {
         base.Enter();
 
         _isStateAnimationFinished = false;
-        _archer.SetVelocityZero();
+        _archerAggroMode.SetVelocityZero();
     }
 
     public override void Exit()
@@ -29,7 +36,7 @@ public class ArcherRangedAttackState : ArcherAggroState
     {
         base.DoChecks();
 
-        _isPlayerInMinAgroRange = _archer.CheckPlayerInMinAgroRange();
+        _isPlayerInMinAgroRange = _archerAggroMode.CheckPlayerInMinAgroRange();
     }
 
     public void CheckCooldown()

@@ -5,6 +5,9 @@ public class ArcherAggroModeData : ScriptableObject
 {
     // Editor ==========================================
 
+    [Header("PlayerDetected State")]
+    [SerializeField] private float _lookTime                = 0.5f;
+
     [Header("Dodge State")]
     [SerializeField] private float _dodgeSpeed              = 10f;
     [SerializeField] private float _dodgeTime               = 0.2f;
@@ -21,6 +24,8 @@ public class ArcherAggroModeData : ScriptableObject
     [SerializeField] private float _rangedAttackCooldown    = 5f;
 
     // Getters ==========================================
+
+    public float LookTime               { get { return _lookTime; } }
 
     public float DodgeSpeed             { get { return _dodgeSpeed; } }
     public float DodgeTime              { get { return _dodgeTime; } }

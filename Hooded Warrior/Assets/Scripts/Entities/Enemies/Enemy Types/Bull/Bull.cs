@@ -52,11 +52,11 @@ public sealed class Bull : Enemy
     {
         base.Damage(attackdetails);
 
-        if (_entityActionComponents.IsDead)
+        if (EntityInternComponents.IsDead)
             ChangeState((int)BullStateID.Dead);
-        else if (_entityActionComponents.IsStuned && !IsStateActive((int)BullStateID.Stun))
+        else if (EntityInternComponents.IsStuned && !IsStateActive((int)BullStateID.Stun))
             ChangeState((int)BullStateID.Stun);
-        else if (!_entityActionComponents.IsStuned && VelocityX != 0)
+        else if (!EntityInternComponents.IsStuned && VelocityX != 0)
             ChangeState((int)BullStateID.LookForPlayer);
     }
 

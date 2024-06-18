@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class PlayerState : EntityState
+public abstract class PlayerState : EntityModeState
 {
     protected Player _player;
 

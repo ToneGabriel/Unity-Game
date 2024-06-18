@@ -1,16 +1,17 @@
 using UnityEngine;
 
 
-public abstract class EntityState : State
+public abstract class EntityModeState : State
 {
-    protected Entity    _entity;
-    protected string    _animBoolName;     // Animation bool name for each state
+    private EntityMode  _entityMode;
+    private string      _animBoolName;     // Animator parameter bool name for each state
+    
     protected float     _stateStartTime;
     protected bool      _isStateAnimationFinished;
 
-    public EntityState(Entity entity, string animBoolName)
+    public EntityModeState(EntityMode mode, string animBoolName)
     {
-        _entity         = entity;
+        _entityMode     = mode;
         _animBoolName   = animBoolName;
     }
 
@@ -18,14 +19,14 @@ public abstract class EntityState : State
     {
         _stateStartTime             = Time.time;
         _isStateAnimationFinished   = false;
-        _entity.SetAnimatorBoolParam(_animBoolName, true);
+        _entityMode.Target_SetAnimatorBoolParam(_animBoolName, true);
 
         DoChecks();
     }
 
     public override void Exit()
     {
-        _entity.SetAnimatorBoolParam(_animBoolName, false);
+        _entityMode.Target_SetAnimatorBoolParam(_animBoolName, false);
     }
 
     public override void LogicUpdate() { }

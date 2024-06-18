@@ -1,26 +1,33 @@
 ﻿
-public class EnemyMoveState : EnemyPatrolState
+public class EnemyMoveState : EntityModeState
 {
+    private EnemyPatrolMode     _enemyPatrolMode;
+    private EnemyPatrolModeData _enemyPatrolModeData;
+
     protected bool _isDetectingWall;
     protected bool _isDetectingLedge;
     protected bool _isPlayerInMinAgroRange;
 
-    public EnemyMoveState(Enemy enemy, EnemyPatrolModeData data, string animBoolName)
-        : base(enemy, data, animBoolName) {}
+    public EnemyMoveState(EnemyPatrolMode mode, EnemyPatrolModeData data, string animBoolName)
+        : base(mode, animBoolName)
+    {
+        _enemyPatrolMode        = mode;
+        _enemyPatrolModeData    = data;
+    }
 
     public override void Enter()
     {
         base.Enter();
 
-        _enemy.SetVelocity(_data.MovementSpeed);                 // Set velocity
+        _enemyPatrolMode.SetVelocity(_enemyPatrolModeData.MovementSpeed);                 // Set velocity
     }
 
     protected override void DoChecks()                                              // Check Ranges
     {
         base.DoChecks();
 
-        _isDetectingWall = _enemy.IsTouchingWall();
-        _isDetectingLedge = _enemy.IsTouchingLedge(-_enemy.transform.up);
-        _isPlayerInMinAgroRange = _enemy.CheckPlayerInMinAgroRange();
+        _isDetectingWall = _enemyPatrolMode.IsTouchingWall();
+        _isDetectingLedge = _enemyPatrolMode.IsTouchingLedge(-_enemy.transform.up);
+        _isPlayerInMinAgroRange = _enemyPatrolMode.CheckPlayerInMinAgroRange();
     }
 }

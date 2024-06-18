@@ -12,9 +12,6 @@ public class EnemyPatrolModeData : ScriptableObject
     [Header("Move State")]
     [SerializeField] private float _movementSpeed               = 3f;
 
-    [Header("PlayerDetected State")]
-    [SerializeField] private float _lookTime                    = 0.5f;
-
     [Header("LookForPlayer State")]
     [SerializeField] private int _amountOfTurns                 = 2;
     [SerializeField] private float _timeBetweenTurns            = 0.75f;
@@ -35,8 +32,6 @@ public class EnemyPatrolModeData : ScriptableObject
     public float MaxIdleTime                { get { return _maxIdleTime; } }
 
     public float MovementSpeed              { get { return _movementSpeed; } }
-
-    public float LookTime                   { get { return _lookTime; } }
 
     public float AmountOfTurns              { get { return _amountOfTurns; } }
     public float TimeBetweenTurns           { get { return _timeBetweenTurns; } }
