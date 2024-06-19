@@ -1,14 +1,14 @@
 ﻿
 public sealed class PlayerIdleState : PlayerGroundedState
 {
-    public PlayerIdleState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerIdleState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
         base.Enter();
 
-        _player.SetVelocityX(0f);
+        //_player.SetVelocityX(0f);
     }
 
     public override void LogicUpdate()
@@ -25,6 +25,6 @@ public sealed class PlayerIdleState : PlayerGroundedState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(0f);
+        //_player.SetVelocityX(0f);
     }
 }

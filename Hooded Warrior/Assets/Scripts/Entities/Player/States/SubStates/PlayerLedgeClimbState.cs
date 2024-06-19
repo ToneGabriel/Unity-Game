@@ -13,9 +13,9 @@ public sealed class PlayerLedgeClimbState : PlayerState
     private int _inputX;
     private int _inputY;
 
-    public PlayerLedgeClimbState(Player player, string animBoolName)
-        : base(player, animBoolName)
-    { }
+    //public PlayerLedgeClimbState(Player player, string animBoolName)
+    //    : base(player, animBoolName)
+    //{ }
 
     public override void Enter()
     {
@@ -25,7 +25,7 @@ public sealed class PlayerLedgeClimbState : PlayerState
         // TODO
         // _player.AdvancedStatus.CanDash = true;
 
-        _player.SetVelocityZero();
+        //_player.SetVelocityZero();
         _player.transform.position = _player.AdvancedStatus.LedgeDetectedposition;
         _cornerPosition = _player.DetermineCornerPosition();
         _startPosition.Set( _cornerPosition.x - (_player.FacingDirection * _player.StateData.StartOffset.x),
@@ -53,34 +53,34 @@ public sealed class PlayerLedgeClimbState : PlayerState
     {
         base.LogicUpdate();
 
-        if (_isStateAnimationFinished)
-            _player.ChangeState((int)PlayerStateID.Idle);
-        else
-        {
-            _inputX     = InputManager.Instance.NormalizedInputX;
-            _inputY     = InputManager.Instance.NormalizedInputY;
-            _jumpInput  = InputManager.Instance.JumpInput;
+        //if (_isStateAnimationFinished)
+        //    _player.ChangeState((int)PlayerStateID.Idle);
+        //else
+        //{
+        //    _inputX     = InputManager.Instance.NormalizedInputX;
+        //    _inputY     = InputManager.Instance.NormalizedInputY;
+        //    _jumpInput  = InputManager.Instance.JumpInput;
 
-            _player.SetVelocityZero();
-            _player.transform.position = _startPosition;
+        //    //_player.SetVelocityZero();
+        //    _player.transform.position = _startPosition;
 
-            if (_player.FacingDirection == _inputX && _isHanging && !_isClimbing)
-            {
-                _isClimbing = true;
-                _player.SetAnimatorBoolParam(PlayerControllerParameters.ClimbLedge_b, true);
-            }
-            else if (_inputY == -1 && _isHanging && !_isClimbing)
-                _player.ChangeState((int)PlayerStateID.WallSlide);
-            else if (_jumpInput && !_isClimbing)
-                _player.ChangeState((int)PlayerStateID.WallJump);
-        }
+        //    if (_player.FacingDirection == _inputX && _isHanging && !_isClimbing)
+        //    {
+        //        _isClimbing = true;
+        //        //_player.SetAnimatorBoolParam(PlayerControllerParameters.ClimbLedge_b, true);
+        //    }
+        //    else if (_inputY == -1 && _isHanging && !_isClimbing)
+        //        _player.ChangeState((int)PlayerStateID.WallSlide);
+        //    else if (_jumpInput && !_isClimbing)
+        //        _player.ChangeState((int)PlayerStateID.WallJump);
+        //}
     }
 
     public override void AnimationFinishTrigger()
     {
         base.AnimationFinishTrigger();
 
-        _player.SetAnimatorBoolParam(PlayerControllerParameters.ClimbLedge_b, false);
+        //_player.SetAnimatorBoolParam(PlayerControllerParameters.ClimbLedge_b, false);
     }
 
     public override void AnimationTrigger()

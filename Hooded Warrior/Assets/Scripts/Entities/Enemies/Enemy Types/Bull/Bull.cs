@@ -2,15 +2,15 @@
 
 public sealed class Bull : Enemy
 {
-    #region States and Data
-    [SerializeField] private Data_Idle _idleStateData;
-    [SerializeField] private Data_Move _moveStateData;
-    [SerializeField] private Data_PlayerDetected _playerDetectedStateData;
-    [SerializeField] private Data_Charge _chargeStateData;
-    [SerializeField] private Data_LookForPlayer _lookForPlayerStateData;
-    [SerializeField] private Data_Stun _stunStateData;
-    [SerializeField] private Data_Dead _deadStateData;
-    #endregion
+    //#region States and Data
+    //[SerializeField] private Data_Idle _idleStateData;
+    //[SerializeField] private Data_Move _moveStateData;
+    //[SerializeField] private Data_PlayerDetected _playerDetectedStateData;
+    //[SerializeField] private Data_Charge _chargeStateData;
+    //[SerializeField] private Data_LookForPlayer _lookForPlayerStateData;
+    //[SerializeField] private Data_Stun _stunStateData;
+    //[SerializeField] private Data_Dead _deadStateData;
+    //#endregion
 
     #region Components
     public GameObject MeleeAttackPosition;
@@ -52,12 +52,12 @@ public sealed class Bull : Enemy
     {
         base.Damage(attackdetails);
 
-        if (EntityInternComponents.IsDead)
-            ChangeState((int)BullStateID.Dead);
-        else if (EntityInternComponents.IsStuned && !IsStateActive((int)BullStateID.Stun))
-            ChangeState((int)BullStateID.Stun);
-        else if (!EntityInternComponents.IsStuned && VelocityX != 0)
-            ChangeState((int)BullStateID.LookForPlayer);
+        //if (EntityInternComponents.IsDead)
+        //    ChangeState((int)BullStateID.Dead);
+        //else if (EntityInternComponents.IsStuned && !IsStateActive((int)BullStateID.Stun))
+        //    ChangeState((int)BullStateID.Stun);
+        //else if (!EntityInternComponents.IsStuned && VelocityX != 0)
+        //    ChangeState((int)BullStateID.LookForPlayer);
     }
 
     public override void OnDrawGizmos()

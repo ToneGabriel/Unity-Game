@@ -20,8 +20,8 @@ public abstract class PlayerGroundedState : PlayerState
     protected bool _canCastSpell;
 
 
-    public PlayerGroundedState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerGroundedState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -67,15 +67,15 @@ public abstract class PlayerGroundedState : PlayerState
             _player.ChangeState((int)PlayerStateID.Dash);
     }
 
-    protected override void DoChecks()
-    {
-        base.DoChecks();
+    //protected override void DoChecks()
+    //{
+    //    base.DoChecks();
 
-        _isGrounded         = _player.IsGrounded();
-        _isTouchingWall     = _player.IsTouchingWall();
-        _isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
-        _isTouchingCeiling  = _player.IsTouchingCeiling();
-        _canDefend          = _player.CanDefend();
-        _canCastSpell       = _player.CanCastSpell();
-    }
+    //    //_isGrounded         = _player.IsGrounded();
+    //    //_isTouchingWall     = _player.IsTouchingWall();
+    //    //_isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
+    //    //_isTouchingCeiling  = _player.IsTouchingCeiling();
+    //    //_canDefend          = _player.CanDefend();
+    //    //_canCastSpell       = _player.CanCastSpell();
+    //}
 }

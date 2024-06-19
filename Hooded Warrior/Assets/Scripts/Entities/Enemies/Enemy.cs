@@ -12,8 +12,8 @@ public abstract class Enemy : Entity                // Base Enemy class
 
     protected override void OnEnable()
     {
-        EntityInternComponents.CurrentStunResistance   = _data.StunResistance;
-        EntityInternComponents.CurrentHealth           = _data.MaxHealth;
+        //EntityInternComponents.CurrentStunResistance   = _data.StunResistance;
+        //EntityInternComponents.CurrentHealth           = _data.MaxHealth;
         
         base.OnEnable();
     }
@@ -22,7 +22,7 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         base.Update();
 
-        EntityInternComponents.Animator.SetFloat("velocityY", EntityInternComponents.Rigidbody.velocity.y);
+        //EntityInternComponents.Animator.SetFloat("velocityY", EntityInternComponents.Rigidbody.velocity.y);
     }
 
     protected override void FixedUpdate()
@@ -40,16 +40,16 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         base.AdditionalDamageActions(attackDetails);
 
-        EntityInternComponents.LastDamageTime = Time.time;
-        EntityInternComponents.CurrentStunResistance -= attackDetails.StunDamageAmmount;
+        //EntityInternComponents.LastDamageTime = Time.time;
+        //EntityInternComponents.CurrentStunResistance -= attackDetails.StunDamageAmmount;
     }
 
     public override void CheckStatus()
     {
         base.CheckStatus();
 
-        if (EntityInternComponents.CurrentStunResistance <= 0)
-            EntityInternComponents.IsStuned = true;
+        //if (EntityInternComponents.CurrentStunResistance <= 0)
+        //    EntityInternComponents.IsStuned = true;
     }
     #endregion
 
@@ -63,7 +63,7 @@ public abstract class Enemy : Entity                // Base Enemy class
     {
         var data = (EnemySaveData)state;
 
-        EntityInternComponents.IsDead = data.IsDead;
+        //EntityInternComponents.IsDead = data.IsDead;
     }
     #endregion
 

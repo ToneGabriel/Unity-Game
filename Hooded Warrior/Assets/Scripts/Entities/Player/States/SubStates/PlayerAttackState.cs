@@ -5,8 +5,8 @@ public sealed class PlayerAttackState : PlayerAbilityState
     private float _velocityToSet;
     private bool _setVelocity;
 
-    public PlayerAttackState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerAttackState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -27,8 +27,8 @@ public sealed class PlayerAttackState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        if (_setVelocity)
-            _player.SetVelocityX(_velocityToSet * _player.FacingDirection);
+        //if (_setVelocity)
+        //    _player.SetVelocityX(_velocityToSet * _player.FacingDirection);
     }
 
     public void SetWeapon(Weapon weapon)
@@ -50,7 +50,7 @@ public sealed class PlayerAttackState : PlayerAbilityState
 
     public void SetPlayerVelocity(float velocity)
     {
-        _player.SetVelocityX(velocity * _player.FacingDirection);
+        //_player.SetVelocityX(velocity * _player.FacingDirection);
         _velocityToSet = velocity;
         _setVelocity = true;
     }

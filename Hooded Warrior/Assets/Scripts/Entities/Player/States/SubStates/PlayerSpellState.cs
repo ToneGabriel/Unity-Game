@@ -4,8 +4,8 @@ public sealed class PlayerSpellState : PlayerAbilityState
     public Spell Spell { get; private set; }
     public bool IsHolding { get; private set; }
 
-    public PlayerSpellState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerSpellState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -45,7 +45,7 @@ public sealed class PlayerSpellState : PlayerAbilityState
     {
         base.AnimationTrigger();
 
-        _player.SetVelocityZero();
+        //_player.SetVelocityZero();
     }
 
     public override void AnimationFinishTrigger()

@@ -48,8 +48,8 @@ public sealed class Player : Entity
     {
         base.Update();
 
-        SetAnimatorFloatParam(PlayerControllerParameters.VelocityY_f, VelocityY);
-        SetAnimatorFloatParam(PlayerControllerParameters.VelocityX_f, Mathf.Abs(VelocityX));
+        //SetAnimatorFloatParam(PlayerControllerParameters.VelocityY_f, VelocityY);
+        //SetAnimatorFloatParam(PlayerControllerParameters.VelocityX_f, Mathf.Abs(VelocityX));
     }
     #endregion
 
@@ -81,13 +81,13 @@ public sealed class Player : Entity
 
     public void SetColiderHeight(float height)
     {
-        Vector2 center = EntityInternComponents.BoxCollider.offset;
-        _workspaceVector2.Set(EntityInternComponents.BoxCollider.size.x, height);
+        //Vector2 center = EntityInternComponents.BoxCollider.offset;
+        //_workspaceVector2.Set(EntityInternComponents.BoxCollider.size.x, height);
 
-        center.y += (height - EntityInternComponents.BoxCollider.size.y) / 2;
+        //center.y += (height - EntityInternComponents.BoxCollider.size.y) / 2;
 
-        EntityInternComponents.BoxCollider.size   = _workspaceVector2;
-        EntityInternComponents.BoxCollider.offset = center;
+        //EntityInternComponents.BoxCollider.size   = _workspaceVector2;
+        //EntityInternComponents.BoxCollider.offset = center;
     }
 
     public GameObject GetLightOrbPosition()
@@ -114,8 +114,8 @@ public sealed class Player : Entity
 
     public void FlipIfShould(int inputX)
     {
-        if (inputX != 0 && inputX != EntityInternComponents.FacingDirection)
-            Flip();
+        //if (inputX != 0 && inputX != EntityInternComponents.FacingDirection)
+        //    Flip();
     }
 
     public bool CanDefend()
@@ -134,18 +134,18 @@ public sealed class Player : Entity
     {
         base.Damage(attackDetails);
 
-        if (EntityInternComponents.IsDead)
-        {
-            gameObject.SetActive(false);
+        //if (EntityInternComponents.IsDead)
+        //{
+        //    gameObject.SetActive(false);
 
-            Instantiate(_playerStateData.DeathBloodParticle,
-                        transform.position,
-                        _playerStateData.DeathBloodParticle.transform.rotation);
+        //    Instantiate(_playerStateData.DeathBloodParticle,
+        //                transform.position,
+        //                _playerStateData.DeathBloodParticle.transform.rotation);
 
-            Instantiate(_playerStateData.DeathChunkParticle,
-                        transform.position,
-                        _playerStateData.DeathChunkParticle.transform.rotation);
-        }
+        //    Instantiate(_playerStateData.DeathChunkParticle,
+        //                transform.position,
+        //                _playerStateData.DeathChunkParticle.transform.rotation);
+        //}
     }
 
     public override bool CanTakeDamage()
@@ -156,7 +156,7 @@ public sealed class Player : Entity
     public override void AdditionalDamageActions(AttackDetails attackDetails)
     {
         InterruptActions();
-        DamageHop(_data.DamageHopDirection, _data.DamageHopSpeed);
+        //DamageHop(_data.DamageHopDirection, _data.DamageHopSpeed);
 
         base.AdditionalDamageActions(attackDetails);
     }
@@ -174,8 +174,8 @@ public sealed class Player : Entity
     {
         var data = (PlayerSaveData)state;
 
-        EntityInternComponents.CurrentHealth = data.PlayerHealth;
-        EntityInternComponents.FacingDirection = data.PlayerFacingDirection;
+        //EntityInternComponents.CurrentHealth = data.PlayerHealth;
+        //EntityInternComponents.FacingDirection = data.PlayerFacingDirection;
         transform.position = data.PlayerPosition.GetValues();
         transform.rotation = data.PlayerRotation.GetValues();
     }
@@ -184,8 +184,8 @@ public sealed class Player : Entity
     #region Other Functions
     public void SetNewGameData()
     {
-        EntityInternComponents.FacingDirection = 1;
-        EntityInternComponents.CurrentHealth = _data.MaxHealth;
+        //EntityInternComponents.FacingDirection = 1;
+        //EntityInternComponents.CurrentHealth = _data.MaxHealth;
         transform.SetPositionAndRotation(   GameManager.Instance.GameStartPlayerPosition.position,
                                             GameManager.Instance.GameStartPlayerPosition.rotation);
     }
@@ -223,24 +223,25 @@ public sealed class Player : Entity
 
     public Vector2 DetermineCornerPosition()
     {
-        RaycastHit2D xHit = Physics2D.Raycast(  _sensors.EnvironmentCheck.transform.position,
-                                                Vector2.right * EntityInternComponents.FacingDirection,
-                                                _data.EnvironmentCheckDistance,
-                                                _data.WhatIsGround);
+        //RaycastHit2D xHit = Physics2D.Raycast(  _sensors.EnvironmentCheck.transform.position,
+        //                                        Vector2.right * EntityInternComponents.FacingDirection,
+        //                                        _data.EnvironmentCheckDistance,
+        //                                        _data.WhatIsGround);
 
-        float xDistance = xHit.distance;
-        _workspaceVector2.Set(xDistance * EntityInternComponents.FacingDirection, 0f);
+        //float xDistance = xHit.distance;
+        //_workspaceVector2.Set(xDistance * EntityInternComponents.FacingDirection, 0f);
 
-        RaycastHit2D yHit = Physics2D.Raycast(  _sensors.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
-                                                Vector2.down,
-                                                _sensors.LedgeCheck.transform.position.y - _sensors.EnvironmentCheck.transform.position.y,
-                                                _data.WhatIsGround);
+        //RaycastHit2D yHit = Physics2D.Raycast(  _sensors.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
+        //                                        Vector2.down,
+        //                                        _sensors.LedgeCheck.transform.position.y - _sensors.EnvironmentCheck.transform.position.y,
+        //                                        _data.WhatIsGround);
 
-        float yDistance = yHit.distance;
-        _workspaceVector2.Set(  _sensors.EnvironmentCheck.transform.position.x + xDistance * EntityInternComponents.FacingDirection,
-                                _sensors.LedgeCheck.transform.position.y - yDistance);
-        
-        return _workspaceVector2;
+        //float yDistance = yHit.distance;
+        //_workspaceVector2.Set(  _sensors.EnvironmentCheck.transform.position.x + xDistance * EntityInternComponents.FacingDirection,
+        //                        _sensors.LedgeCheck.transform.position.y - yDistance);
+
+        //return _workspaceVector2;
+        return new();
     }
 
     private void AnimationTrigger()

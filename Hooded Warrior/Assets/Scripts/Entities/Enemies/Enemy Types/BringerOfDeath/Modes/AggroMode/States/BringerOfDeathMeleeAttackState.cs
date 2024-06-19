@@ -1,0 +1,36 @@
+﻿using UnityEngine;
+
+public class BringerOfDeathMeleeAttackState : EntityModeState
+{
+    private BringerOfDeathAggroMode     _bringerOfDeathAggroMode;
+    private BringerOfDeathAggroModeData _bringerOfDeathAggroModeData;
+
+    public BringerOfDeathMeleeAttackState(BringerOfDeathAggroMode mode, BringerOfDeathAggroModeData data, string animBoolName)
+        : base(mode, animBoolName)
+    {
+        _bringerOfDeathAggroMode        = mode;
+        _bringerOfDeathAggroModeData    = data;
+    }
+
+    public override void LogicUpdate()
+    {
+        base.LogicUpdate();
+
+        //if (_isStateAnimationFinished)
+        //{
+        //    if (_isPlayerInMinAgroRange)
+        //        _bod.ChangeState((int)BringerOfDeathStateID.PlayerDetected);
+        //    else
+        //        _bod.ChangeState((int)BringerOfDeathStateID.LookForPlayer);
+        //}
+    }
+
+    //public override void TriggerMeleeAttack()
+    //{
+    //    base.TriggerMeleeAttack();
+
+    //    //Collider2D detectedObject = Physics2D.OverlapCircle(_bod.MeleeAttackPosition.transform.position, _stateData.AttackRadius, _stateData.WhatIsPlayer);
+    //    //if (detectedObject)
+    //    //    detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
+    //}
+}

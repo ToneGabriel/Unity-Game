@@ -1,14 +1,14 @@
 ﻿
 public sealed class PlayerCrouchIdleState : PlayerGroundedState
 {
-    public PlayerCrouchIdleState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerCrouchIdleState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
         base.Enter();
 
-        _player.SetVelocityZero();
+        //_player.SetVelocityZero();
         _player.SetColiderHeight(_player.StateData.CrouchColliderHeight);
         _player.SetLightOrbPosition(_player.StateData.CrouchLightOrbPosition);
     }

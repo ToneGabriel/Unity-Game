@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 
-public abstract class PlayerState : EntityModeState
+public abstract class PlayerState : State   // EntityModeState
 {
     protected Player _player;
 
     private bool _changeWeaponInput;
     private bool _changeSpellInput;
 
-    public PlayerState(Player player, string animBoolName)
-        : base(player, animBoolName)
-    {
-        _player = player;
-    }
+    //public PlayerState(Player player, string animBoolName)
+    //    : base(player, animBoolName)
+    //{
+    //    _player = player;
+    //}
 
     public override void LogicUpdate()
     {

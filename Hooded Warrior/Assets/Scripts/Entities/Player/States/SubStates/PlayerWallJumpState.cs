@@ -2,25 +2,25 @@
 
 public sealed class PlayerWallJumpState : PlayerAbilityState
 {
-    public PlayerWallJumpState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerWallJumpState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
         base.Enter();
 
         _player.ResetAndDecreaseAmountOfJumpsLeft();
-        _player.SetVelocity(_player.StateData.WallJumpVelocity,
-                            _player.StateData.WallJumpAngle,
-                            -_player.FacingDirection);
-        _player.Flip();
+        //_player.SetVelocity(_player.StateData.WallJumpVelocity,
+        //                    _player.StateData.WallJumpAngle,
+        //                    -_player.FacingDirection);
+        //_player.Flip();
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
 
-        if (Time.time >= _stateStartTime + _player.StateData.WallJumpTime)
-            _isAbilityDone = true;
+        //if (Time.time >= _stateStartTime + _player.StateData.WallJumpTime)
+        //    _isAbilityDone = true;
     }
 }

@@ -9,8 +9,8 @@ public abstract class PlayerTouchingWallState : PlayerState
     protected int _inputX;
     protected int _inputY;
 
-    public PlayerTouchingWallState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerTouchingWallState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -38,15 +38,15 @@ public abstract class PlayerTouchingWallState : PlayerState
             _player.ChangeState((int)PlayerStateID.LedgeClimb);
     }
 
-    protected override void DoChecks()
-    {
-        base.DoChecks();
+    //protected override void DoChecks()
+    //{
+    //    base.DoChecks();
 
-        _isGrounded         = _player.IsGrounded();
-        _isTouchingWall     = _player.IsTouchingWall();
-        _isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
+    //    //_isGrounded         = _player.IsGrounded();
+    //    //_isTouchingWall     = _player.IsTouchingWall();
+    //    //_isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
 
-        //if (_isTouchingWall && !_isTouchingLedge)
-        //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
-    }
+    //    //if (_isTouchingWall && !_isTouchingLedge)
+    //    //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
+    //}
 }

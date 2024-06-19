@@ -1,8 +1,8 @@
 ﻿
 public sealed class PlayerMoveState : PlayerGroundedState
 {
-    public PlayerMoveState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerMoveState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void LogicUpdate()
     {
@@ -23,6 +23,6 @@ public sealed class PlayerMoveState : PlayerGroundedState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.StateData.MovementVelocity * _inputX);
+        //_player.SetVelocityX(_player.StateData.MovementVelocity * _inputX);
     }
 }

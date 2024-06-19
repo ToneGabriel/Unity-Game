@@ -15,21 +15,21 @@ public sealed class PlayerInAirState : PlayerState
     private bool _isTouchingWall;
     private bool _isTouchingLedge;
 
-    public PlayerInAirState(Player player, string animBoolName)
-        : base(player, animBoolName) { /*Empty*/ }
+    //public PlayerInAirState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { /*Empty*/ }
 
-    protected override void DoChecks()
-    {
-        base.DoChecks();
+    //protected override void DoChecks()
+    //{
+    //    base.DoChecks();
 
-        _isGrounded         = _player.IsGrounded();
-        _isTouchingWall     = _player.IsTouchingWall();
-        _isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
+    //    //_isGrounded         = _player.IsGrounded();
+    //    //_isTouchingWall     = _player.IsTouchingWall();
+    //    //_isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
 
-        // Save player position as soon as it detects ledge
-        //if (_isTouchingWall && !_isTouchingLedge)
-        //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
-    }
+    //    // Save player position as soon as it detects ledge
+    //    //if (_isTouchingWall && !_isTouchingLedge)
+    //    //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
+    //}
 
     public override void LogicUpdate()
     {
@@ -43,26 +43,26 @@ public sealed class PlayerInAirState : PlayerState
 
         CheckJumpMultiplier();
 
-        if (_isGrounded && _player.VelocityY < 0.01f)
-            _player.ChangeState((int)PlayerStateID.Land);
-        else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
-            _player.ChangeState((int)PlayerStateID.LedgeClimb);
-        else if (_jumpInput && _player.CanJump())
-            _player.ChangeState((int)PlayerStateID.Jump);
-        else if (_isTouchingWall && _grabInput && _isTouchingLedge)
-            _player.ChangeState((int)PlayerStateID.WallGrab);
-        else if (_isTouchingWall && !_grabInput)
-            _player.ChangeState((int)PlayerStateID.WallSlide);
-        else if (_dashInput /*&& _player._dashState.CheckIfCanDash()*/)
-            _player.ChangeState((int)PlayerStateID.Dash);
-        else
-        {
-            _player.FlipIfShould(_inputX);
-            _player.SetVelocity(_player.StateData.MovementVelocity * _inputX,
-                                Mathf.Clamp(_player.VelocityY,
-                                            -_player.StateData.MaxVelocityY,
-                                            _player.StateData.MaxVelocityY));  // prevent falling too fast
-        }
+        //if (_isGrounded && _player.VelocityY < 0.01f)
+        //    _player.ChangeState((int)PlayerStateID.Land);
+        //else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
+        //    _player.ChangeState((int)PlayerStateID.LedgeClimb);
+        //else if (_jumpInput && _player.CanJump())
+        //    _player.ChangeState((int)PlayerStateID.Jump);
+        //else if (_isTouchingWall && _grabInput && _isTouchingLedge)
+        //    _player.ChangeState((int)PlayerStateID.WallGrab);
+        //else if (_isTouchingWall && !_grabInput)
+        //    _player.ChangeState((int)PlayerStateID.WallSlide);
+        //else if (_dashInput /*&& _player._dashState.CheckIfCanDash()*/)
+        //    _player.ChangeState((int)PlayerStateID.Dash);
+        //else
+        //{
+        //    _player.FlipIfShould(_inputX);
+        //    _player.SetVelocity(_player.StateData.MovementVelocity * _inputX,
+        //                        Mathf.Clamp(_player.VelocityY,
+        //                                    -_player.StateData.MaxVelocityY,
+        //                                    _player.StateData.MaxVelocityY));  // prevent falling too fast
+        //}
     }
 
     public void SetIsJumping() // used for jump multiplier only
@@ -72,14 +72,14 @@ public sealed class PlayerInAirState : PlayerState
 
     private void CheckJumpMultiplier()
     {
-        if (_isJumping)
-            if (_jumpInputStop)
-            {
-                _player.SetVelocityY(_player.VelocityY * _player.StateData.JumpHeightMultiplier);
-                _isJumping = false;
-            }
-            else if (_player.VelocityY <= 0f)
-                _isJumping = false;
+        //if (_isJumping)
+        //    if (_jumpInputStop)
+        //    {
+        //        _player.SetVelocityY(_player.VelocityY * _player.StateData.JumpHeightMultiplier);
+        //        _isJumping = false;
+        //    }
+        //    else if (_player.VelocityY <= 0f)
+        //        _isJumping = false;
     }
 
 }

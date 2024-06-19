@@ -1,8 +1,8 @@
 ﻿
 public sealed class PlayerCrouchMoveState : PlayerGroundedState
 {
-    public PlayerCrouchMoveState(Player player, string animBoolName)
-        : base(player, animBoolName) { /*Empty*/ }
+    //public PlayerCrouchMoveState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { /*Empty*/ }
 
     public override void Enter()
     {
@@ -26,7 +26,7 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
     {
         base.PhysicsUpdate();
 
-        _player.SetVelocityX(_player.StateData.CrouchMovementVelocity * _inputX);
+        //_player.SetVelocityX(_player.StateData.CrouchMovementVelocity * _inputX);
     }
 
     public override void Exit()

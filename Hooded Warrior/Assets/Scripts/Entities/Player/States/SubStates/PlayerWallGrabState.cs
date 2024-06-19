@@ -4,8 +4,8 @@ public sealed class PlayerWallGrabState : PlayerTouchingWallState
 {
     private Vector3 _workspaceVector3;
 
-    public PlayerWallGrabState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerWallGrabState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -30,7 +30,7 @@ public sealed class PlayerWallGrabState : PlayerTouchingWallState
     private void HoldPosition()
     {
         _player.transform.position = _workspaceVector3;
-        _player.SetVelocityZero();
+        //_player.SetVelocityZero();
     }
 
 }

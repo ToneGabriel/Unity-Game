@@ -1,15 +1,15 @@
 ﻿
 public sealed class PlayerJumpState : PlayerAbilityState
 {
-    public PlayerJumpState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerJumpState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
         base.Enter();
 
         InputManager.Instance.UseJumpInput();
-        _player.SetVelocityY(_player.StateData.JumpVelocity);
+        //_player.SetVelocityY(_player.StateData.JumpVelocity);
         _player.DecreaseAmountOfJumpsLeft();
         _isAbilityDone = true;
         // TODO

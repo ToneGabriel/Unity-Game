@@ -79,10 +79,10 @@ public sealed class BringerOfDeath : Enemy
     {
         base.Damage(attackdetails);
 
-        if (EntityInternComponents.IsDead)
-            ChangeState((int)BringerOfDeathStateID.Dead);
-        else if (VelocityX != 0)
-            ChangeState((int)BringerOfDeathStateID.LookForPlayer);
+        //if (EntityInternComponents.IsDead)
+        //    ChangeState((int)BringerOfDeathStateID.Dead);
+        //else if (VelocityX != 0)
+        //    ChangeState((int)BringerOfDeathStateID.LookForPlayer);
     }
     
     public override void OnDrawGizmos()

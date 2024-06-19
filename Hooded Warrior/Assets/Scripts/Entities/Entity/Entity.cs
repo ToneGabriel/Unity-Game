@@ -94,8 +94,8 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
     public virtual void AdditionalDamageActions(AttackDetails attackDetails)
     {
         //DamageHop(_dataEntity.DamageHopDirection, _dataEntity.DamageHopSpeed);
-        if (LastDamageDirection != FacingDirection)
-            Flip();
+        //if (LastDamageDirection != FacingDirection)
+        //    Flip();
     }
 
     public virtual void CheckStatus()
@@ -107,16 +107,16 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
     public virtual void ResetStunResistnce()
     {
         IsStuned = false;
-        CurrentStunResistance = _EntityData.StunResistance;
+        //CurrentStunResistance = _EntityData.StunResistance;
     }
 
     public void DamageHop(Vector2 direction, float velocity)
     {
-        if (EntityInternComponents.Rigidbody.bodyType == RigidbodyType2D.Dynamic)
-        {
-            direction.Set(direction.x * LastDamageDirection * (-1), direction.y);
-            EntityInternComponents.Rigidbody.velocity = direction * velocity;
-        }
+        //if (EntityInternComponents.Rigidbody.bodyType == RigidbodyType2D.Dynamic)
+        //{
+        //    direction.Set(direction.x * LastDamageDirection * (-1), direction.y);
+        //    EntityInternComponents.Rigidbody.velocity = direction * velocity;
+        //}
     }
     #endregion
 

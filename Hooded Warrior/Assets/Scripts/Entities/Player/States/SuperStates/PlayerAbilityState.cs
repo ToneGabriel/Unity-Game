@@ -5,8 +5,8 @@ public abstract class PlayerAbilityState : PlayerState
     protected bool _isTouchingCeiling;
     protected bool _isGrounded;
 
-    public PlayerAbilityState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerAbilityState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -18,22 +18,22 @@ public abstract class PlayerAbilityState : PlayerState
     {
         base.LogicUpdate();
 
-        if (_isAbilityDone)
-        {
-            if (_isTouchingCeiling)
-                _player.ChangeState((int)PlayerStateID.CrouchIdle);
-            else if (_isGrounded && _player.VelocityY < 0.01f)
-                _player.ChangeState((int)PlayerStateID.Idle);
-            else
-                _player.ChangeState((int)PlayerStateID.InAir);
-        }
+        //if (_isAbilityDone)
+        //{
+        //    if (_isTouchingCeiling)
+        //        _player.ChangeState((int)PlayerStateID.CrouchIdle);
+        //    else if (_isGrounded && _player.VelocityY < 0.01f)
+        //        _player.ChangeState((int)PlayerStateID.Idle);
+        //    else
+        //        _player.ChangeState((int)PlayerStateID.InAir);
+        //}
     }
 
-    protected override void DoChecks()
-    {
-        base.DoChecks();
+    //protected override void DoChecks()
+    //{
+    //    base.DoChecks();
 
-        _isGrounded = _player.IsGrounded();
-        _isTouchingCeiling = _player.IsTouchingCeiling();
-    }
+    //    _isGrounded = _player.IsGrounded();
+    //    _isTouchingCeiling = _player.IsTouchingCeiling();
+    //}
 }

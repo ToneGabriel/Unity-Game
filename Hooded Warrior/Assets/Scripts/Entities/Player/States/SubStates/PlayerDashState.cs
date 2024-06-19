@@ -11,8 +11,8 @@ public sealed class PlayerDashState : PlayerAbilityState
     private Vector3 _lastAIPosition;
     private float   _lastDashTime;
 
-    public PlayerDashState(Player player, string animBoolName)
-        : base(player, animBoolName) { }
+    //public PlayerDashState(Player player, string animBoolName)
+    //    : base(player, animBoolName) { }
 
     public override void Enter()
     {
@@ -24,7 +24,7 @@ public sealed class PlayerDashState : PlayerAbilityState
         //_dashDirection = Vector2.right * _player.FacingDirection;
 
         Helpers.ChangeTimeScale(TimeScale.Frozen);
-        _stateStartTime = Time.unscaledTime;
+        //_stateStartTime = Time.unscaledTime;
 
         _player.SetDashArrowActive(true);
     }
@@ -33,8 +33,8 @@ public sealed class PlayerDashState : PlayerAbilityState
     {
         base.Exit();
 
-        if (_player.VelocityY > 0f)
-            _player.SetVelocityY(_player.VelocityY * _player.StateData.DashEndYMultiplier);
+        //if (_player.VelocityY > 0f)
+        //    _player.SetVelocityY(_player.VelocityY * _player.StateData.DashEndYMultiplier);
     }
 
     public override void LogicUpdate()
@@ -54,31 +54,31 @@ public sealed class PlayerDashState : PlayerAbilityState
                 float angle = Vector2.SignedAngle(Vector2.right, _dashDirection);
                 _player.SetDashArrowRotation(Quaternion.Euler(0f, 0f, angle - 45));
 
-                if (_dashInputStop || Time.unscaledTime >= _stateStartTime + _player.StateData.MaxHoldTime)
-                {
-                    Helpers.ChangeTimeScale(TimeScale.Normal);
-                    _isHolding      = false;
-                    _stateStartTime = Time.time;
-                    _player.Drag    = _player.StateData.DashDrag;
-                    _player.FlipIfShould(Mathf.RoundToInt(_dashDirection.x));
-                    _player.SetDashArrowActive(false);
-                    //_player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
-                    //PlaceAfterImage();
-                }
+                //if (_dashInputStop || Time.unscaledTime >= _stateStartTime + _player.StateData.MaxHoldTime)
+                //{
+                //    Helpers.ChangeTimeScale(TimeScale.Normal);
+                //    _isHolding      = false;
+                //    _stateStartTime = Time.time;
+                //    _player.Drag    = _player.StateData.DashDrag;
+                //    _player.FlipIfShould(Mathf.RoundToInt(_dashDirection.x));
+                //    _player.SetDashArrowActive(false);
+                //    _player.SetVelocity(_player.PlayerData.DashVelocity, _dashDirection);
+                //    PlaceAfterImage();
+                //}
             }
             else
             {
-                _player.SetVelocity(_player.StateData.DashVelocity, _dashDirection);
+                //_player.SetVelocity(_player.StateData.DashVelocity, _dashDirection);
 
                 if (Vector2.Distance(_player.transform.position, _lastAIPosition) >= _player.StateData.DistanceBetweenAfterimages)
                     PlaceAfterImage();
 
-                if (Time.time >= _stateStartTime + _player.StateData.DashTime)
-                {
-                    _player.Drag    = 0f;
-                    _isAbilityDone  = true;
-                    _lastDashTime   = Time.time;
-                }
+                //if (Time.time >= _stateStartTime + _player.StateData.DashTime)
+                //{
+                //    //_player.Drag    = 0f;
+                //    _isAbilityDone  = true;
+                //    _lastDashTime   = Time.time;
+                //}
             }
     }
 
