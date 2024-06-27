@@ -31,18 +31,18 @@ public class GameplayState : GameManagerState
         _pauseGameInput = InputManager.Instance.PauseGameInput;
         //_pauseGameInput = _gameManager.Player._inputHandler.PauseGameInput;    // check "ESC" input for pause/resume game
 
-        if(_gameManager.Player.IsDead)
-            _gameManager.ChangeState((int)GameManagerStateID.ResetGame);
-        else if(_pauseGameInput)
-        {
-            if (!_gameManager.IsGamePaused)
-                PauseGame();
-            else
-                ResumeGame();
+        //if(_gameManager.Player.IsDead)
+        //    _gameManager.ChangeState((int)GameManagerStateID.ResetGame);
+        //else if(_pauseGameInput)
+        //{
+        //    if (!_gameManager.IsGamePaused)
+        //        PauseGame();
+        //    else
+        //        ResumeGame();
 
-            InputManager.Instance.UsePauseGameInput();
-            //_gameManager.Player._inputHandler.UsePauseGameInput();
-        }        
+        //    InputManager.Instance.UsePauseGameInput();
+        //    //_gameManager.Player._inputHandler.UsePauseGameInput();
+        //}        
     }
 
     public override void Exit()

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
+public abstract class Entity : ModularBehaviour, ISaveable, IDamageble
 {
     #region Components & Data
     [SerializeField] private EntitySensors  _sensors;
@@ -65,7 +65,7 @@ public abstract class Entity : FSMMonoBehaviour, ISaveable, IDamageble
 
     protected override void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
     }
     #endregion
 

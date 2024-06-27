@@ -75,11 +75,6 @@ public sealed class Archer : Enemy
         //Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _archerAggroModeData.MeleeAttackRadius);
     }
 
-    protected override void FSMInitializeModes()
-    {
-
-    }
-
     //protected override void FSMInitializeTransitions()
     //{
     //    // from Idle...

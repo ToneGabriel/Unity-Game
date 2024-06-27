@@ -3,7 +3,7 @@ using UnityEngine.Rendering.Universal;
 
 
 [PoolObject]
-public sealed class LightOrb : FSMMonoBehaviour
+public sealed class LightOrb : ModularBehaviour
 {
     #region Components & Data
     [SerializeField] private Light2D            _innerLightComponent;
@@ -99,12 +99,12 @@ public sealed class LightOrb : FSMMonoBehaviour
     #endregion Setters
 
     #region Other
-    protected override void FSMInitializeModes()
-    {
-        //AddNewState((int)LightOrbStateID.Born, new LightOrbBornState(this));
-        //AddNewState((int)LightOrbStateID.Live, new LightOrbLiveState(this));
-        //AddNewState((int)LightOrbStateID.Die,  new LightOrbDieState(this));
-    }
+    //protected override void FSMInitializeModes()
+    //{
+    //    //AddNewState((int)LightOrbStateID.Born, new LightOrbBornState(this));
+    //    //AddNewState((int)LightOrbStateID.Live, new LightOrbLiveState(this));
+    //    //AddNewState((int)LightOrbStateID.Die,  new LightOrbDieState(this));
+    //}
 
     protected override bool FSMUpdateConditions()
     {

@@ -67,17 +67,17 @@ public sealed class Bull : Enemy
         //Gizmos.DrawWireSphere(meleeAttackPosition.transform.position, meleeAttackStateData.attackRadius);
     }
 
-    protected override void FSMInitializeModes()
-    {
-        //AddNewState((int)BullStateID.Idle,              new BullIdleState(this, "idle", _idleStateData));
-        //AddNewState((int)BullStateID.Move,              new BullMoveState(this, "walk", _moveStateData));
-        //AddNewState((int)BullStateID.PlayerDetected,    new BullPlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
-        //AddNewState((int)BullStateID.LookForPlayer,     new BullLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData));
-        //AddNewState((int)BullStateID.Charge,            new BullChargeState(this, "charge", _chargeStateData));
-        //AddNewState((int)BullStateID.MeleeAttack,       new BullMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
-        //AddNewState((int)BullStateID.Stun,              new BullStunState(this, "stun", _stunStateData));
-        //AddNewState((int)BullStateID.Dead,              new BullDeadState(this, "dead", _deadStateData));
-    }
+    //protected override void FSMInitializeModes()
+    //{
+    //    //AddNewState((int)BullStateID.Idle,              new BullIdleState(this, "idle", _idleStateData));
+    //    //AddNewState((int)BullStateID.Move,              new BullMoveState(this, "walk", _moveStateData));
+    //    //AddNewState((int)BullStateID.PlayerDetected,    new BullPlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
+    //    //AddNewState((int)BullStateID.LookForPlayer,     new BullLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData));
+    //    //AddNewState((int)BullStateID.Charge,            new BullChargeState(this, "charge", _chargeStateData));
+    //    //AddNewState((int)BullStateID.MeleeAttack,       new BullMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
+    //    //AddNewState((int)BullStateID.Stun,              new BullStunState(this, "stun", _stunStateData));
+    //    //AddNewState((int)BullStateID.Dead,              new BullDeadState(this, "dead", _deadStateData));
+    //}
 
     protected override bool FSMUpdateConditions()
     {

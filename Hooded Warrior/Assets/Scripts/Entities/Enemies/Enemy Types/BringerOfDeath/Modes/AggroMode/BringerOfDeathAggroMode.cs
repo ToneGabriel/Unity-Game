@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class BringerOfDeathAggroMode : EntityMode
 {
-    private BringerOfDeath              _target;
-    private BringerOfDeathAggroModeData _aggroData;
+    private readonly BringerOfDeath                 _target;
+    private readonly BringerOfDeathAggroModeData    _aggroData;
+
+    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public BringerOfDeathAggroMode(BringerOfDeath bod, BringerOfDeathAggroModeData data)
         : base(bod)
@@ -14,16 +17,15 @@ public class BringerOfDeathAggroMode : EntityMode
         _aggroData  = data;
 
         // Initialize FSM
-        CreateStateArray((int)StateID.Count);
+        InitializeStates
+        (
+            new KeyValuePair<int, State>((int)StateID.PlayerDetected,   new BringerOfDeathPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b)),
+            new KeyValuePair<int, State>((int)StateID.MeleeAttack,      new BringerOfDeathMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b)),
+            new KeyValuePair<int, State>((int)StateID.RangedAttack,     new BringerOfDeathRangedAttackState(this, _aggroData, AnimatorParameters.RangedAttack_b))
+        );
 
-        AddNewState((int)StateID.PlayerDetected,    new BringerOfDeathPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b));
-        AddNewState((int)StateID.MeleeAttack,       new BringerOfDeathMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b));
-        AddNewState((int)StateID.RangedAttack,      new BringerOfDeathRangedAttackState(this, _aggroData, AnimatorParameters.RangedAttack_b));
-
-        SetDefaultState((int)StateID.PlayerDetected);
+        SetDefaultState((int)StateID.Default);
     }
-
-    public override string[] AnimatorParameterNames => throw new System.NotImplementedException();
 
     public enum StateID
     {
@@ -31,7 +33,7 @@ public class BringerOfDeathAggroMode : EntityMode
         MeleeAttack,
         RangedAttack,
 
-        Count
+        Default = PlayerDetected
     }
 
     //public enum BringerOfDeathStateID

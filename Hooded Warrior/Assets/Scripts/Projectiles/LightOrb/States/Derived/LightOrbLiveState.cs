@@ -20,8 +20,8 @@ public sealed class LightOrbLiveState : LightOrbBaseState
     {
         base.LogicUpdate();
 
-        if (Time.time >= _spellCastTime + _lightOrb.Data.SpellLifeTime)
-            _lightOrb.ChangeState((int)LightOrbStateID.Die);
+        //if (Time.time >= _spellCastTime + _lightOrb.Data.SpellLifeTime)
+        //    _lightOrb.ChangeState((int)LightOrbStateID.Die);
     }
 
     public override void PhysicsUpdate()

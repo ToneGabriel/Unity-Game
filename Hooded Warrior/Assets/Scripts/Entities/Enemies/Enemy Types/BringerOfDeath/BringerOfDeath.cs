@@ -92,19 +92,19 @@ public sealed class BringerOfDeath : Enemy
         //Gizmos.DrawWireSphere(MeleeAttackPosition.transform.position, _meleeAttackStateData.AttackRadius);
     }
 
-    protected override void FSMInitializeModes()
-    {
-        throw new System.NotImplementedException();
-        //AddNewState((int)BringerOfDeathStateID.Idle,                new BringerOfDeathIdleState(this, "idle", _idleStateData));
-        //AddNewState((int)BringerOfDeathStateID.Move,                new BringerOfDeathMoveState(this, "walk", _moveStateData));
-        //AddNewState((int)BringerOfDeathStateID.PlayerDetected,      new BringerOfDeathPlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
-        //AddNewState((int)BringerOfDeathStateID.LookForPlayer,       new BringerOfDeathLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData));
-        //AddNewState((int)BringerOfDeathStateID.Charge,              new BringerOfDeathChargeState(this, "charge", _chargeStateData));
-        //AddNewState((int)BringerOfDeathStateID.Dead,                new BringerOfDeathDeadState(this, "dead", _deadStateData));
-        //AddNewState((int)BringerOfDeathStateID.MeleeAttack,         new BringerOfDeathMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
-        //AddNewState((int)BringerOfDeathStateID.PortalRangedAttack,  new BringerOfDeathRangedAttackState(this, "portalRangedAttack", _portalRangedAttackStateData));
-        //AddNewState((int)BringerOfDeathStateID.OrbRangedAttack,     new BringerOfDeathRangedAttackState(this, "orbRangedAttack", _orbRangedAttackStateData));
-    }
+    //protected override void FSMInitializeModes()
+    //{
+    //    throw new System.NotImplementedException();
+    //    //AddNewState((int)BringerOfDeathStateID.Idle,                new BringerOfDeathIdleState(this, "idle", _idleStateData));
+    //    //AddNewState((int)BringerOfDeathStateID.Move,                new BringerOfDeathMoveState(this, "walk", _moveStateData));
+    //    //AddNewState((int)BringerOfDeathStateID.PlayerDetected,      new BringerOfDeathPlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
+    //    //AddNewState((int)BringerOfDeathStateID.LookForPlayer,       new BringerOfDeathLookForPlayerState(this, "lookForPlayer", _lookForPlayerStateData));
+    //    //AddNewState((int)BringerOfDeathStateID.Charge,              new BringerOfDeathChargeState(this, "charge", _chargeStateData));
+    //    //AddNewState((int)BringerOfDeathStateID.Dead,                new BringerOfDeathDeadState(this, "dead", _deadStateData));
+    //    //AddNewState((int)BringerOfDeathStateID.MeleeAttack,         new BringerOfDeathMeleeAttackState(this, "meleeAttack", _meleeAttackStateData));
+    //    //AddNewState((int)BringerOfDeathStateID.PortalRangedAttack,  new BringerOfDeathRangedAttackState(this, "portalRangedAttack", _portalRangedAttackStateData));
+    //    //AddNewState((int)BringerOfDeathStateID.OrbRangedAttack,     new BringerOfDeathRangedAttackState(this, "orbRangedAttack", _orbRangedAttackStateData));
+    //}
 
     protected override bool FSMUpdateConditions()
     {

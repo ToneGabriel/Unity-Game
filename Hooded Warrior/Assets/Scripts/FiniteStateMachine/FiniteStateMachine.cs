@@ -1,106 +1,99 @@
 using System;
-using UnityEngine;
+using System.Collections.Generic;
 
 
-public abstract class FiniteStateMachine : State
+public class FiniteStateMachine : State
 {
-    private int     _defaultStateID = -1;
-    private int     _currentStateID = -1;
+    #region Components
+    private int     _defaultStateID = 0;
+    private State   _currentState   = null;
     private State[] _states         = null;
 
-    public abstract string[] AnimatorParameterNames { get; }
+    public int StateCount { get { return _states.Length; } }
+    #endregion Components 
 
-    protected virtual void Start()
+    #region FSM Late Initialization
+    public void InitializeStates(params KeyValuePair<int, State>[] newStates)
     {
-        // Check integrity
-
-        foreach (var state in _states)
-            if (state == null)
-                throw new Exception();
-
-        if (_defaultStateID == -1)
+        if (newStates == null)
             throw new Exception();
+
+        _states = new State[newStates.Length];
+
+        foreach (var pair in newStates)
+        {
+            int key     = pair.Key;
+            State state = pair.Value;
+
+            if (state == null)
+                throw new Exception("Null State not allowed!");
+
+            if (0 > key || _states.Length <= key || _states[key] != null)
+                throw new Exception("Key outside range or duplicate!");
+
+            _states[key] = state;
+        }
     }
 
+    public void SetDefaultState(int stateID)
+    {
+        CheckStateID(stateID);
+
+        _defaultStateID = stateID;
+    }
+    #endregion FSM Late Initialization
+
+    #region State Interface
     public override void Enter()
     {
-        _currentStateID = _defaultStateID;
-        _states[_currentStateID].Enter();
+        _currentState = _states[_defaultStateID];
+        _currentState.Enter();
     }
 
     public override void Exit()
     {
-        _states[_currentStateID].Exit();
-        _currentStateID = _defaultStateID;
+        _currentState.Exit();
     }
 
     public override void LogicUpdate()
     {
-        _states[_currentStateID].LogicUpdate();
+        _currentState.LogicUpdate();
     }
 
     public override void PhysicsUpdate()
     {
-        _states[_currentStateID].PhysicsUpdate();
+        _currentState.PhysicsUpdate();
     }
+    #endregion State Interface
 
-    protected void CreateStateArray(int size)
-    {
-        if (_states != null)
-            throw new Exception();
-
-        if (size <= 0)
-            throw new Exception();
-
-        _states = new State[size];
-    }
-
-    public override void AddNewState(int stateID, State state)
-    {
-        if (_states == null)
-            throw new Exception();
-
-        if (state == null)
-            throw new Exception();
-
-        if (0 > stateID || _states.Length <= stateID || _states[stateID] != null)
-            throw new Exception();
-
-        _states[stateID] = state;
-    }
-
-    protected void SetDefaultState(int stateID)
-    {
-        if (0 > stateID || _states.Length <= stateID || _states[stateID] == null)
-            throw new Exception();
-
-        _defaultStateID = stateID;
-    }
-
-    public override void ChangeState(int stateID)
+    #region FSM Interface
+    public void ChangeState(int stateID)
     {
         CheckStateID(stateID);
 
-        _states[_currentStateID].Exit();
-        _currentStateID = stateID;
-        _states[_currentStateID].Enter();
+        _currentState.Exit();
+        _currentState = _states[stateID];
+        _currentState.Enter();
     }
 
     public bool IsStateActive(int stateID)
     {
         CheckStateID(stateID);
 
-        return _states[_currentStateID] == _states[stateID];
+        return _currentState == _states[stateID];
     }
 
     public State CurrentState()
     {
-        return _states[_currentStateID];
+        return _currentState;
     }
+    #endregion FSM Interface
 
+    #region Helpers
     private void CheckStateID(int stateID)
     {
         if (0 > stateID || _states.Length <= stateID)
             throw new ArgumentException("No state with ID exists!");
     }
+    #endregion Helpers
 }

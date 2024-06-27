@@ -20,7 +20,7 @@ public sealed class LightOrbBornState : LightOrbBaseState
             _lightOrb.OuterLightInnerRadius += _lightOrb.Data.OuterLightInnerRadiusChangeRatio;
             _lightOrb.OuterLightOuterRadius += _lightOrb.Data.OuterLightOuterRadiusChangeRatio;
         }
-        else
-            _lightOrb.ChangeState((int)LightOrbStateID.Live);
+        //else
+        //    _lightOrb.ChangeState((int)LightOrbStateID.Live);
     }
 }

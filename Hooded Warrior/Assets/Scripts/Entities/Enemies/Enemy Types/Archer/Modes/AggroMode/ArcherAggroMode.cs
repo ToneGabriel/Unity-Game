@@ -1,9 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public sealed class ArcherAggroMode : EntityMode
 {
     private Archer                 _target;
     private ArcherAggroModeData    _aggroData;
+
+    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public ArcherAggroMode(Archer archer, ArcherAggroModeData data)
         : base(archer)
@@ -12,17 +15,16 @@ public sealed class ArcherAggroMode : EntityMode
         _aggroData  = data;
 
         // Initialize FSM
-        CreateStateArray((int)StateID.Count);
+        InitializeStates
+        (
+            new KeyValuePair<int, State>((int)StateID.PlayerDetected,   new ArcherPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b)),
+            new KeyValuePair<int, State>((int)StateID.Dodge,            new ArcherDodgeState(this, _aggroData, AnimatorParameters.Dodge_b)),
+            new KeyValuePair<int, State>((int)StateID.MeleeAttack,      new ArcherMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b)),
+            new KeyValuePair<int, State>((int)StateID.RangedAttack,     new ArcherRangedAttackState(this, _aggroData, AnimatorParameters.RangedAttack_b))
+        );
 
-        AddNewState((int)StateID.PlayerDetected,    new ArcherPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b));
-        AddNewState((int)StateID.Dodge,             new ArcherDodgeState(this, _aggroData, AnimatorParameters.Dodge_b));
-        AddNewState((int)StateID.MeleeAttack,       new ArcherMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b));
-        AddNewState((int)StateID.RangedAttack,      new ArcherRangedAttackState(this, _aggroData, AnimatorParameters.RangedAttack_b));
-
-        SetDefaultState((int)StateID.PlayerDetected);
+        SetDefaultState((int)StateID.Default);
     }
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     #region Checkers
     public bool CheckPlayerInMinAgroRange()                                     // Raycast to check agro enter range
@@ -54,7 +56,7 @@ public sealed class ArcherAggroMode : EntityMode
         MeleeAttack,
         RangedAttack,
 
-        Count
+        Default = PlayerDetected
     }
 
     private static class AnimatorParameters

@@ -1,8 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class Player : Entity
 {
+    private enum MainStateID
+    {
+        Control,
+
+        Default = Control
+    }
+
+    private enum EventStateID
+    {
+        Hit
+    }
+
     #region Components & Data
     [SerializeField] private PlayerExternComponents _playerExternComponents;
     [SerializeField] private PlayerStateData        _playerStateData;
@@ -24,6 +37,21 @@ public sealed class Player : Entity
     protected override void Awake()
     {
         base.Awake();
+
+        // Only 1 main mode
+        InitializeMainModes
+        (
+            new KeyValuePair<int, State>((int)MainStateID.Control, new PlayerControlMode(this, null))
+        );
+
+        SetDefaultMainMode((int)MainStateID.Control);
+
+        // Hit mode
+        // Maybe add cinematic mode
+        InitializeEventModes
+        (
+            new KeyValuePair<int, State>((int)EventStateID.Hit, null)
+        );
 
         //_playerExtObjComponents._inventory = GetComponent<PlayerInventory>();
         //_weaponIndex    = 0;
@@ -260,9 +288,9 @@ public sealed class Player : Entity
         //Gizmos.DrawLine(_ledgeCheck.transform.position, _ledgeCheck.transform.position + (Vector3)(Vector2.right * FacingDirection * _dataPlayer.EnvironmentCheckDistance));
     }
 
-    protected override void FSMInitializeModes()
-    {
-        AddNewMode(0);  // only 1 mode
+    //protected override void FSMInitializeModes()
+    //{
+        //AddNewMode(0);  // only 1 mode
 
         //AddNewState(0, (int)PlayerStateID.Idle,            new PlayerIdleState(this, PlayerControllerParameters.Idle_b));
         //AddNewState(0, (int)PlayerStateID.Move,            new PlayerMoveState(this, PlayerControllerParameters.Move_b));
@@ -285,7 +313,7 @@ public sealed class Player : Entity
         //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
         //_secondaryDefendState.SetShield(_inventory.Shield);
         //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
-    }
+    //}
 
     //protected override void FSMInitializeTransitions()
     //{

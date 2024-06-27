@@ -4,8 +4,10 @@ using UnityEngine;
 
 public sealed class PlayerControlMode : EntityMode
 {
-    private Player                  _target;
-    private PlayerControlModeData   _controlData;
+    private readonly Player                 _target;
+    private readonly PlayerControlModeData  _controlData;
+
+    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public PlayerControlMode(Player player, PlayerControlModeData data)
         : base(player)
@@ -14,15 +16,14 @@ public sealed class PlayerControlMode : EntityMode
         _controlData    = data;
 
         // Initialize FSM
-        CreateStateArray((int)StateID.Count);
+        InitializeStates
+        (
+            new KeyValuePair<int, State>((int)StateID.Idle, new PlayerIdleState(this, _controlData, AnimatorParameters.Idle_b)),
+            new KeyValuePair<int, State>((int)StateID.Move, new PlayerMoveState(this, _controlData, AnimatorParameters.Move_b))
+        );
 
-        AddNewState((int)StateID.Idle, new PlayerIdleState(this, _controlData, AnimatorParameters.Idle_b));
-        AddNewState((int)StateID.Move, new PlayerMoveState(this, _controlData, AnimatorParameters.Move_b));
-
-        SetDefaultState((int)StateID.Idle);
+        SetDefaultState((int)StateID.Default);
     }
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public enum StateID
     {
@@ -44,7 +45,7 @@ public sealed class PlayerControlMode : EntityMode
         SecondaryDefend,
         SpellCast,
 
-        Count
+        Default = Idle
     }
 
     private static class AnimatorParameters

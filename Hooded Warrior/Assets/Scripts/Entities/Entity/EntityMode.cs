@@ -1,15 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public abstract class EntityMode : FiniteStateMachine
 {
-    private Entity      _target;
-    protected Vector2   _workspaceVector2;
+    private readonly Entity _target;
+    protected Vector2       _workspaceVector2;
+
+    public abstract string[] AnimatorParameterNames { get; }
 
     public EntityMode(Entity entity)
     {
         _target = entity;
+    }
+
+    public void ExitCurrentMode()
+    {
+        _target.ChangeToNextMainMode();
     }
 
     #region Setters
@@ -75,7 +81,7 @@ public abstract class EntityMode : FiniteStateMachine
         _target.FacingDirection *= -1;
         _target.transform.Rotate(0f, -180f, 0f);
     }
-    #endregion
+    #endregion Setters
 
     #region Checkers
     public bool IsGrounded()
@@ -107,5 +113,5 @@ public abstract class EntityMode : FiniteStateMachine
                                     _target.BaseData.EnvironmentCheckDistance,
                                     _target.BaseData.WhatIsGround);
     }
-    #endregion
+    #endregion Checkers
 }

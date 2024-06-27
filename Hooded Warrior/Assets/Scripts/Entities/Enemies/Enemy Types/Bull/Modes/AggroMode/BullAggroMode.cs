@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class BullAggroMode : EntityMode
 {
-    private Bull                _target;
-    private BullAggroModeData   _aggroData;
+    private readonly Bull               _target;
+    private readonly BullAggroModeData  _aggroData;
+
+    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public BullAggroMode(Bull bull, BullAggroModeData data)
         : base(bull)
@@ -14,16 +16,15 @@ public class BullAggroMode : EntityMode
         _aggroData  = data;
 
         // Initialize FSM
-        CreateStateArray((int)StateID.Count);
+        InitializeStates
+        (
+            new KeyValuePair<int, State>((int)StateID.PlayerDetected,   new BullPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b)),
+            new KeyValuePair<int, State>((int)StateID.Charge,           new BullChargeState(this, _aggroData, AnimatorParameters.Charge_b)),
+            new KeyValuePair<int, State>((int)StateID.MeleeAttack,      new BullMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b))
+        );
 
-        AddNewState((int)StateID.PlayerDetected,    new BullPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b));
-        AddNewState((int)StateID.Charge,            new BullChargeState(this, _aggroData, AnimatorParameters.Charge_b));
-        AddNewState((int)StateID.MeleeAttack,       new BullMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b));
-
-        SetDefaultState((int)StateID.PlayerDetected);
+        SetDefaultState((int)StateID.Default);
     }
-
-    public override string[] AnimatorParameterNames => throw new System.NotImplementedException();
 
     public enum StateID
     {
@@ -31,7 +32,7 @@ public class BullAggroMode : EntityMode
         Charge,
         MeleeAttack,
 
-        Count
+        Default = PlayerDetected
     }
 
     private static class AnimatorParameters

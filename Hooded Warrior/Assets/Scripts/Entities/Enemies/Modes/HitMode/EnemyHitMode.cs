@@ -2,27 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public sealed class EnemyHitMode : EntityMode
 {
-    private Enemy               _target;
-    private EnemyHitModeData    _hitData;
+    private readonly Enemy              _target;
+    private readonly EnemyHitModeData   _hitData;
 
-    public EnemyHitMode(Enemy enemy)
+    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
+
+    public EnemyHitMode(Enemy enemy, EnemyHitModeData data)
         : base(enemy)
     {
-        _target = enemy;
+        _target     = enemy;
+        _hitData    = data;
 
         // Initialize FSM
-        CreateStateArray((int)StateID.Count);
+        InitializeStates
+        (
+            new KeyValuePair<int, State>((int)StateID.Hit,  new EnemyHitState(this, _hitData, AnimatorParameters.Hit_b)),
+            new KeyValuePair<int, State>((int)StateID.Stun, new EnemyStunState(this, _hitData, AnimatorParameters.Stun_b)),
+            new KeyValuePair<int, State>((int)StateID.Dead, new EnemyDeadState(this, _hitData, AnimatorParameters.Dead_b))
+        );
 
-        AddNewState((int)StateID.Hit,   new EnemyHitState(this, _hitData, AnimatorParameters.Hit_b));
-        AddNewState((int)StateID.Stun,  new EnemyStunState(this, _hitData, AnimatorParameters.Stun_b));
-        AddNewState((int)StateID.Dead,  new EnemyDeadState(this, _hitData, AnimatorParameters.Dead_b));
-
-        SetDefaultState((int)StateID.Hit);
+        SetDefaultState((int)StateID.Default);
     }
-
-    public override string[] AnimatorParameterNames => throw new System.NotImplementedException();
 
     public enum StateID
     {
@@ -30,7 +33,7 @@ public sealed class EnemyHitMode : EntityMode
         Stun,
         Dead,
 
-        Count
+        Default = Hit
     }
 
     private static class AnimatorParameters

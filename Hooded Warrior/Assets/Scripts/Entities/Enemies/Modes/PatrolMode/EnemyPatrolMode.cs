@@ -1,27 +1,30 @@
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public sealed class EnemyPatrolMode : EntityMode
 {
-    private Enemy                _target;
-    private EnemyPatrolModeData  _patrolData;
+    private readonly Enemy                  _target;
+    private readonly EnemyPatrolModeData    _patrolData;
+
+    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public EnemyPatrolMode(Enemy enemy, EnemyPatrolModeData data)
         : base(enemy)
     {
         _target     = enemy;
         _patrolData = data;
-        
+
         // Initialize FSM
-        CreateStateArray((int)StateID.Count);
+        InitializeStates
+        (
+            new KeyValuePair<int, State>((int)StateID.Idle,             new EnemyIdleState(this, _patrolData, AnimatorParameters.Idle_b)),
+            new KeyValuePair<int, State>((int)StateID.Move,             new EnemyMoveState(this, _patrolData, AnimatorParameters.Move_b)),
+            new KeyValuePair<int, State>((int)StateID.LookForPlayer,    new EnemyLookForPlayerState(this, _patrolData, AnimatorParameters.LookForPlayer_b))
+        );
 
-        AddNewState((int)StateID.Idle,          new EnemyIdleState(this, _patrolData, AnimatorParameters.Idle_b));
-        AddNewState((int)StateID.Move,          new EnemyMoveState(this, _patrolData, AnimatorParameters.Move_b));
-        AddNewState((int)StateID.LookForPlayer, new EnemyLookForPlayerState(this, _patrolData, AnimatorParameters.LookForPlayer_b));
-
-        SetDefaultState((int)StateID.Move);
+        SetDefaultState((int)StateID.Default);
     }
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); }}
 
     #region Checkers
     public bool CheckPlayerInMinAgroRange()                                     // Raycast to check agro enter range
@@ -52,7 +55,7 @@ public sealed class EnemyPatrolMode : EntityMode
         Move,
         LookForPlayer,
 
-        Count
+        Default = LookForPlayer
     }
 
     private static class AnimatorParameters
