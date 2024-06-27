@@ -1,8 +1,8 @@
 ﻿
-public class BringerOfDeathRangedAttackState : EntityModeState
+public class BringerOfDeathRangedAttackState : EntityModeState<BringerOfDeathAggroMode.StateID>
 {
-    private BringerOfDeathAggroMode     _bringerOfDeathAggroMode;
-    private BringerOfDeathAggroModeData _bringerOfDeathAggroModeData;
+    private readonly BringerOfDeathAggroMode        _bringerOfDeathAggroMode;
+    private readonly BringerOfDeathAggroModeData    _bringerOfDeathAggroModeData;
 
     public BringerOfDeathRangedAttackState(BringerOfDeathAggroMode mode, BringerOfDeathAggroModeData data, string animBoolName)
         : base(mode, animBoolName)

@@ -1,10 +1,38 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public sealed class ArcherAggroMode : EntityMode
+public sealed class ArcherAggroMode : EntityMode<ArcherAggroMode.StateID>
 {
-    private Archer                 _target;
-    private ArcherAggroModeData    _aggroData;
+    public enum StateID
+    {
+        PlayerDetected,
+        Dodge,
+        MeleeAttack,
+        RangedAttack,
+
+        Default = PlayerDetected
+    }
+
+    private static class AnimatorParameters
+    {
+        public static readonly string PlayerDetected_b = "PlayerDetected_b";
+        public static readonly string Dodge_b = "Dodge_b";
+        public static readonly string MeleeAttack_b = "MeleeAttack_b";
+        public static readonly string RangedAttack_b = "RangedAttack_b";
+
+        public static string[] GetAnimatorParameterNames()
+        {
+            return new string[] {
+                                    PlayerDetected_b,
+                                    Dodge_b,
+                                    MeleeAttack_b,
+                                    RangedAttack_b,
+                                };
+        }
+    }
+
+    private readonly Archer                 _target;
+    private readonly ArcherAggroModeData    _aggroData;
 
     public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
@@ -17,13 +45,13 @@ public sealed class ArcherAggroMode : EntityMode
         // Initialize FSM
         InitializeStates
         (
-            new KeyValuePair<int, State>((int)StateID.PlayerDetected,   new ArcherPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b)),
-            new KeyValuePair<int, State>((int)StateID.Dodge,            new ArcherDodgeState(this, _aggroData, AnimatorParameters.Dodge_b)),
-            new KeyValuePair<int, State>((int)StateID.MeleeAttack,      new ArcherMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b)),
-            new KeyValuePair<int, State>((int)StateID.RangedAttack,     new ArcherRangedAttackState(this, _aggroData, AnimatorParameters.RangedAttack_b))
+            new KeyValuePair<StateID, State>(StateID.PlayerDetected,    new ArcherPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b)),
+            new KeyValuePair<StateID, State>(StateID.Dodge,             new ArcherDodgeState(this, _aggroData, AnimatorParameters.Dodge_b)),
+            new KeyValuePair<StateID, State>(StateID.MeleeAttack,       new ArcherMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b)),
+            new KeyValuePair<StateID, State>(StateID.RangedAttack,      new ArcherRangedAttackState(this, _aggroData, AnimatorParameters.RangedAttack_b))
         );
 
-        SetDefaultState((int)StateID.Default);
+        SetDefaultState(StateID.Default);
     }
 
     #region Checkers
@@ -48,32 +76,4 @@ public sealed class ArcherAggroMode : EntityMode
                                     _target.EnemyBaseData.CloseRangeActionDistance, _target.EnemyBaseData.WhatIsPlayer);
     }
     #endregion
-
-    public enum StateID
-    {
-        PlayerDetected,
-        Dodge,
-        MeleeAttack,
-        RangedAttack,
-
-        Default = PlayerDetected
-    }
-
-    private static class AnimatorParameters
-    {
-        public static readonly string PlayerDetected_b  = "PlayerDetected_b";
-        public static readonly string Dodge_b           = "Dodge_b";
-        public static readonly string MeleeAttack_b     = "MeleeAttack_b";
-        public static readonly string RangedAttack_b    = "RangedAttack_b";
-
-        public static string[] GetAnimatorParameterNames()
-        {
-            return new string[] {
-                                    PlayerDetected_b,
-                                    Dodge_b,
-                                    MeleeAttack_b,
-                                    RangedAttack_b,
-                                };
-        }
-    }
 }

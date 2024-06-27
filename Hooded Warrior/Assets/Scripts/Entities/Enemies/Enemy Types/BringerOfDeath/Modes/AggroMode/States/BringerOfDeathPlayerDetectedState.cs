@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BringerOfDeathPlayerDetectedState : EntityModeState
+public class BringerOfDeathPlayerDetectedState : EntityModeState<BringerOfDeathAggroMode.StateID>
 {
-    private BringerOfDeathAggroMode     _bringerOfDeathAggroMode;
-    private BringerOfDeathAggroModeData _bringerOfDeathAggroModeData;
+    private readonly BringerOfDeathAggroMode        _bringerOfDeathAggroMode;
+    private readonly BringerOfDeathAggroModeData    _bringerOfDeathAggroModeData;
 
     public BringerOfDeathPlayerDetectedState(BringerOfDeathAggroMode mode, BringerOfDeathAggroModeData data, string animBoolName)
         : base(mode, animBoolName)

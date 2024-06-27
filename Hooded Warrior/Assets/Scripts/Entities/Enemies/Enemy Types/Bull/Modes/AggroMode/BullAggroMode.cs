@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BullAggroMode : EntityMode
+public class BullAggroMode : EntityMode<BullAggroMode.StateID>
 {
     private readonly Bull               _target;
     private readonly BullAggroModeData  _aggroData;
@@ -18,12 +18,12 @@ public class BullAggroMode : EntityMode
         // Initialize FSM
         InitializeStates
         (
-            new KeyValuePair<int, State>((int)StateID.PlayerDetected,   new BullPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b)),
-            new KeyValuePair<int, State>((int)StateID.Charge,           new BullChargeState(this, _aggroData, AnimatorParameters.Charge_b)),
-            new KeyValuePair<int, State>((int)StateID.MeleeAttack,      new BullMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b))
+            new KeyValuePair<StateID, State>(StateID.PlayerDetected,    new BullPlayerDetectedState(this, _aggroData, AnimatorParameters.PlayerDetected_b)),
+            new KeyValuePair<StateID, State>(StateID.Charge,            new BullChargeState(this, _aggroData, AnimatorParameters.Charge_b)),
+            new KeyValuePair<StateID, State>(StateID.MeleeAttack,       new BullMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b))
         );
 
-        SetDefaultState((int)StateID.Default);
+        SetDefaultState(StateID.Default);
     }
 
     public enum StateID

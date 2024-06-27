@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ArcherPlayerDetectedState : EntityModeState
+public class ArcherPlayerDetectedState : EntityModeState<ArcherAggroMode.StateID>
 {
     private ArcherAggroMode     _archerAggroMode;
     private ArcherAggroModeData _archerAggroModeData;

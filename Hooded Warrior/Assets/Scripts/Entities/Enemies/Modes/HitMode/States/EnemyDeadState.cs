@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public class EnemyDeadState : EntityModeState
+public class EnemyDeadState : EntityModeState<EnemyHitMode.StateID>
 {
-    private EnemyHitMode        _enemyHitMode;
-    private EnemyHitModeData    _enemyHitModeData;
+    private readonly EnemyHitMode       _enemyHitMode;
+    private readonly EnemyHitModeData   _enemyHitModeData;
 
     public EnemyDeadState(EnemyHitMode mode, EnemyHitModeData data, string animBoolName)
         : base(mode, animBoolName)

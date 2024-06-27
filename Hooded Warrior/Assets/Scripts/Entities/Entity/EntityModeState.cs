@@ -1,15 +1,17 @@
+using System;
 using UnityEngine;
 
 
-public abstract class EntityModeState : State
+public abstract class EntityModeState<EState> : State
+where EState : Enum
 {
-    private EntityMode  _entityMode;
-    private string      _animBoolName;     // Animator parameter bool name for each state
+    private readonly EntityMode<EState> _entityMode;
+    private readonly string             _animBoolName;     // Animator parameter bool name for each state
     
     protected float     _stateStartTime;
     protected bool      _isStateAnimationFinished;
 
-    public EntityModeState(EntityMode mode, string animBoolName)
+    public EntityModeState(EntityMode<EState> mode, string animBoolName)
     {
         _entityMode     = mode;
         _animBoolName   = animBoolName;

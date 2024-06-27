@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHitState : EntityModeState
+public class EnemyHitState : EntityModeState<EnemyHitMode.StateID>
 {
-    private EnemyHitMode        _enemyHitMode;
-    private EnemyHitModeData    _enemyHitModeData;
+    private readonly EnemyHitMode       _enemyHitMode;
+    private readonly EnemyHitModeData   _enemyHitModeData;
 
     public EnemyHitState(EnemyHitMode mode, EnemyHitModeData data, string animBoolName)
         : base(mode, animBoolName)

@@ -2,29 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class PlayerControlMode : EntityMode
+public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
 {
-    private readonly Player                 _target;
-    private readonly PlayerControlModeData  _controlData;
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
-
-    public PlayerControlMode(Player player, PlayerControlModeData data)
-        : base(player)
-    {
-        _target         = player;
-        _controlData    = data;
-
-        // Initialize FSM
-        InitializeStates
-        (
-            new KeyValuePair<int, State>((int)StateID.Idle, new PlayerIdleState(this, _controlData, AnimatorParameters.Idle_b)),
-            new KeyValuePair<int, State>((int)StateID.Move, new PlayerMoveState(this, _controlData, AnimatorParameters.Move_b))
-        );
-
-        SetDefaultState((int)StateID.Default);
-    }
-
     public enum StateID
     {
         Idle,
@@ -60,5 +39,26 @@ public sealed class PlayerControlMode : EntityMode
                                     Move_b,
                                 };
         }
+    }
+
+    private readonly Player                 _target;
+    private readonly PlayerControlModeData  _controlData;
+
+    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
+
+    public PlayerControlMode(Player player, PlayerControlModeData data)
+        : base(player)
+    {
+        _target         = player;
+        _controlData    = data;
+
+        // Initialize FSM
+        InitializeStates
+        (
+            new KeyValuePair<StateID, State>(StateID.Idle, new PlayerIdleState(this, _controlData, AnimatorParameters.Idle_b)),
+            new KeyValuePair<StateID, State>(StateID.Move, new PlayerMoveState(this, _controlData, AnimatorParameters.Move_b))
+        );
+
+        SetDefaultState(StateID.Default);
     }
 }

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public class BringerOfDeathMeleeAttackState : EntityModeState
+public class BringerOfDeathMeleeAttackState : EntityModeState<BringerOfDeathAggroMode.StateID>
 {
-    private BringerOfDeathAggroMode     _bringerOfDeathAggroMode;
-    private BringerOfDeathAggroModeData _bringerOfDeathAggroModeData;
+    private readonly BringerOfDeathAggroMode        _bringerOfDeathAggroMode;
+    private readonly BringerOfDeathAggroModeData    _bringerOfDeathAggroModeData;
 
     public BringerOfDeathMeleeAttackState(BringerOfDeathAggroMode mode, BringerOfDeathAggroModeData data, string animBoolName)
         : base(mode, animBoolName)

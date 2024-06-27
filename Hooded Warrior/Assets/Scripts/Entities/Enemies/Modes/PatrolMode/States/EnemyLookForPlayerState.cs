@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public sealed class EnemyLookForPlayerState : EntityModeState
+public sealed class EnemyLookForPlayerState : EntityModeState<EnemyPatrolMode.StateID>
 {
-    private EnemyPatrolMode     _enemyPatrolMode;
-    private EnemyPatrolModeData _enemyPatrolModeData;
+    private readonly EnemyPatrolMode        _enemyPatrolMode;
+    private readonly EnemyPatrolModeData    _enemyPatrolModeData;
 
     private bool _turnImmediately;
     private bool _isPLayerInMinAgroRange;

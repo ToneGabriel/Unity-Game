@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public sealed class EnemyIdleState : EntityModeState
+public sealed class EnemyIdleState : EntityModeState<EnemyPatrolMode.StateID>
 {
-    private EnemyPatrolMode     _enemyPatrolMode;
-    private EnemyPatrolModeData _enemyPatrolModeData;
+    private readonly EnemyPatrolMode        _enemyPatrolMode;
+    private readonly EnemyPatrolModeData    _enemyPatrolModeData;
 
     private bool _flipAfterIdle;
     private bool _isIdleTimeOver;
@@ -39,9 +39,9 @@ public sealed class EnemyIdleState : EntityModeState
         base.LogicUpdate();
 
         if (Time.time >= _stateStartTime + _idleTime)
-            _enemyPatrolMode.ChangeState((int)EnemyPatrolMode.StateID.Move);
+            _enemyPatrolMode.ChangeState(EnemyPatrolMode.StateID.Move);
         else if (_enemyPatrolMode.CheckPlayerInMinAgroRange())
-            _enemyPatrolMode.ChangeState((int)EnemyPatrolMode.StateID.LookForPlayer);
+            _enemyPatrolMode.ChangeState(EnemyPatrolMode.StateID.LookForPlayer);
     }
 
     protected override void DoChecks()                                         // Check ranges

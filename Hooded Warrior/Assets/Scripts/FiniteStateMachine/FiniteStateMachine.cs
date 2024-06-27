@@ -2,40 +2,41 @@ using System;
 using System.Collections.Generic;
 
 
-public class FiniteStateMachine : State
+public class FiniteStateMachine<EState> : State
+where EState : Enum
 {
     #region Components
-    private int     _defaultStateID = 0;
-    private State   _currentState   = null;
-    private State[] _states         = null;
+    private EState                      _defaultStateID;
+    private State                       _currentState   = null;
+    private Dictionary<EState, State>   _states         = null;
 
-    public int StateCount { get { return _states.Length; } }
+    public int StateCount { get { return _states.Count; } }
     #endregion Components 
 
     #region FSM Late Initialization
-    public void InitializeStates(params KeyValuePair<int, State>[] newStates)
+    public void InitializeStates(params KeyValuePair<EState, State>[] newStates)
     {
         if (newStates == null)
             throw new Exception();
 
-        _states = new State[newStates.Length];
+        _states = new Dictionary<EState, State>();
 
         foreach (var pair in newStates)
         {
-            int key     = pair.Key;
+            EState key  = pair.Key;
             State state = pair.Value;
 
             if (state == null)
                 throw new Exception("Null State not allowed!");
 
-            if (0 > key || _states.Length <= key || _states[key] != null)
-                throw new Exception("Key outside range or duplicate!");
+            if (_states[key] != null)
+                throw new Exception("Duplicate Key!");
 
-            _states[key] = state;
+            _states.Add(key, state);
         }
     }
 
-    public void SetDefaultState(int stateID)
+    public void SetDefaultState(EState stateID)
     {
         CheckStateID(stateID);
 
@@ -67,7 +68,7 @@ public class FiniteStateMachine : State
     #endregion State Interface
 
     #region FSM Interface
-    public void ChangeState(int stateID)
+    public void ChangeState(EState stateID)
     {
         CheckStateID(stateID);
 
@@ -76,7 +77,7 @@ public class FiniteStateMachine : State
         _currentState.Enter();
     }
 
-    public bool IsStateActive(int stateID)
+    public bool IsStateActive(EState stateID)
     {
         CheckStateID(stateID);
 
@@ -90,9 +91,9 @@ public class FiniteStateMachine : State
     #endregion FSM Interface
 
     #region Helpers
-    private void CheckStateID(int stateID)
+    private void CheckStateID(EState stateID)
     {
-        if (0 > stateID || _states.Length <= stateID)
+        if (_states.ContainsKey(stateID))
             throw new ArgumentException("No state with ID exists!");
     }
     #endregion Helpers

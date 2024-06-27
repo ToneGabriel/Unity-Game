@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BullMeleeAttackState : EntityModeState
+public class BullMeleeAttackState : EntityModeState<BullAggroMode.StateID>
 {
     private BullAggroMode       _bullAggroMode;
     private BullAggroModeData   _bullAggroModeData;

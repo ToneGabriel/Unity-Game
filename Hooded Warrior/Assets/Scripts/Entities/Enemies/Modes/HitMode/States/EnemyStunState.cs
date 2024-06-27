@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public class EnemyStunState : EntityModeState
+public class EnemyStunState : EntityModeState<EnemyHitMode.StateID>
 {
-    private EnemyHitMode        _enemyHitMode;
-    private EnemyHitModeData    _enemyHitModeData;
+    private readonly EnemyHitMode       _enemyHitMode;
+    private readonly EnemyHitModeData   _enemyHitModeData;
 
     protected bool _isStunTimeOver;
     protected bool _isGrounded;

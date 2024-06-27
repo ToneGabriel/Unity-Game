@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 
-public abstract class EntityMode : FiniteStateMachine
+public abstract class EntityMode<EState> : FiniteStateMachine<EState>
+where EState : Enum
 {
     private readonly Entity _target;
     protected Vector2       _workspaceVector2;

@@ -1,8 +1,8 @@
 ﻿
-public class EnemyMoveState : EntityModeState
+public class EnemyMoveState : EntityModeState<EnemyPatrolMode.StateID>
 {
-    private EnemyPatrolMode     _enemyPatrolMode;
-    private EnemyPatrolModeData _enemyPatrolModeData;
+    private readonly EnemyPatrolMode        _enemyPatrolMode;
+    private readonly EnemyPatrolModeData    _enemyPatrolModeData;
 
     protected bool _isDetectingWall;
     protected bool _isDetectingLedge;

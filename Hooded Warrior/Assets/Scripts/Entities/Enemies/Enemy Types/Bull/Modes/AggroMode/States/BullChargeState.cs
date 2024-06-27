@@ -1,5 +1,5 @@
 ﻿
-public class BullChargeState : EntityModeState
+public class BullChargeState : EntityModeState<BullAggroMode.StateID>
 {
     private BullAggroMode     _bullAggroMode;
     private BullAggroModeData _bullAggroModeData;

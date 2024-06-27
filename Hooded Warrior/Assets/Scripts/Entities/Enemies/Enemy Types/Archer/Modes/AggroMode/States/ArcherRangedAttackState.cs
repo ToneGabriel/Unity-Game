@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ArcherRangedAttackState : EntityModeState
+public class ArcherRangedAttackState : EntityModeState<ArcherAggroMode.StateID>
 {
     public bool IsOnCooldown { get; private set; }
 

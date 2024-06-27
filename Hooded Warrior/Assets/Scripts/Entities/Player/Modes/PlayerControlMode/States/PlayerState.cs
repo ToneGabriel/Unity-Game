@@ -1,5 +1,5 @@
 ﻿
-public abstract class PlayerState : EntityModeState
+public abstract class PlayerState : EntityModeState<PlayerControlMode.StateID>
 {
     protected PlayerControlMode     _playerControlMode;
     protected PlayerControlModeData _playerControlModeData;

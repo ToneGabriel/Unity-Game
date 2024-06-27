@@ -9,8 +9,8 @@ public abstract class ModularBehaviour : MonoBehaviour
     private int _defaultMainModeID                  = 0;
     private int _currentMainModeID                  = 0;
     private State _currentMode                      = null;
-    private CircularFiniteStateMachine _mainMode    = null;
-    private FiniteStateMachine _eventMode           = null;
+    //private CircularFiniteStateMachine _mainMode    = null;
+    //private FiniteStateMachine _eventMode           = null;
     #endregion Components & Data
 
     #region Unity Functions
@@ -62,12 +62,12 @@ public abstract class ModularBehaviour : MonoBehaviour
     #region Late Init Functions
     protected void InitializeMainModes(params KeyValuePair<int, State>[] newModes)
     {
-        _mainMode.InitializeOrderedStates(newModes);
+        //_mainMode.InitializeOrderedStates(newModes);
     }
 
     protected void InitializeEventModes(params KeyValuePair<int, State>[] newModes)
     {
-        _eventMode.InitializeStates(newModes);
+        //_eventMode.InitializeStates(newModes);
     }
 
     protected void SetDefaultMainMode(int modeID) // from main modes
@@ -84,21 +84,21 @@ public abstract class ModularBehaviour : MonoBehaviour
     public void ChangeToNextMainMode()
     {
         // cyclic transition
-        _currentMode = _mainMode;
-        _mainMode.ChangeNextState();
+        //_currentMode = _mainMode;
+        //_mainMode.ChangeNextState();
     }
 
     public void ChangeToDefaultMainState()
     {
-        _currentMode = _mainMode;
-        _mainMode.ChangeDefaultState();
+        //_currentMode = _mainMode;
+        //_mainMode.ChangeDefaultState();
     }
 
     public void ChangeToEventMode(int modeID)
     {
         // specific transition
-        _currentMode = _eventMode;
-        _eventMode.ChangeState(modeID);
+        //_currentMode = _eventMode;
+        //_eventMode.ChangeState(modeID);
     }
     #endregion External Interface
 }
