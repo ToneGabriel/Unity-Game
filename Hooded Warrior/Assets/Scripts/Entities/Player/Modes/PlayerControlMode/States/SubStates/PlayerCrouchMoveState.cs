@@ -12,9 +12,9 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
         //_player.SetLightOrbPosition(_player.StateData.CrouchLightOrbPosition);
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_inputX == 0)
         //    _player.ChangeState((int)PlayerStateID.CrouchIdle);
@@ -22,9 +22,9 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
         //    _player.ChangeState((int)PlayerStateID.Move);
     }
 
-    public override void PhysicsUpdate()
+    public override void FixedUpdate()
     {
-        base.PhysicsUpdate();
+        base.FixedUpdate();
 
         //_player.SetVelocityX(_player.StateData.CrouchMovementVelocity * _inputX);
     }

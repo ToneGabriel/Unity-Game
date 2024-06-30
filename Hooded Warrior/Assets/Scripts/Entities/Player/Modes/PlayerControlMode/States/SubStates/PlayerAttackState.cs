@@ -23,9 +23,9 @@ public sealed class PlayerAttackState : PlayerAbilityState
         _weapon.ExitWeapon();
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_setVelocity)
         //    _player.SetVelocityX(_velocityToSet * _player.FacingDirection);

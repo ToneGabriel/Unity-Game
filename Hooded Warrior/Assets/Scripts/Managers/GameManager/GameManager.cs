@@ -1,7 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public sealed class GameManager : ModularBehaviour
+public sealed class GameManager : MonoBehaviourController
 {
+    public enum StateID
+    {
+        StartMenu,
+        LoadingScreen,
+        Gameplay,
+        ResetGame
+    }
+
     public static GameManager Instance;
 
     #region Components & Data
@@ -44,6 +53,29 @@ public sealed class GameManager : ModularBehaviour
     }
     #endregion
 
+    #region Controller Interface
+    protected override State GetControlState()
+    {
+        return null;// _fsm;
+    }
+
+    protected override bool UpdateConditions()
+    {
+        return true;
+    }
+
+    protected override bool FixedUpdateConditions()
+    {
+        return true;
+    }
+
+    public override void ChangeState()
+    {
+        throw new NotImplementedException("Not intended for implementation!");
+    }
+
+    #endregion Controller Interface
+
     #region Other
     public void LoadDataOnNewGame()
     {
@@ -60,17 +92,5 @@ public sealed class GameManager : ModularBehaviour
     //    //AddNewState(0, (int)GameManagerStateID.Gameplay,       new GameplayState(Instance, _gameplayData));
     //    //AddNewState(0, (int)GameManagerStateID.ResetGame,      new ResetGameState(Instance, _resetGameData));
     //}
-
-    protected override bool FSMUpdateConditions()
-    {
-        // always update
-        return true;
-    }
-
-    protected override bool FSMFixedUpdateConditions()
-    {
-        // always update
-        return true;
-    }
     #endregion Other
 }

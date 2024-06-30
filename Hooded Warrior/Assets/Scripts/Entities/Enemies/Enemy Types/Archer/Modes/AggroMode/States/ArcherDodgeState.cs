@@ -37,9 +37,9 @@ public class ArcherDodgeState : EntityModeState<ArcherAggroMode.StateID>
         //CooldownManager.Instance.Subscribe(this);
     }
 
-    public override void LogicUpdate()                                              // Counts dodge time
+    public override void Update()                                              // Counts dodge time
     {
-        base.LogicUpdate();
+        base.Update();
 
         if (Time.time >= _stateStartTime + _archerAggroModeData.DodgeTime && _isGrounded)
             _isDodgeOver = true;

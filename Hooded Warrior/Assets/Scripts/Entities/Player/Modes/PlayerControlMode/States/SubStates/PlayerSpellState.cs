@@ -21,9 +21,9 @@ public sealed class PlayerSpellState : PlayerAbilityState
         Spell.ExitSpell();
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         IsHolding = InputManager.Instance.SpellCastInput;
 

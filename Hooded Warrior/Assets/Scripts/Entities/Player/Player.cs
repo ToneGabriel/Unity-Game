@@ -4,17 +4,13 @@ using UnityEngine;
 
 public sealed class Player : Entity
 {
-    private enum MainStateID
+    private enum StateID
     {
         Control,
-
-        Default = Control
-    }
-
-    private enum EventStateID
-    {
         Hit
     }
+
+    private FiniteStateMachine<StateID> _playerController = null;
 
     #region Components & Data
     [SerializeField] private PlayerExternComponents _playerExternComponents;
@@ -33,25 +29,44 @@ public sealed class Player : Entity
     //private int _spellIndex;
     #endregion
 
+    #region Control Interface
+    protected override State GetControlState()
+    {
+        return _playerController;
+    }
+
+    protected override bool UpdateConditions()
+    {
+        return true;
+        //return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FixedUpdateConditions()
+    {
+        return true;
+        //return !GameManager.Instance.IsGamePaused;
+    }
+
+    public override void ChangeState()
+    {
+        _playerController.ChangeState(StateID.Control);
+    }
+    #endregion Control Interface
+
     #region Unity Functions
     protected override void Awake()
     {
         base.Awake();
 
-        // Only 1 main mode
-        InitializeMainModes
-        (
-            new KeyValuePair<int, State>((int)MainStateID.Control, new PlayerControlMode(this, null))
-        );
+        _playerController = new FiniteStateMachine<StateID>();
 
-        SetDefaultMainMode((int)MainStateID.Control);
-
-        // Hit mode
-        // Maybe add cinematic mode
-        InitializeEventModes
+        _playerController.InitializeStates
         (
-            new KeyValuePair<int, State>((int)EventStateID.Hit, null)
-        );
+            new KeyValuePair<StateID, State>(StateID.Control, new PlayerControlMode(this, null))
+            //new KeyValuePair<StateID, State>(StateID.Hit,       null)
+        );    
+
+        _playerController.SetDefaultState(StateID.Control);
 
         //_playerExtObjComponents._inventory = GetComponent<PlayerInventory>();
         //_weaponIndex    = 0;
@@ -414,16 +429,6 @@ public sealed class Player : Entity
 
     //    // TODO: add more
     //}
-
-    protected override bool FSMUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
-
-    protected override bool FSMFixedUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
     #endregion
 }
 

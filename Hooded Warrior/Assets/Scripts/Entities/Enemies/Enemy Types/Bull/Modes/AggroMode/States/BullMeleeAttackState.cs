@@ -12,9 +12,9 @@ public class BullMeleeAttackState : EntityModeState<BullAggroMode.StateID>
         _bullAggroModeData  = data;
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_isStateAnimationFinished)
         //{

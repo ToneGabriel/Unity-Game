@@ -23,7 +23,7 @@ public class ResetGameState : GameManagerState
         _gameManager.StartCoroutine(ShowDeathPrompt());
     }
 
-    public override void LogicUpdate() => base.LogicUpdate();
+    public override void Update() => base.Update();
 
     public override void Exit()
     {

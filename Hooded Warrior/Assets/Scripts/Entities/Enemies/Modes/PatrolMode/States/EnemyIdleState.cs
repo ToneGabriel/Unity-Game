@@ -34,9 +34,9 @@ public sealed class EnemyIdleState : EntityModeState<EnemyPatrolMode.StateID>
             _enemyPatrolMode.Flip();
     }
 
-    public override void LogicUpdate()                                      // Counts idle time
+    public override void Update()                                      // Counts idle time
     {
-        base.LogicUpdate();
+        base.Update();
 
         if (Time.time >= _stateStartTime + _idleTime)
             _enemyPatrolMode.ChangeState(EnemyPatrolMode.StateID.Move);

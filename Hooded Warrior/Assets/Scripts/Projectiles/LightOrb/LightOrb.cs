@@ -1,17 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 
 [PoolObject]
-public sealed class LightOrb : ModularBehaviour
+public sealed class LightOrb : MonoBehaviourController
 {
     #region Components & Data
-    [SerializeField] private Light2D            _innerLightComponent;
-    [SerializeField] private Light2D            _outerLightComponent;
-    [SerializeField] private LightOrbSpellData  _lightOrbSpellData;
+    [SerializeField] private Light2D _innerLightComponent;
+    [SerializeField] private Light2D _outerLightComponent;
+    [SerializeField] private LightOrbSpellData _lightOrbSpellData;
 
-    private Rigidbody2D                         _rigidbody;
-    private GameObject                          _target;
+    private Rigidbody2D _rigidbody;
+    private GameObject _target;
     #endregion Components & Data
 
     #region Component Getters & Setters
@@ -50,8 +51,8 @@ public sealed class LightOrb : ModularBehaviour
     {
         base.Awake();
 
-        _rigidbody  = GetComponent<Rigidbody2D>();
-        _target     = null;
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _target = null;
     }
 
     protected override void OnEnable()
@@ -69,6 +70,28 @@ public sealed class LightOrb : ModularBehaviour
         base.FixedUpdate();
     }
     #endregion Unity Functions
+
+    #region Controller Interface
+    protected override State GetControlState()
+    {
+        return null; //_fsm;
+    }
+
+    protected override bool UpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FixedUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    public override void ChangeState()
+    {
+        throw new NotImplementedException("Not intended for implementation!");
+    }
+    #endregion Controller Interface
 
     #region Setters
     public void SetTarget(GameObject target)
@@ -105,15 +128,5 @@ public sealed class LightOrb : ModularBehaviour
     //    //AddNewState((int)LightOrbStateID.Live, new LightOrbLiveState(this));
     //    //AddNewState((int)LightOrbStateID.Die,  new LightOrbDieState(this));
     //}
-
-    protected override bool FSMUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
-
-    protected override bool FSMFixedUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
     #endregion Other
 }

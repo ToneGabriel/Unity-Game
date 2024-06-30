@@ -26,6 +26,28 @@ public sealed class Archer : Enemy
     }
     #endregion
 
+    #region Controller Interface
+    protected override State GetControlState()
+    {
+        return null;// _fsm;
+    }
+
+    protected override bool UpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FixedUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    public override void ChangeState()
+    {
+        // TODO
+    }
+    #endregion Controller Interface
+
     #region Triggers
     public void TriggerMeleeAttack()
     {
@@ -116,15 +138,5 @@ public sealed class Archer : Enemy
     //    AddNewTransition((int)ArcherStateID.RangedAttack, (int)ArcherStateID.PlayerDetected,    () => { return CheckPlayerInMinAgroRange(); });
     //    AddNewTransition((int)ArcherStateID.RangedAttack, (int)ArcherStateID.LookForPlayer,     () => { return !CheckPlayerInMinAgroRange(); });
     //}
-
-    protected override bool FSMUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
-
-    protected override bool FSMFixedUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
     #endregion
 }

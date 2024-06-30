@@ -48,9 +48,9 @@ public sealed class PlayerLedgeClimbState : PlayerState
         }
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_isStateAnimationFinished)
         //    _player.ChangeState((int)PlayerStateID.Idle);

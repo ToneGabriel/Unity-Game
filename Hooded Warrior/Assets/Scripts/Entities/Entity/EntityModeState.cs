@@ -31,9 +31,9 @@ where EState : Enum
         _entityMode.Target_SetAnimatorBoolParam(_animBoolName, false);
     }
 
-    public override void LogicUpdate() { }
+    public override void Update() { }
 
-    public override void PhysicsUpdate() => DoChecks();
+    public override void FixedUpdate() => DoChecks();
 
     public override void AnimationTrigger() { }
 

@@ -11,9 +11,9 @@ public sealed class PlayerIdleState : PlayerGroundedState
         //_player.SetVelocityX(0f);
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_inputX != 0)
         //    _playerControlMode.ChangeState((int)PlayerStateID.Move);
@@ -21,9 +21,9 @@ public sealed class PlayerIdleState : PlayerGroundedState
         //    _playerControlMode.ChangeState((int)PlayerStateID.CrouchIdle);
     }
 
-    public override void PhysicsUpdate()
+    public override void FixedUpdate()
     {
-        base.PhysicsUpdate();
+        base.FixedUpdate();
 
         //_player.SetVelocityX(0f);
     }

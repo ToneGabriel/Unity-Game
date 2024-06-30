@@ -30,9 +30,9 @@ public sealed class PlayerInAirState : PlayerState
     //    //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
     //}
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         _inputX         = InputManager.Instance.NormalizedInputX;
         _jumpInput      = InputManager.Instance.JumpInput;

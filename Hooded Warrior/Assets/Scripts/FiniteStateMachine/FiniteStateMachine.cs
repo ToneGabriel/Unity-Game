@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
+// EState is the enum used to map states
 public class FiniteStateMachine<EState> : State
 where EState : Enum
 {
@@ -17,7 +18,7 @@ where EState : Enum
     public void InitializeStates(params KeyValuePair<EState, State>[] newStates)
     {
         if (newStates == null)
-            throw new Exception();
+            throw new Exception("At least one state is required!");
 
         _states = new Dictionary<EState, State>();
 
@@ -26,11 +27,11 @@ where EState : Enum
             EState key  = pair.Key;
             State state = pair.Value;
 
+            if (_states.ContainsKey(key))
+                throw new Exception("Duplicate Key!");
+
             if (state == null)
                 throw new Exception("Null State not allowed!");
-
-            if (_states[key] != null)
-                throw new Exception("Duplicate Key!");
 
             _states.Add(key, state);
         }
@@ -56,14 +57,14 @@ where EState : Enum
         _currentState.Exit();
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        _currentState.LogicUpdate();
+        _currentState.Update();
     }
 
-    public override void PhysicsUpdate()
+    public override void FixedUpdate()
     {
-        _currentState.PhysicsUpdate();
+        _currentState.FixedUpdate();
     }
     #endregion State Interface
 
@@ -93,7 +94,7 @@ where EState : Enum
     #region Helpers
     private void CheckStateID(EState stateID)
     {
-        if (_states.ContainsKey(stateID))
+        if (!_states.ContainsKey(stateID))
             throw new ArgumentException("No state with ID exists!");
     }
     #endregion Helpers

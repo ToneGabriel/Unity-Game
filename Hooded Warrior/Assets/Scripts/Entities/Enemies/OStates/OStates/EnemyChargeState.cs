@@ -23,9 +23,9 @@ public abstract class EnemyChargeState
     //    _isChargeTimeOver = false;
     //}
 
-    //public override void LogicUpdate()                                                  
+    //public override void Update()                                                  
     //{
-    //    base.LogicUpdate();
+    //    base.Update();
 
     //    if (Time.time >= _stateStartTime + _stateData.ChargeTime)                       // Counts charge time
     //        _isChargeTimeOver = true;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public sealed class Bull : Enemy
 {
@@ -27,6 +28,28 @@ public sealed class Bull : Enemy
         base.OnEnable();
     }
     #endregion
+
+    #region Controller Interface
+    protected override State GetControlState()
+    {
+        return null;    // _fsm
+    }
+
+    protected override bool UpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FixedUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    public override void ChangeState()
+    {
+        // TODO
+    }
+    #endregion Controller Interface
 
     #region Triggers
     // get acces to Trigger and Finish attack in Bull_MeleeAttackState class from Bull class
@@ -78,15 +101,5 @@ public sealed class Bull : Enemy
     //    //AddNewState((int)BullStateID.Stun,              new BullStunState(this, "stun", _stunStateData));
     //    //AddNewState((int)BullStateID.Dead,              new BullDeadState(this, "dead", _deadStateData));
     //}
-
-    protected override bool FSMUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
-
-    protected override bool FSMFixedUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
     #endregion
 }

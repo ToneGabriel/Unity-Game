@@ -25,9 +25,9 @@ public class ArcherPlayerDetectedState : EntityModeState<ArcherAggroMode.StateID
         _canMove = false;
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         if (Time.time >= _stateStartTime + _archerAggroModeData.LookTime)       // Counts time before taking action
             _canMove = true;

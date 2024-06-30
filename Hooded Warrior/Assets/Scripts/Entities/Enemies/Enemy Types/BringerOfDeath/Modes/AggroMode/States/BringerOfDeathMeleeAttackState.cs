@@ -12,9 +12,9 @@ public class BringerOfDeathMeleeAttackState : EntityModeState<BringerOfDeathAggr
         _bringerOfDeathAggroModeData    = data;
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_isStateAnimationFinished)
         //{

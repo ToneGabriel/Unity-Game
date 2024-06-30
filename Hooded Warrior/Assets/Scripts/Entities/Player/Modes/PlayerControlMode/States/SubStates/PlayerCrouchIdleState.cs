@@ -21,9 +21,9 @@ public sealed class PlayerCrouchIdleState : PlayerGroundedState
         //_player.SetLightOrbPosition(_player.StateData.StandLightOrbPosition);
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_inputX != 0)
         //    _player.ChangeState((int)PlayerStateID.CrouchMove);

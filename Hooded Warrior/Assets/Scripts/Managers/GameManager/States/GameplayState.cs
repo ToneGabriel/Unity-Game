@@ -24,9 +24,9 @@ public class GameplayState : GameManagerState
         _gameManager.Player.gameObject.SetActive(true);
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         _pauseGameInput = InputManager.Instance.PauseGameInput;
         //_pauseGameInput = _gameManager.Player._inputHandler.PauseGameInput;    // check "ESC" input for pause/resume game

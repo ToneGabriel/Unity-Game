@@ -1,7 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+
 
 public sealed class Slime : Enemy
 {
+    public enum StateID
+    {
+        // TODO: change this for aggro, non-aggro ...
+        //Move,
+        //Idle,
+        //PlayerDetected
+    }
+
     [SerializeField] private Data_Idle _idleStateData;
     [SerializeField] private Data_Move _moveStateData;
     [SerializeField] private Data_PlayerDetected _playerDetectedStateData;
@@ -24,13 +34,25 @@ public sealed class Slime : Enemy
     //    //AddNewState((int)SlimeStateID.PlayerDetected,   new SlimePlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
     //}
 
-    protected override bool FSMUpdateConditions()
+    #region Controller Interface
+    protected override State GetControlState()
+    {
+        return null;    // _fsm
+    }
+
+    protected override bool UpdateConditions()
     {
         return !GameManager.Instance.IsGamePaused;
     }
 
-    protected override bool FSMFixedUpdateConditions()
+    protected override bool FixedUpdateConditions()
     {
         return !GameManager.Instance.IsGamePaused;
     }
+
+    public override void ChangeState()
+    {
+        // TODO
+    }
+    #endregion Controller Interface
 }

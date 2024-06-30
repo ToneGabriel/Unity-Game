@@ -16,9 +16,9 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
         //_player.Flip();
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (Time.time >= _stateStartTime + _player.StateData.WallJumpTime)
         //    _isAbilityDone = true;

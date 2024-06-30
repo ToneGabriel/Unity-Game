@@ -23,9 +23,9 @@ public sealed class PlayerDefendState : PlayerAbilityState
         Shield.ExitShield();
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         IsHolding = InputManager.Instance.SecondaryDefendInput;
 

@@ -21,9 +21,9 @@ public abstract class PlayerTouchingWallState : PlayerState
         // _player.AdvancedStatus.CanDash = true;
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         _inputX     = InputManager.Instance.NormalizedInputX;
         _inputY     = InputManager.Instance.NormalizedInputY;

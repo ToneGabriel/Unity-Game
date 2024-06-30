@@ -14,9 +14,9 @@ public abstract class PlayerState : EntityModeState<PlayerControlMode.StateID>
         _playerControlModeData  = data;
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         _changeWeaponInput  = InputManager.Instance.ChangeWeaponInput;
         _changeSpellInput   = InputManager.Instance.ChangeSpellInput;

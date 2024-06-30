@@ -17,7 +17,7 @@ where EState : Enum
 
     public void ExitCurrentMode()
     {
-        _target.ChangeToNextMainMode();
+        _target.ChangeState();
     }
 
     #region Setters

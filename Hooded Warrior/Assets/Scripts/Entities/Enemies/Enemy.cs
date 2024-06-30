@@ -54,17 +54,17 @@ public abstract class Enemy : Entity                // Base Enemy class
     #endregion
 
     #region Save Functions
-    public override object CaptureState()
-    {
-        return new EnemySaveData(this);
-    }
+    //public override object CaptureState()
+    //{
+    //    return new EnemySaveData(this);
+    //}
 
-    public override void RestoreState(ref object state)
-    {
-        var data = (EnemySaveData)state;
+    //public override void RestoreState(ref object state)
+    //{
+    //    var data = (EnemySaveData)state;
 
-        //EntityInternComponents.IsDead = data.IsDead;
-    }
+    //    //EntityInternComponents.IsDead = data.IsDead;
+    //}
     #endregion
 
     #region Other Functions

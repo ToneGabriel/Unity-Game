@@ -1,4 +1,3 @@
-using System;
 
 // Composition
 // States will be inherited by leaf concrete states...
@@ -9,9 +8,9 @@ public abstract class State
 
     public virtual void Exit() { }
 
-    public virtual void LogicUpdate() { }
+    public virtual void Update() { }
 
-    public virtual void PhysicsUpdate() { }
+    public virtual void FixedUpdate() { }
 
     public virtual void AnimationTrigger() { }
 

@@ -35,9 +35,9 @@ public class EnemyStunState : EntityModeState<EnemyHitMode.StateID>
         //_enemy.RigidbodyType = RigidbodyType2D.Dynamic;
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         if (Time.time >= _stateStartTime + _enemyHitModeData.StunTime)                                                        // Counts stun time
             _isStunTimeOver = true;

@@ -16,17 +16,17 @@ public sealed class LightOrbLiveState : LightOrbBaseState
         _lastHoverTime = Time.time;
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (Time.time >= _spellCastTime + _lightOrb.Data.SpellLifeTime)
         //    _lightOrb.ChangeState((int)LightOrbStateID.Die);
     }
 
-    public override void PhysicsUpdate()
+    public override void FixedUpdate()
     {
-        base.PhysicsUpdate();
+        base.FixedUpdate();
 
         // Random direction generator. This results in a "flutter" effect
         _lightOrb.ApplyImpulse( _lightOrb.Data.FlutterAcceleration *

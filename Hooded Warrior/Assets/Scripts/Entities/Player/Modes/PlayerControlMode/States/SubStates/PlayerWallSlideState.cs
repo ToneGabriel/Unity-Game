@@ -4,9 +4,9 @@ public sealed class PlayerWallSlideState : PlayerTouchingWallState
     public PlayerWallSlideState(PlayerControlMode mode, PlayerControlModeData data, string animBoolName)
         : base(mode, data, animBoolName) { }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //_player.SetVelocityY(-_player.StateData.WallSlideVelocity);
         //_player.SetVelocityX(_player.StateData.MovementVelocity * _inputX);

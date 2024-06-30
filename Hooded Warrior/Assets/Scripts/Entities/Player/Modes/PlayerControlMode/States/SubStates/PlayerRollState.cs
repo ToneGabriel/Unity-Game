@@ -12,9 +12,9 @@ public sealed class PlayerRollState : PlayerAbilityState
         //_player.SetLightOrbPosition(_player.StateData.CrouchLightOrbPosition);
     }
 
-    public override void PhysicsUpdate()
+    public override void FixedUpdate()
     {
-        base.PhysicsUpdate();
+        base.FixedUpdate();
 
         //_player.SetVelocityX(_player.StateData.RollVelocity * _player.FacingDirection);
     }

@@ -15,9 +15,9 @@ public sealed class PlayerWallGrabState : PlayerTouchingWallState
         HoldPosition();
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         HoldPosition();
 

@@ -1,7 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public sealed class BringerOfDeath : Enemy
 {
+    public enum StateID
+    {
+
+    }
+
     #region States and Data
     [SerializeField] private Data_Idle _idleStateData;
     [SerializeField] private Data_Move _moveStateData;
@@ -36,6 +42,28 @@ public sealed class BringerOfDeath : Enemy
         ObjectPoolManager.Instance.RequestPool<DeathOrb>();
     }
     #endregion
+
+    #region Controller Interface
+    protected override State GetControlState()
+    {
+        return null;    // _fsm
+    }
+
+    protected override bool UpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    protected override bool FixedUpdateConditions()
+    {
+        return !GameManager.Instance.IsGamePaused;
+    }
+
+    public override void ChangeState()
+    {
+        // TODO
+    }
+    #endregion Controller Interface
 
     #region Triggers
     public void TriggerMeleeAttack()
@@ -105,15 +133,5 @@ public sealed class BringerOfDeath : Enemy
     //    //AddNewState((int)BringerOfDeathStateID.PortalRangedAttack,  new BringerOfDeathRangedAttackState(this, "portalRangedAttack", _portalRangedAttackStateData));
     //    //AddNewState((int)BringerOfDeathStateID.OrbRangedAttack,     new BringerOfDeathRangedAttackState(this, "orbRangedAttack", _orbRangedAttackStateData));
     //}
-
-    protected override bool FSMUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
-
-    protected override bool FSMFixedUpdateConditions()
-    {
-        return !GameManager.Instance.IsGamePaused;
-    }
     #endregion
 }

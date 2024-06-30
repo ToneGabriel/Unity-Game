@@ -14,9 +14,9 @@ public abstract class PlayerAbilityState : PlayerState
         _isAbilityDone = false;
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_isAbilityDone)
         //{

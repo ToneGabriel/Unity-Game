@@ -30,9 +30,9 @@ public sealed class EnemyLookForPlayerState : EntityModeState<EnemyPatrolMode.St
         _enemyPatrolMode.SetVelocityZero();
     }
 
-    public override void LogicUpdate()                                          // Counts turns and time between turns
+    public override void Update()                                          // Counts turns and time between turns
     {
-        base.LogicUpdate();
+        base.Update();
 
         if (_turnImmediately)
         {

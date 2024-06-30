@@ -9,7 +9,7 @@ public abstract class LightOrbBaseState : State
         _lightOrb = lightOrb;
     }
 
-    public override void PhysicsUpdate()
+    public override void FixedUpdate()
     {
         // Follow target
         _lightOrb.MoveTowardsTarget(_lightOrb.Data.SmoothSpeed);

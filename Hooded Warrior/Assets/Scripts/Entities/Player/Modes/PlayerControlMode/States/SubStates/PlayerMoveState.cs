@@ -4,9 +4,9 @@ public sealed class PlayerMoveState : PlayerGroundedState
     public PlayerMoveState(PlayerControlMode mode, PlayerControlModeData data, string animBoolName)
         : base(mode, data, animBoolName) { }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         //if (_inputX == 0)
         //    _player.ChangeState((int)PlayerStateID.Idle);
@@ -19,9 +19,9 @@ public sealed class PlayerMoveState : PlayerGroundedState
         //}
     }
 
-    public override void PhysicsUpdate()
+    public override void FixedUpdate()
     {
-        base.PhysicsUpdate();
+        base.FixedUpdate();
 
         //_player.SetVelocityX(_player.StateData.MovementVelocity * _inputX);
     }

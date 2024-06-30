@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class Entity : ModularBehaviour, ISaveable, IDamageble
+public abstract class Entity : MonoBehaviourController//, ISaveable, IDamageble
 {
     #region Components & Data
     [SerializeField] private EntitySensors  _sensors;
@@ -35,7 +35,7 @@ public abstract class Entity : ModularBehaviour, ISaveable, IDamageble
         BoxCollider = GetComponent<BoxCollider2D>();
 
         FacingDirection = 1;
-        CurrentHealth   = _data.MaxHealth;
+        //CurrentHealth   = _data.MaxHealth;
     }
 
     protected override void OnEnable()

@@ -37,9 +37,9 @@ public sealed class PlayerDashState : PlayerAbilityState
         //    _player.SetVelocityY(_player.VelocityY * _player.StateData.DashEndYMultiplier);
     }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         if (!_isAbilityDone)
             if (_isHolding)
