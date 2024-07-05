@@ -17,8 +17,6 @@ public abstract class MonoBehaviourController : MonoBehaviour
     #region Unity Functions
     protected virtual void Awake() { /*Empty*/ }
 
-    protected virtual void Start() { /*Empty*/ }
-
     protected virtual void OnEnable()
     {
         if (_controlState == null)
@@ -27,10 +25,7 @@ public abstract class MonoBehaviourController : MonoBehaviour
         _controlState.Enter();
     }
 
-    protected virtual void OnDisable()
-    {
-        _controlState.Exit();
-    }
+    protected virtual void Start() { /*Empty*/ }
 
     protected virtual void Update()
     {
@@ -46,6 +41,11 @@ public abstract class MonoBehaviourController : MonoBehaviour
             return;
 
         _controlState.FixedUpdate();
+    }
+
+    protected virtual void OnDisable()
+    {
+        _controlState.Exit();
     }
     #endregion Unity Functions
 }

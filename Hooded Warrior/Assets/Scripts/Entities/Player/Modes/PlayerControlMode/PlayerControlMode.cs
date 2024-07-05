@@ -43,7 +43,10 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
 
     private readonly Player                 _target;
     private readonly PlayerControlModeData  _controlData;
+    private PlayerActionComponents          _playerActionComponents;    // TODO: rename PlayerActionParameters
 
+
+    public ref PlayerActionComponents ActionComponents { get { return ref _playerActionComponents; } }
     public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public PlayerControlMode(Player player, PlayerControlModeData data)

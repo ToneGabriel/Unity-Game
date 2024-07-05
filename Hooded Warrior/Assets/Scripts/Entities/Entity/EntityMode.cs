@@ -15,12 +15,12 @@ where EState : Enum
         _target = entity;
     }
 
+    #region Setters
     public void ExitCurrentMode()
     {
         _target.ChangeState();
     }
 
-    #region Setters
     public void Target_SetAnimatorBoolParam(string animBoolName, bool value)
     {
         _target.Animator.SetBool(animBoolName, value);

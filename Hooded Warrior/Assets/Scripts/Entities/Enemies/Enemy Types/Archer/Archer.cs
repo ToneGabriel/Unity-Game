@@ -1,7 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public sealed class Archer : Enemy
 {
+    private enum StateID
+    {
+        Patrol,
+        Aggro,
+        Hit
+    }
+
+    private FiniteStateMachine<StateID> _archerController = null;
+
     #region Components
     public GameObject MeleeAttackPosition;
     public GameObject RangedAttackPosition;
@@ -11,6 +21,17 @@ public sealed class Archer : Enemy
     protected override void Awake()
     {
         base.Awake();
+
+        _archerController = new FiniteStateMachine<StateID>();
+
+        _archerController.InitializeStates
+        (
+            new KeyValuePair<StateID, State>(StateID.Patrol,    new EnemyPatrolMode(this, null)),
+            new KeyValuePair<StateID, State>(StateID.Aggro,     new ArcherAggroMode(this, null)),
+            new KeyValuePair<StateID, State>(StateID.Hit,       new EnemyHitMode(this, null))
+        );
+
+        _archerController.SetDefaultState(StateID.Patrol);
     }
 
     protected override void OnEnable()
@@ -29,7 +50,7 @@ public sealed class Archer : Enemy
     #region Controller Interface
     protected override State GetControlState()
     {
-        return null;// _fsm;
+        return _archerController;
     }
 
     protected override bool UpdateConditions()
@@ -44,7 +65,12 @@ public sealed class Archer : Enemy
 
     public override void ChangeState()
     {
-        // TODO
+        if (_archerController.IsStateActive(StateID.Patrol))
+            _archerController.ChangeState(StateID.Aggro);
+        else if (_archerController.IsStateActive(StateID.Aggro))
+            _archerController.ChangeState(StateID.Patrol);
+        else if (_archerController.IsStateActive(StateID.Hit))
+            _archerController.ChangeState(StateID.Aggro);
     }
     #endregion Controller Interface
 

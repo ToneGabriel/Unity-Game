@@ -128,7 +128,7 @@ public sealed partial class ObjectPoolManager : MonoBehaviour
         if (false == _pools.TryGetValue(key, out var currentPool))
             throw new NullReferenceException("No such pool exists. Try call RequestPool<" + key + ">() first.");
         else
-            return currentPool.Get(positionToSet, rotationToSet).GetComponent<TyObject>();
+            return currentPool.GetObject(positionToSet, rotationToSet).GetComponent<TyObject>();
     }
 
     public TyObject GetFromPool<TyObject>()    // default position and rotation
@@ -141,7 +141,7 @@ public sealed partial class ObjectPoolManager : MonoBehaviour
     where TyObject : MonoBehaviour
     {
         // guaranteed to have pool because it cannot be spawned otherwise
-        _pools[GetKey<TyObject>()].Return(instance.gameObject);
+        _pools[GetKey<TyObject>()].ReturnObject(instance.gameObject);
     }
 
     public void ClearScene()    // clear scene for pool objects (ex: when game is loading)
