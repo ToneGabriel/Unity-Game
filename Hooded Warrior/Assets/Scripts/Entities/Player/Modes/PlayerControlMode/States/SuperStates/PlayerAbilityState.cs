@@ -11,29 +11,37 @@ public abstract class PlayerAbilityState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        _isAbilityDone = false;
+
+        _isAbilityDone      = false;
+        _isTouchingCeiling  = false;
+        _isGrounded         = false;
     }
 
     public override void Update()
     {
         base.Update();
 
-        //if (_isAbilityDone)
-        //{
-        //    if (_isTouchingCeiling)
-        //        _player.ChangeState((int)PlayerStateID.CrouchIdle);
-        //    else if (_isGrounded && _player.VelocityY < 0.01f)
-        //        _player.ChangeState((int)PlayerStateID.Idle);
-        //    else
-        //        _player.ChangeState((int)PlayerStateID.InAir);
-        //}
+        if (_isAbilityDone)
+        {
+            if (_isTouchingCeiling)
+                _playerControlMode.ChangeState(PlayerControlMode.StateID.CrouchIdle);
+            //else if (_isGrounded && _player.VelocityY < 0.01f)
+            //    _playerControlMode.ChangeState(PlayerControlMode.StateID.Idle);
+            else
+                _playerControlMode.ChangeState(PlayerControlMode.StateID.InAir);
+        }
     }
 
-    //protected override void DoChecks()
-    //{
-    //    base.DoChecks();
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
 
-    //    _isGrounded = _player.IsGrounded();
-    //    _isTouchingCeiling = _player.IsTouchingCeiling();
-    //}
+        //_isGrounded = _player.IsGrounded();
+        //_isTouchingCeiling = _player.IsTouchingCeiling();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+    }
 }

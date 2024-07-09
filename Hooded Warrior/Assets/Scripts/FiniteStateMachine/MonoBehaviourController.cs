@@ -1,8 +1,6 @@
 using UnityEngine;
 
-// This behaviour contains a state machine that is unavailable to extern modifications.
-// Other states linked to this FSM can only use ChangeState() method...
-// ...to simply change the current state, but the actual state change is implemented by each derived class.
+// Template pattern
 public abstract class MonoBehaviourController : MonoBehaviour
 {
     private State _controlState = null;                 // actual FSM returned from GetControlState()
@@ -11,7 +9,7 @@ public abstract class MonoBehaviourController : MonoBehaviour
     protected abstract State GetControlState();         // returns a FSM created in derived class
     protected abstract bool UpdateConditions();         // control update execution
     protected abstract bool FixedUpdateConditions();    // control fixedupdate execution
-    public abstract void ChangeState();
+    public abstract void ChangeState();                 // control the general flow of the states (the ones inside FSM _controlState)
     #endregion Control Interface
 
     #region Unity Functions

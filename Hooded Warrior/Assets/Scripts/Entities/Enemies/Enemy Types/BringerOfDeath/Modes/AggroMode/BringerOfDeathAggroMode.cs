@@ -9,9 +9,7 @@ public class BringerOfDeathAggroMode : EntityMode<BringerOfDeathAggroMode.StateI
     {
         PlayerDetected,
         MeleeAttack,
-        RangedAttack,
-
-        Default = PlayerDetected
+        RangedAttack
     }
 
     //public enum BringerOfDeathStateID
@@ -60,6 +58,6 @@ public class BringerOfDeathAggroMode : EntityMode<BringerOfDeathAggroMode.StateI
             new KeyValuePair<StateID, State>(StateID.RangedAttack,     new BringerOfDeathRangedAttackState(this, _aggroData, AnimatorParameters.RangedAttack_b))
         );
 
-        SetDefaultState(StateID.Default);
+        SetDefaultState(StateID.PlayerDetected);
     }
 }

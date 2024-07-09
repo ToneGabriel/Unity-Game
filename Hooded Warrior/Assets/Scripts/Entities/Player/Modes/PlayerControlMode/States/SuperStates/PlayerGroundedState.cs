@@ -65,17 +65,28 @@ public abstract class PlayerGroundedState : PlayerState
         //    _playerControlMode.ChangeState((int)PlayerStateID.WallGrab);
         //else if (_dashInput /*&& _player._dashState.CheckIfCanDash()*/ && !_isTouchingCeiling)
         //    _playerControlMode.ChangeState((int)PlayerStateID.Dash);
+
+        if (!_isGrounded)
+        {
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.InAir);
+        }
+        else if (_jumpInput /*&& _player.CanJump()*/)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Jump);
+        else if (_isTouchingWall && _grabInput && _isTouchingLedge)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.WallGrab);
+        else if (_dashInput /*&& _player._dashState.CheckIfCanDash()*/ && !_isTouchingCeiling)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Dash);
     }
 
-    //protected override void DoChecks()
-    //{
-    //    base.DoChecks();
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
 
-    //    //_isGrounded         = _player.IsGrounded();
-    //    //_isTouchingWall     = _player.IsTouchingWall();
-    //    //_isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
-    //    //_isTouchingCeiling  = _player.IsTouchingCeiling();
-    //    //_canDefend          = _player.CanDefend();
-    //    //_canCastSpell       = _player.CanCastSpell();
-    //}
+        //_isGrounded = _player.IsGrounded();
+        //_isTouchingWall = _player.IsTouchingWall();
+        //_isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
+        //_isTouchingCeiling = _player.IsTouchingCeiling();
+        //_canDefend = _player.CanDefend();
+        //_canCastSpell = _player.CanCastSpell();
+    }
 }

@@ -15,6 +15,32 @@ where EState : Enum
         _target = entity;
     }
 
+    #region Getters
+    public Vector2 Target_Position
+    {
+        get
+        {
+            return _target.transform.position;
+        }
+    }
+
+    public Quaternion Target_Rotation
+    {
+        get
+        {
+            return _target.transform.rotation;
+        }
+    }
+
+    public Vector2 Target_Velocity
+    {
+        get
+        {
+            return _target.Rigidbody.velocity;
+        }
+    }
+    #endregion Getters
+
     #region Setters
     public void ExitCurrentMode()
     {
@@ -26,59 +52,64 @@ where EState : Enum
         _target.Animator.SetBool(animBoolName, value);
     }
 
-    public void SetAnimatorFloatParam(string animFloatName, float value)
+    public void Target_SetAnimatorFloatParam(string animFloatName, float value)
     {
         _target.Animator.SetFloat(animFloatName, value);
     }
 
-    public void SetVelocityZero()
+    public void Target_SetVelocityZero()
     {
         _target.Rigidbody.velocity = Vector2.zero;
     }
 
-    public void SetVelocityX(float velocityX)
+    public void Target_SetVelocityX(float velocityX)
     {
         _workspaceVector2.Set(velocityX, _target.Rigidbody.velocity.y);
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void SetVelocityY(float velocityY)
+    public void Target_SetVelocityY(float velocityY)
     {
         _workspaceVector2.Set(_target.Rigidbody.velocity.x, velocityY);
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void SetVelocity(float velocityX, float velocityY)
+    public void Target_SetVelocity(float velocityX, float velocityY)
     {
         _workspaceVector2.Set(velocityX, velocityY);
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void SetVelocity(Vector2 velocity)
+    public void Target_SetVelocity(Vector2 velocity)
     {
         _target.Rigidbody.velocity = velocity;
     }
 
-    public void SetVelocity(float velocity, Vector2 direction)
+    public void Target_SetVelocity(float velocity, Vector2 direction)
     {
         _workspaceVector2 = direction * velocity;
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void SetVelocity(float velocity, Vector2 angle, int direction)
+    public void Target_SetVelocity(float velocity, Vector2 angle, int direction)
     {
         angle.Normalize();
         _workspaceVector2.Set(angle.x * velocity * direction, angle.y * velocity);
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void SetVelocity(float velocity)     // Set velocity towards facing direction
+    public void Target_SetVelocityTowardsFacingDirection(float velocity)
     {
         _workspaceVector2.Set(_target.FacingDirection * velocity, _target.Rigidbody.velocity.y);
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void Flip()
+    public void Target_SetColliderHight()
+    {
+        // TODO
+    }
+
+    public void Target_Flip()
     {
         _target.FacingDirection *= -1;
         _target.transform.Rotate(0f, -180f, 0f);
@@ -86,21 +117,21 @@ where EState : Enum
     #endregion Setters
 
     #region Checkers
-    public bool IsGrounded()
+    public bool Target_IsGrounded()
     {
         return Physics2D.OverlapCircle( _target.Sensors.GroundCheck.transform.position,
                                         _target.BaseData.GroundCheckRadius,
                                         _target.BaseData.WhatIsGround);
     }
 
-    public bool IsTouchingCeiling()
+    public bool Target_IsTouchingCeiling()
     {
         return Physics2D.OverlapCircle( _target.Sensors.LedgeCheck.transform.position,
                                         _target.BaseData.GroundCheckRadius,
                                         _target.BaseData.WhatIsGround);
     }
 
-    public bool IsTouchingWall()
+    public bool Target_IsTouchingWall()
     {
         return Physics2D.Raycast(   _target.Sensors.EnvironmentCheck.transform.position,
                                     _target.transform.right,
@@ -108,7 +139,7 @@ where EState : Enum
                                     _target.BaseData.WhatIsGround);
     }
 
-    public bool IsTouchingLedge(Vector3 direction)
+    public bool Target_IsTouchingLedge(Vector3 direction)
     {
         return Physics2D.Raycast(   _target.Sensors.LedgeCheck.transform.position,
                                     direction,

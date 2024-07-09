@@ -9,16 +9,14 @@ public sealed class EnemyHitMode : EntityMode<EnemyHitMode.StateID>
     {
         Hit,
         Stun,
-        Dead,
-
-        Default = Hit
+        Dead
     }
 
     private static class AnimatorParameters
     {
-        public static readonly string Hit_b = "Hit_b";
-        public static readonly string Stun_b = "Stun_b";
-        public static readonly string Dead_b = "Dead_b";
+        public static readonly string Hit_b     = "Hit_b";
+        public static readonly string Stun_b    = "Stun_b";
+        public static readonly string Dead_b    = "Dead_b";
 
         public static string[] GetAnimatorParameterNames()
         {
@@ -49,6 +47,6 @@ public sealed class EnemyHitMode : EntityMode<EnemyHitMode.StateID>
             new KeyValuePair<StateID, State>(StateID.Dead,  new EnemyDeadState(this, _hitData, AnimatorParameters.Dead_b))
         );
 
-        SetDefaultState(StateID.Default);
+        SetDefaultState(StateID.Hit);
     }
 }

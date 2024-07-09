@@ -8,9 +8,7 @@ public sealed class EnemyPatrolMode : EntityMode<EnemyPatrolMode.StateID>
     {
         Idle,
         Move,
-        LookForPlayer,
-
-        Default = LookForPlayer
+        LookForPlayer
     }
 
     private static class AnimatorParameters
@@ -48,25 +46,25 @@ public sealed class EnemyPatrolMode : EntityMode<EnemyPatrolMode.StateID>
             new KeyValuePair<StateID, State>(StateID.LookForPlayer, new EnemyLookForPlayerState(this, _patrolData, AnimatorParameters.LookForPlayer_b))
         );
 
-        SetDefaultState(StateID.Default);
+        SetDefaultState(StateID.LookForPlayer);
     }
 
     #region Checkers
-    public bool CheckPlayerInMinAgroRange()                                     // Raycast to check agro enter range
+    public bool Target_CheckPlayerInMinAgroRange()                                     // Raycast to check agro enter range
     {
         return Physics2D.Raycast(   _target.Sensors.EnvironmentCheck.transform.position,
                                     _target.Sensors.EnvironmentCheck.transform.right,
                                     _target.EnemyBaseData.MinAgroDistance, _target.EnemyBaseData.WhatIsPlayer);
     }
 
-    public bool CheckPlayerInMaxAgroRange()                                     // Raycast to check agro exit range
+    public bool Target_CheckPlayerInMaxAgroRange()                                     // Raycast to check agro exit range
     {
         return Physics2D.Raycast(   _target.Sensors.EnvironmentCheck.transform.position,
                                     _target.Sensors.EnvironmentCheck.transform.right,
                                     _target.EnemyBaseData.MaxAgroDistance, _target.EnemyBaseData.WhatIsPlayer);
     }
 
-    public bool CheckPlayerInMeleeRange()                                       // Raycast to check melee range
+    public bool Target_CheckPlayerInMeleeRange()                                       // Raycast to check melee range
     {
         return Physics2D.Raycast(   _target.Sensors.EnvironmentCheck.transform.position,
                                     _target.Sensors.EnvironmentCheck.transform.right,

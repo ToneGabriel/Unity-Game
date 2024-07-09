@@ -1,14 +1,9 @@
 ﻿using UnityEngine;
 
-public class ArcherPlayerDetectedState : EntityModeState<ArcherAggroMode.StateID>
+public sealed class ArcherPlayerDetectedState : EntityModeState<ArcherAggroMode.StateID>
 {
-    private ArcherAggroMode     _archerAggroMode;
-    private ArcherAggroModeData _archerAggroModeData;
-
-    protected bool _isPLayerInMinAgroRange;
-    protected bool _isPLayerInMaxAgroRange;
-    protected bool _isPlayerInMeleeRange;
-    protected bool _canMove;
+    private readonly ArcherAggroMode        _archerAggroMode;
+    private readonly ArcherAggroModeData    _archerAggroModeData;
 
     public ArcherPlayerDetectedState(ArcherAggroMode mode, ArcherAggroModeData data, string animBoolName) 
         : base(mode, animBoolName)
@@ -21,8 +16,7 @@ public class ArcherPlayerDetectedState : EntityModeState<ArcherAggroMode.StateID
     {
         base.Enter();
 
-        _archerAggroMode.SetVelocityZero();
-        _canMove = false;
+        _archerAggroMode.Target_SetVelocityZero();
     }
 
     public override void Update()
@@ -30,21 +24,30 @@ public class ArcherPlayerDetectedState : EntityModeState<ArcherAggroMode.StateID
         base.Update();
 
         if (Time.time >= _stateStartTime + _archerAggroModeData.LookTime)       // Counts time before taking action
-            _canMove = true;
+        {
+            if (!_archerAggroMode.CheckPlayerInMinAgroRange())
+                _archerAggroMode.ExitCurrentMode(); // transition to patrol mode
+            //else if ()
+            //    _archerAggroMode.ChangeState(ArcherAggroMode.StateID.Dodge);
+            //else if ()
+            //    _archerAggroMode.ChangeState(ArcherAggroMode.StateID.MeleeAttack);
+            //else if ()
+            //    _archerAggroMode.ChangeState(ArcherAggroMode.StateID.RangedAttack);
+        }
+        else
+        {
+            // wait
+        }
+    }
 
-        //if (false)
-        //    _enemy.ChangeMode((int)EnemyModeID.Aggro);
-        //else if (false)
-        //    _archerAggroMode.ChangeState((int)EnemyPatrolMode.StateID.Move);
+    public override void Exit()
+    {
+        base.Exit();
     }
 
     protected override void DoChecks()                                             // Check Ranges
     {
         base.DoChecks();
-
-        _isPLayerInMinAgroRange = _archerAggroMode.CheckPlayerInMinAgroRange();
-        _isPLayerInMaxAgroRange = _archerAggroMode.CheckPlayerInMaxAgroRange();
-        _isPlayerInMeleeRange = _archerAggroMode.CheckPlayerInMeleeRange();
     }
 
 }

@@ -8,21 +8,21 @@ public sealed class PlayerMoveState : PlayerGroundedState
     {
         base.Update();
 
-        //if (_inputX == 0)
-        //    _player.ChangeState((int)PlayerStateID.Idle);
-        //else if (_inputY == -1)
-        //    _player.ChangeState((int)PlayerStateID.CrouchMove);
-        //else if (_isGrounded && _rollInput)
-        //{
-        //    InputManager.Instance.UseRollInput();
-        //    _player.ChangeState((int)PlayerStateID.Roll);
-        //}
+        if (_inputX == 0)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Idle);
+        else if (_inputY == -1)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.CrouchMove);
+        else if (_isGrounded && _rollInput)
+        {
+            InputManager.Instance.UseRollInput();
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Roll);
+        }
     }
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
 
-        //_player.SetVelocityX(_player.StateData.MovementVelocity * _inputX);
+        _playerControlMode.Target_SetVelocityX(/*_player.StateData.MovementVelocity * */ _inputX);
     }
 }

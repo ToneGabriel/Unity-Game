@@ -21,7 +21,7 @@ public class ArcherRangedAttackState : EntityModeState<ArcherAggroMode.StateID>
         base.Enter();
 
         _isStateAnimationFinished = false;
-        _archerAggroMode.SetVelocityZero();
+        _archerAggroMode.Target_SetVelocityZero();
     }
 
     public override void Exit()

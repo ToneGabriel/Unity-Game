@@ -5,12 +5,8 @@ public sealed class EnemyLookForPlayerState : EntityModeState<EnemyPatrolMode.St
     private readonly EnemyPatrolMode        _enemyPatrolMode;
     private readonly EnemyPatrolModeData    _enemyPatrolModeData;
 
-    private bool _turnImmediately;
-    private bool _isPLayerInMinAgroRange;
-    private bool _isAllTurnsDone;
-    private bool _isAllTurnsTimeDone;
-    private float _lastTurnTime;
-    private int _amountOfTurnsDone;
+    private float   _lastTurnTime;
+    private int     _amountOfTurnsDone;
 
     public EnemyLookForPlayerState(EnemyPatrolMode mode, EnemyPatrolModeData data, string animBoolName)
         : base(mode, animBoolName)
@@ -23,47 +19,38 @@ public sealed class EnemyLookForPlayerState : EntityModeState<EnemyPatrolMode.St
     {
         base.Enter();
 
-        _isAllTurnsDone = false;
-        _isAllTurnsTimeDone = false;
-        _lastTurnTime = _stateStartTime;
-        _amountOfTurnsDone = 0;
-        _enemyPatrolMode.SetVelocityZero();
+        _lastTurnTime       = _stateStartTime;
+        _amountOfTurnsDone  = 0;
+        _enemyPatrolMode.Target_SetVelocityZero();
     }
 
     public override void Update()                                          // Counts turns and time between turns
     {
         base.Update();
 
-        if (_turnImmediately)
+        if (_enemyPatrolMode.Target_CheckPlayerInMinAgroRange())
+            _enemyPatrolMode.ExitCurrentMode(); // transition to aggro mode
+        else if (_amountOfTurnsDone >= _enemyPatrolModeData.AmountOfTurns)
+            _enemyPatrolMode.ChangeState(EnemyPatrolMode.StateID.Move);
+        else if (Time.time >= _lastTurnTime + _enemyPatrolModeData.TimeBetweenTurns)
         {
-            _enemyPatrolMode.Flip();
+            _enemyPatrolMode.Target_Flip();
             _lastTurnTime = Time.time;
-            _amountOfTurnsDone++;
-            _turnImmediately = false;
+            ++_amountOfTurnsDone;
         }
-        else if (Time.time >= _lastTurnTime + _enemyPatrolModeData.TimeBetweenTurns && !_isAllTurnsDone)
+        else
         {
-            _enemyPatrolMode.Flip();
-            _lastTurnTime = Time.time;
-            _amountOfTurnsDone++;
+            // wait for next turn time
         }
+    }
 
-        if (_amountOfTurnsDone >= _enemyPatrolModeData.AmountOfTurns)
-            _isAllTurnsDone = true;
-
-        if (Time.time >= _lastTurnTime + _enemyPatrolModeData.TimeBetweenTurns && _isAllTurnsDone)
-            _isAllTurnsTimeDone = true;
+    public override void Exit()
+    {
+        base.Exit();
     }
 
     protected override void DoChecks()
     {
         base.DoChecks();
-
-        _isPLayerInMinAgroRange = _enemyPatrolMode.CheckPlayerInMinAgroRange();
-    }
-
-    public void SetTurnImmediately(bool flip)
-    {
-        _turnImmediately = flip;
     }
 }

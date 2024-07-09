@@ -8,9 +8,9 @@ public sealed class PlayerLandState : PlayerGroundedState
     {
         base.Update();
 
-        //if (_inputX != 0)
-        //    _player.ChangeState((int)PlayerStateID.Move);
-        //else if (_isStateAnimationFinished)
-        //    _player.ChangeState((int)PlayerStateID.Idle);
+        if (_inputX != 0)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Move);
+        else if (_isStateAnimationFinished)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Idle);
     }
 }

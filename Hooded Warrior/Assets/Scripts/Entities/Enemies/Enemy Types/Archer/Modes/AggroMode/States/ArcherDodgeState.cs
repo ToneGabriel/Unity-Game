@@ -51,7 +51,7 @@ public class ArcherDodgeState : EntityModeState<ArcherAggroMode.StateID>
 
         _isPlayerInMeleeRange = _archerAggroMode.CheckPlayerInMeleeRange();
         _isPlayerInMaxAgroRange = _archerAggroMode.CheckPlayerInMaxAgroRange();
-        _isGrounded = _archerAggroMode.IsGrounded();
+        _isGrounded = _archerAggroMode.Target_IsGrounded();
     }
 
     public void CheckCooldown()

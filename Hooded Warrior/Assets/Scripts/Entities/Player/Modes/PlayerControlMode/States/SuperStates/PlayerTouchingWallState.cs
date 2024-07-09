@@ -30,23 +30,28 @@ public abstract class PlayerTouchingWallState : PlayerState
         _grabInput  = InputManager.Instance.GrabInput;
         _jumpInput  = InputManager.Instance.JumpInput;
 
-        //if (_isGrounded && !_grabInput)
-        //    _player.ChangeState((int)PlayerStateID.Idle);
-        //else if (!_isTouchingWall)
-        //    _player.ChangeState((int)PlayerStateID.InAir);
-        //else if (_isTouchingWall && !_isTouchingLedge)
-        //    _player.ChangeState((int)PlayerStateID.LedgeClimb);
+        if (_isGrounded && !_grabInput)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Idle);
+        else if (!_isTouchingWall)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.InAir);
+        else if (_isTouchingWall && !_isTouchingLedge)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.LedgeClimb);
     }
 
-    //protected override void DoChecks()
-    //{
-    //    base.DoChecks();
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
 
-    //    //_isGrounded         = _player.IsGrounded();
-    //    //_isTouchingWall     = _player.IsTouchingWall();
-    //    //_isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
+        //    //_isGrounded         = _player.IsGrounded();
+        //    //_isTouchingWall     = _player.IsTouchingWall();
+        //    //_isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
 
-    //    //if (_isTouchingWall && !_isTouchingLedge)
-    //    //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
-    //}
+        //    //if (_isTouchingWall && !_isTouchingLedge)
+        //    //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+    }
 }

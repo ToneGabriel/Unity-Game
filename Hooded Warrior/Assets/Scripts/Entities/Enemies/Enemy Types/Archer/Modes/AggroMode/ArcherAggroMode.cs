@@ -8,9 +8,7 @@ public sealed class ArcherAggroMode : EntityMode<ArcherAggroMode.StateID>
         PlayerDetected,
         Dodge,
         MeleeAttack,
-        RangedAttack,
-
-        Default = PlayerDetected
+        RangedAttack
     }
 
     private static class AnimatorParameters
@@ -51,7 +49,7 @@ public sealed class ArcherAggroMode : EntityMode<ArcherAggroMode.StateID>
             new KeyValuePair<StateID, State>(StateID.RangedAttack,      new ArcherRangedAttackState(this, _aggroData, AnimatorParameters.RangedAttack_b))
         );
 
-        SetDefaultState(StateID.Default);
+        SetDefaultState(StateID.PlayerDetected);
     }
 
     #region Checkers

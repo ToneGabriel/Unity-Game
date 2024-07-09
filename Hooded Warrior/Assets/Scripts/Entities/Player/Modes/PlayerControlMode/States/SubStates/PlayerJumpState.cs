@@ -9,10 +9,10 @@ public sealed class PlayerJumpState : PlayerAbilityState
         base.Enter();
 
         InputManager.Instance.UseJumpInput();
-        //_player.SetVelocityY(_player.StateData.JumpVelocity);
-        //_player.DecreaseAmountOfJumpsLeft();
-        _isAbilityDone = true;
         // TODO
+        //_playerControlMode.Target_SetVelocityY(_player.StateData.JumpVelocity);
+        //_player.DecreaseAmountOfJumpsLeft();
         //_player._inAirState.SetIsJumping();
+        _isAbilityDone = true;
     }
 }

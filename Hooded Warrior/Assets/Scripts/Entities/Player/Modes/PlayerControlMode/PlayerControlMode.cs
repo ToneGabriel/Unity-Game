@@ -22,21 +22,33 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
         Roll,
         PrimaryAttack,
         SecondaryDefend,
-        SpellCast,
-
-        Default = Idle
+        SpellCast
     }
 
     private static class AnimatorParameters
     {
-        public static readonly string Idle_b = "Idle_b";
-        public static readonly string Move_b = "Move_b";
+        public static readonly string Idle_b        = "Idle_b";
+        public static readonly string Move_b        = "Move_b";
+        public static readonly string InAir_b       = "InAir_b";
+        //public static readonly string Jump_b    = InAir_b;
+        public static readonly string Land_b        = "Land_b";
+        public static readonly string WallSlide_b   = "WallSlide_b";
+
+        public static readonly string VelocityX_f   = "VelocityX_f";
+        public static readonly string VelocityY_f   = "VelocityY_f";
 
         public static string[] GetAnimatorParameterNames()
         {
             return new string[] {
                                     Idle_b,
                                     Move_b,
+                                    //Jump_b,
+                                    InAir_b,
+                                    Land_b,
+                                    WallSlide_b,
+
+                                    VelocityX_f,
+                                    VelocityY_f
                                 };
         }
     }
@@ -58,10 +70,20 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
         // Initialize FSM
         InitializeStates
         (
-            new KeyValuePair<StateID, State>(StateID.Idle, new PlayerIdleState(this, _controlData, AnimatorParameters.Idle_b)),
-            new KeyValuePair<StateID, State>(StateID.Move, new PlayerMoveState(this, _controlData, AnimatorParameters.Move_b))
+            new KeyValuePair<StateID, State>(StateID.Idle,  new PlayerIdleState(this, _controlData, AnimatorParameters.Idle_b)),
+            new KeyValuePair<StateID, State>(StateID.Move,  new PlayerMoveState(this, _controlData, AnimatorParameters.Move_b)),
+            new KeyValuePair<StateID, State>(StateID.Jump,  new PlayerJumpState(this, _controlData, AnimatorParameters.InAir_b)),
+            new KeyValuePair<StateID, State>(StateID.InAir, new PlayerInAirState(this, _controlData, AnimatorParameters.InAir_b, AnimatorParameters.VelocityX_f, AnimatorParameters.VelocityY_f)),
+            new KeyValuePair<StateID, State>(StateID.Land,  new PlayerLandState(this, _controlData, AnimatorParameters.Land_b)),
+            new KeyValuePair<StateID, State>(StateID.WallSlide,  new PlayerWallSlideState(this, _controlData, AnimatorParameters.WallSlide_b))
         );
 
-        SetDefaultState(StateID.Default);
+        SetDefaultState(StateID.Idle);
+    }
+
+    public void Target_SetDashArrowRotation(Quaternion rotation)
+    {
+        // TODO:
+        //_playerExternComponents._dashDirectionIndicator.transform.rotation = rotation;
     }
 }

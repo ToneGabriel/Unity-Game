@@ -8,14 +8,14 @@ public sealed class PlayerWallSlideState : PlayerTouchingWallState
     {
         base.Update();
 
-        //_player.SetVelocityY(-_player.StateData.WallSlideVelocity);
-        //_player.SetVelocityX(_player.StateData.MovementVelocity * _inputX);
+        //_playerControlMode.Target_SetVelocityY(-_player.StateData.WallSlideVelocity);
+        //_playerControlMode.Target_SetVelocityX(_player.StateData.MovementVelocity * _inputX);
 
-        //if (_grabInput && _inputY == 0)
-        //    _player.ChangeState((int)PlayerStateID.WallGrab);
-        //else if (_jumpInput && _isTouchingWall)
-        //    _player.ChangeState((int)PlayerStateID.WallJump);
+        if (_grabInput && _inputY == 0)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.WallGrab);
+        else if (_jumpInput && _isTouchingWall)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.WallJump);
         //else if (!_grabInput && _inputX != 0 && _inputX != _player.FacingDirection)
-        //    _player.ChangeState((int)PlayerStateID.InAir);
+        //    _playerControlMode.ChangeState(PlayerControlMode.StateID.InAir);
     }
 }

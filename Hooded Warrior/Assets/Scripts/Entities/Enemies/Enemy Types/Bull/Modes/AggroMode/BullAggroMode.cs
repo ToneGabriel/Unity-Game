@@ -4,6 +4,29 @@ using UnityEngine;
 
 public class BullAggroMode : EntityMode<BullAggroMode.StateID>
 {
+    public enum StateID
+    {
+        PlayerDetected,
+        Charge,
+        MeleeAttack
+    }
+
+    private static class AnimatorParameters
+    {
+        public static readonly string PlayerDetected_b  = "PlayerDetected_b";
+        public static readonly string Charge_b          = "Charge_b";
+        public static readonly string MeleeAttack_b     = "MeleeAttack_b";
+
+        public static string[] GetAnimatorParameterNames()
+        {
+            return new string[] {
+                                    PlayerDetected_b,
+                                    Charge_b,
+                                    MeleeAttack_b,
+                                };
+        }
+    }
+
     private readonly Bull               _target;
     private readonly BullAggroModeData  _aggroData;
 
@@ -23,31 +46,6 @@ public class BullAggroMode : EntityMode<BullAggroMode.StateID>
             new KeyValuePair<StateID, State>(StateID.MeleeAttack,       new BullMeleeAttackState(this, _aggroData, AnimatorParameters.MeleeAttack_b))
         );
 
-        SetDefaultState(StateID.Default);
-    }
-
-    public enum StateID
-    {
-        PlayerDetected,
-        Charge,
-        MeleeAttack,
-
-        Default = PlayerDetected
-    }
-
-    private static class AnimatorParameters
-    {
-        public static readonly string PlayerDetected_b  = "PlayerDetected_b";
-        public static readonly string Charge_b          = "Charge_b";
-        public static readonly string MeleeAttack_b     = "MeleeAttack_b";
-
-        public static string[] GetAnimatorParameterNames()
-        {
-            return new string[] {
-                                    PlayerDetected_b,
-                                    Charge_b,
-                                    MeleeAttack_b,
-                                };
-        }
+        SetDefaultState(StateID.PlayerDetected);
     }
 }
