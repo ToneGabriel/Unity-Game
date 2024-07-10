@@ -2,15 +2,25 @@
 public sealed class PlayerCrouchIdleState : PlayerGroundedState
 {
     public PlayerCrouchIdleState(PlayerControlMode mode, PlayerControlModeData data, string animBoolName)
-        : base(mode, data, animBoolName) { }
+        : base(mode, data, animBoolName) { /*Empty*/ }
 
     public override void Enter()
     {
         base.Enter();
 
-        //_player.SetVelocityZero();
+        _playerControlMode.Target_SetVelocityZero();
         //_player.SetColiderHeight(_player.StateData.CrouchColliderHeight);
         //_player.SetLightOrbPosition(_player.StateData.CrouchLightOrbPosition);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (_inputX != 0)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.CrouchMove);
+        else if (_inputY != -1 && !_isTouchingCeiling)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Idle);
     }
 
     public override void Exit()
@@ -19,15 +29,5 @@ public sealed class PlayerCrouchIdleState : PlayerGroundedState
 
         //_player.SetColiderHeight(_player.StateData.StandColliderHeight);
         //_player.SetLightOrbPosition(_player.StateData.StandLightOrbPosition);
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-        //if (_inputX != 0)
-        //    _player.ChangeState((int)PlayerStateID.CrouchMove);
-        //else if (_inputY != -1 && !_isTouchingCeiling)
-        //    _player.ChangeState((int)PlayerStateID.Idle);
     }
 }

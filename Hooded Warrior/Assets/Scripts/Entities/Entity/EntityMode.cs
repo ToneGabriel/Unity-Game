@@ -16,11 +16,24 @@ where EState : Enum
     }
 
     #region Getters
+    public int Target_FacingDirection
+    {
+        get
+        {
+            return _target.FacingDirection;
+        }
+    }
+
     public Vector2 Target_Position
     {
         get
         {
             return _target.transform.position;
+        }
+
+        set
+        {
+            _target.transform.position = value;
         }
     }
 
@@ -107,6 +120,16 @@ where EState : Enum
     public void Target_SetColliderHight()
     {
         // TODO
+    }
+
+    public void Target_SetRigidbodyDynamic()
+    {
+        _target.Rigidbody.bodyType = RigidbodyType2D.Dynamic;
+    }
+
+    public void Target_SetRigidbodyStatic()
+    {
+        _target.Rigidbody.bodyType = RigidbodyType2D.Static;
     }
 
     public void Target_Flip()

@@ -264,27 +264,46 @@ public sealed class Player : Entity
         //    _inventory.Shield.AnimationFinishTrigger(); 
     }
 
-    public Vector2 DetermineCornerPosition()
+    public Vector2 GetDetectedLedgeCornerPosition()
     {
+        Vector2 ret;
+
+        if (_playerIntStatusComponents.LedgeDetectedPosition == Vector2.zero)
+        {
+            _playerIntStatusComponents.LedgeDetectedPosition = new();
+            ret = _playerIntStatusComponents.LedgeDetectedPosition;
+        }
+        else
+        {
+            ret = _playerIntStatusComponents.LedgeDetectedPosition;
+            _playerIntStatusComponents.LedgeDetectedPosition = Vector2.zero;
+        }
+
+        return ret;
+
         //RaycastHit2D xHit = Physics2D.Raycast(  _sensors.EnvironmentCheck.transform.position,
         //                                        Vector2.right * EntityInternComponents.FacingDirection,
         //                                        _data.EnvironmentCheckDistance,
         //                                        _data.WhatIsGround);
 
-        //float xDistance = xHit.distance;
-        //_workspaceVector2.Set(xDistance * EntityInternComponents.FacingDirection, 0f);
+            //float xDistance = xHit.distance;
+            //_workspaceVector2.Set(xDistance * EntityInternComponents.FacingDirection, 0f);
 
-        //RaycastHit2D yHit = Physics2D.Raycast(  _sensors.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
-        //                                        Vector2.down,
-        //                                        _sensors.LedgeCheck.transform.position.y - _sensors.EnvironmentCheck.transform.position.y,
-        //                                        _data.WhatIsGround);
+            //RaycastHit2D yHit = Physics2D.Raycast(  _sensors.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
+            //                                        Vector2.down,
+            //                                        _sensors.LedgeCheck.transform.position.y - _sensors.EnvironmentCheck.transform.position.y,
+            //                                        _data.WhatIsGround);
 
-        //float yDistance = yHit.distance;
-        //_workspaceVector2.Set(  _sensors.EnvironmentCheck.transform.position.x + xDistance * EntityInternComponents.FacingDirection,
-        //                        _sensors.LedgeCheck.transform.position.y - yDistance);
+            //float yDistance = yHit.distance;
+            //_workspaceVector2.Set(  _sensors.EnvironmentCheck.transform.position.x + xDistance * EntityInternComponents.FacingDirection,
+            //                        _sensors.LedgeCheck.transform.position.y - yDistance);
 
-        //return _workspaceVector2;
-        return new();
+            //return _workspaceVector2;
+    }
+
+    public void ResetDetectedLedgeCornerPosition()
+    {
+        _playerIntStatusComponents.LedgeDetectedPosition = Vector2.zero;
     }
 
     private void AnimationTrigger()

@@ -10,15 +10,15 @@ where EState : Enum
     private EState                      _defaultStateID;
     private State                       _currentState   = null;
     private Dictionary<EState, State>   _states         = null;
-
-    public int StateCount { get { return _states.Count; } }
     #endregion Components 
 
     #region FSM Late Initialization
     public void InitializeStates(params KeyValuePair<EState, State>[] newStates)
     {
-        if (newStates == null)
-            throw new Exception("At least one state is required!");
+        int stateCount = Enum.GetValues(typeof(EState)).Length;
+
+        if (newStates == null || newStates.Length != stateCount)
+            throw new Exception("The number of states must be equal to the enum count!");
 
         _states = new Dictionary<EState, State>();
 
@@ -39,8 +39,6 @@ where EState : Enum
 
     public void SetDefaultState(EState stateID)
     {
-        CheckStateID(stateID);
-
         _defaultStateID = stateID;
     }
     #endregion FSM Late Initialization
@@ -52,11 +50,6 @@ where EState : Enum
         _currentState.Enter();
     }
 
-    public override void Exit()
-    {
-        _currentState.Exit();
-    }
-
     public override void Update()
     {
         _currentState.Update();
@@ -66,13 +59,26 @@ where EState : Enum
     {
         _currentState.FixedUpdate();
     }
+
+    public override void Exit()
+    {
+        _currentState.Exit();
+    }
+
+    public override void AnimationTrigger()
+    {
+        _currentState.AnimationTrigger();
+    }
+
+    public override void AnimationFinishTrigger()
+    {
+        _currentState.AnimationFinishTrigger();
+    }
     #endregion State Interface
 
     #region FSM Interface
     public void ChangeState(EState stateID)
     {
-        CheckStateID(stateID);
-
         _currentState.Exit();
         _currentState = _states[stateID];
         _currentState.Enter();
@@ -80,8 +86,6 @@ where EState : Enum
 
     public bool IsStateActive(EState stateID)
     {
-        CheckStateID(stateID);
-
         return _currentState == _states[stateID];
     }
 
@@ -90,12 +94,4 @@ where EState : Enum
         return _currentState;
     }
     #endregion FSM Interface
-
-    #region Helpers
-    private void CheckStateID(EState stateID)
-    {
-        if (!_states.ContainsKey(stateID))
-            throw new ArgumentException("No state with ID exists!");
-    }
-    #endregion Helpers
 }

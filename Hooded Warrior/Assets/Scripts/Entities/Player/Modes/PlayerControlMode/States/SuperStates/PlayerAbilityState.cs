@@ -25,10 +25,14 @@ public abstract class PlayerAbilityState : PlayerState
         {
             if (_isTouchingCeiling)
                 _playerControlMode.ChangeState(PlayerControlMode.StateID.CrouchIdle);
-            //else if (_isGrounded && _player.VelocityY < 0.01f)
-            //    _playerControlMode.ChangeState(PlayerControlMode.StateID.Idle);
+            else if (_isGrounded && _playerControlMode.Target_Velocity.y < 0.01f)
+                _playerControlMode.ChangeState(PlayerControlMode.StateID.Idle);
             else
                 _playerControlMode.ChangeState(PlayerControlMode.StateID.InAir);
+        }
+        else
+        {
+            // wait
         }
     }
 

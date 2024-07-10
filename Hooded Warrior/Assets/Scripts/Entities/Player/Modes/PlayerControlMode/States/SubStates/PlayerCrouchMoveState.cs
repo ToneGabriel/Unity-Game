@@ -2,7 +2,7 @@
 public sealed class PlayerCrouchMoveState : PlayerGroundedState
 {
     public PlayerCrouchMoveState(PlayerControlMode mode, PlayerControlModeData data, string animBoolName)
-        : base(mode, data, animBoolName) { }
+        : base(mode, data, animBoolName) { /*Empty*/ }
 
     public override void Enter()
     {
@@ -16,17 +16,17 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
     {
         base.Update();
 
-        //if (_inputX == 0)
-        //    _player.ChangeState((int)PlayerStateID.CrouchIdle);
-        //else if (_inputY != -1 && !_isTouchingCeiling)
-        //    _player.ChangeState((int)PlayerStateID.Move);
+        if (_inputX == 0)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.CrouchIdle);
+        else if (_inputY != -1 && !_isTouchingCeiling)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.Move);
     }
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
 
-        //_player.SetVelocityX(_player.StateData.CrouchMovementVelocity * _inputX);
+        //_playerControlMode.Target_SetVelocityX(_player.StateData.CrouchMovementVelocity * _inputX);
     }
 
     public override void Exit()

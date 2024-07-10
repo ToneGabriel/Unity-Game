@@ -3,17 +3,17 @@
 public sealed class PlayerWallJumpState : PlayerAbilityState
 {
     public PlayerWallJumpState(PlayerControlMode mode, PlayerControlModeData data, string animBoolName)
-        : base(mode, data, animBoolName) { }
+        : base(mode, data, animBoolName) { /*Empty*/ }
 
     public override void Enter()
     {
         base.Enter();
 
-        //_player.ResetAndDecreaseAmountOfJumpsLeft();
-        //_player.SetVelocity(_player.StateData.WallJumpVelocity,
-        //                    _player.StateData.WallJumpAngle,
-        //                    -_player.FacingDirection);
-        //_player.Flip();
+        _playerControlMode.Target_ResetAndDecreaseAmountOfJumpsLeft();
+        //_playerControlMode.Target_SetVelocity(  _player.StateData.WallJumpVelocity,
+        //                                        _player.StateData.WallJumpAngle,
+        //                                        -_player.FacingDirection);
+        _playerControlMode.Target_Flip();
     }
 
     public override void Update()

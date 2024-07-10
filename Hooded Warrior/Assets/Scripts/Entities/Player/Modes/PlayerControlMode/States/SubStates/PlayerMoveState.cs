@@ -13,16 +13,13 @@ public sealed class PlayerMoveState : PlayerGroundedState
         else if (_inputY == -1)
             _playerControlMode.ChangeState(PlayerControlMode.StateID.CrouchMove);
         else if (_isGrounded && _rollInput)
-        {
-            InputManager.Instance.UseRollInput();
             _playerControlMode.ChangeState(PlayerControlMode.StateID.Roll);
-        }
     }
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
 
-        _playerControlMode.Target_SetVelocityX(/*_player.StateData.MovementVelocity * */ _inputX);
+        _playerControlMode.Target_SetVelocityX(_playerControlModeData.MovementVelocity * _inputX);
     }
 }

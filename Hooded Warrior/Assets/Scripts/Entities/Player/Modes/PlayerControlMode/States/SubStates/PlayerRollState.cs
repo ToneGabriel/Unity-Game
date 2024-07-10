@@ -8,6 +8,8 @@ public sealed class PlayerRollState : PlayerAbilityState
     {
         base.Enter();
 
+        InputManager.Instance.UseRollInput();
+
         //_playerControlMode.Target_SetColliderHight(_player.StateData.CrouchColliderHeight);
         //_playerControlMode.SetLightOrbPosition(_player.StateData.CrouchLightOrbPosition);
     }

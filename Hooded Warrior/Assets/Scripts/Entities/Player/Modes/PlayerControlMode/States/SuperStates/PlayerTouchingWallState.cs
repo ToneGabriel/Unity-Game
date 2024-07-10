@@ -16,7 +16,7 @@ public abstract class PlayerTouchingWallState : PlayerState
     {
         base.Enter();
 
-        //_player.ResetAndDecreaseAmountOfJumpsLeft();
+        _playerControlMode.Target_ResetAndDecreaseAmountOfJumpsLeft();
         // TODO
         // _player.AdvancedStatus.CanDash = true;
     }
@@ -42,12 +42,12 @@ public abstract class PlayerTouchingWallState : PlayerState
     {
         base.FixedUpdate();
 
-        //    //_isGrounded         = _player.IsGrounded();
-        //    //_isTouchingWall     = _player.IsTouchingWall();
-        //    //_isTouchingLedge    = _player.IsTouchingLedge(_player.transform.right);
+        //_isGrounded = _player.IsGrounded();
+        //_isTouchingWall = _player.IsTouchingWall();
+        //_isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
 
-        //    //if (_isTouchingWall && !_isTouchingLedge)
-        //    //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
+        //if (_isTouchingWall && !_isTouchingLedge)
+        //    _player.AdvancedStatus.LedgeDetectedposition = _player.transform.position;
     }
 
     public override void Exit()

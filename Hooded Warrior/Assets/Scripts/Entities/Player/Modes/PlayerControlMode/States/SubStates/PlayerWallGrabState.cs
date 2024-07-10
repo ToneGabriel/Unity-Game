@@ -2,7 +2,7 @@
 
 public sealed class PlayerWallGrabState : PlayerTouchingWallState
 {
-    private Vector3 _workspaceVector3;
+    private Vector2 _workspaceVector2;
 
     public PlayerWallGrabState(PlayerControlMode mode, PlayerControlModeData data, string animBoolName)
         : base(mode, data, animBoolName) { }
@@ -11,7 +11,7 @@ public sealed class PlayerWallGrabState : PlayerTouchingWallState
     {
         base.Enter();
 
-        //_workspaceVector3 = _player.transform.position;
+        //_workspaceVector2 = _playerControlMode.Target_Position;
         HoldPosition();
     }
 
@@ -21,16 +21,16 @@ public sealed class PlayerWallGrabState : PlayerTouchingWallState
 
         HoldPosition();
 
-        //if (_inputY > 0)
-        //    _player.ChangeState((int)PlayerStateID.WallClimb);
-        //else if (_inputY < 0 || !_grabInput)
-        //    _player.ChangeState((int)PlayerStateID.WallSlide);
+        if (_inputY > 0)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.WallClimb);
+        else if (_inputY < 0 || !_grabInput)
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.WallSlide);
     }
 
     private void HoldPosition()
     {
         //_player.transform.position = _workspaceVector3;
-        //_player.SetVelocityZero();
+        _playerControlMode.Target_SetVelocityZero();
     }
 
 }
