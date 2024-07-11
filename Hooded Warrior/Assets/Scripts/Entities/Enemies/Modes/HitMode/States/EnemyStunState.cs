@@ -49,9 +49,9 @@ public class EnemyStunState : EntityModeState<EnemyHitMode.StateID>
         }
     }
 
-    protected override void DoChecks()
+    public override void FixedUpdate()
     {
-        base.DoChecks();
+        base.FixedUpdate();
 
         //_isGrounded             = _enemy.IsGrounded();
         //_isPlayerInMeleeRange   = _enemy.CheckPlayerInMeleeRange();

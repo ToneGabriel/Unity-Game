@@ -2,17 +2,16 @@
 public sealed class PlayerJumpState : PlayerAbilityState
 {
     public PlayerJumpState(PlayerControlMode mode, PlayerControlModeData data, string animBoolName)
-        : base(mode, data, animBoolName) { }
+        : base(mode, data, animBoolName) { /*Empty*/ }
 
     public override void Enter()
     {
         base.Enter();
 
         InputManager.Instance.UseJumpInput();
-        // TODO
-        //_playerControlMode.Target_SetVelocityY(_player.StateData.JumpVelocity);
-        //_player.DecreaseAmountOfJumpsLeft();
-        //_player._inAirState.SetIsJumping();
+        _playerControlMode.Target_SetVelocityY(_playerControlModeData.JumpVelocity);
+        --_playerControlMode.Target_JumpCount;
+
         _isAbilityDone = true;
     }
 }

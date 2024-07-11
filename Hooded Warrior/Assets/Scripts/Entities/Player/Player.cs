@@ -14,14 +14,12 @@ public sealed class Player : Entity
 
     #region Components & Data
     [SerializeField] private PlayerExternComponents _playerExternComponents;
-    [SerializeField] private PlayerStateData        _playerStateData;
 
-    private PlayerActionComponents                  _playerIntStatusComponents;
-    #endregion
+    [Header("Player Modes Data")]
+    [SerializeField] private PlayerControlModeData  _playerControlModeData;
 
-    #region Component Getters
-    public PlayerStateData                          StateData       { get { return _playerStateData; } }
-    public ref PlayerActionComponents               AdvancedStatus  { get { return ref _playerIntStatusComponents; } }
+    public int      JumpCount { get; set; }
+    public Vector2  FuturePosition { get; set; }
     #endregion
 
     #region Others
@@ -62,7 +60,7 @@ public sealed class Player : Entity
 
         _playerController.InitializeStates
         (
-            new KeyValuePair<StateID, State>(StateID.Control, new PlayerControlMode(this, null))
+            new KeyValuePair<StateID, State>(StateID.Control, new PlayerControlMode(this, _playerControlModeData))
             //new KeyValuePair<StateID, State>(StateID.Hit,       null)
         );    
 
@@ -97,21 +95,6 @@ public sealed class Player : Entity
     #endregion
 
     #region Setters
-    public void ResetAmountOfJumpsLeft()
-    {
-        _playerIntStatusComponents.AmountOfJumpsLeft = _playerStateData.MaxAmountOfJumps;
-    }
-
-    public void DecreaseAmountOfJumpsLeft()
-    {
-        --_playerIntStatusComponents.AmountOfJumpsLeft;
-    }
-
-    public void ResetAndDecreaseAmountOfJumpsLeft()
-    {
-        _playerIntStatusComponents.AmountOfJumpsLeft = _playerStateData.MaxAmountOfJumps - 1;
-    }
-
     public void SetDashArrowActive(bool value)
     {
         _playerExternComponents._dashDirectionIndicator.SetActive(value);
@@ -145,11 +128,6 @@ public sealed class Player : Entity
     #endregion
 
     #region Checkers
-    public bool CanJump()
-    {
-        return (_playerIntStatusComponents.AmountOfJumpsLeft > 0);
-    }
-
     public bool CanDash()
     {
         return false;   // TODO
@@ -264,48 +242,6 @@ public sealed class Player : Entity
         //    _inventory.Shield.AnimationFinishTrigger(); 
     }
 
-    public Vector2 GetDetectedLedgeCornerPosition()
-    {
-        Vector2 ret;
-
-        if (_playerIntStatusComponents.LedgeDetectedPosition == Vector2.zero)
-        {
-            _playerIntStatusComponents.LedgeDetectedPosition = new();
-            ret = _playerIntStatusComponents.LedgeDetectedPosition;
-        }
-        else
-        {
-            ret = _playerIntStatusComponents.LedgeDetectedPosition;
-            _playerIntStatusComponents.LedgeDetectedPosition = Vector2.zero;
-        }
-
-        return ret;
-
-        //RaycastHit2D xHit = Physics2D.Raycast(  _sensors.EnvironmentCheck.transform.position,
-        //                                        Vector2.right * EntityInternComponents.FacingDirection,
-        //                                        _data.EnvironmentCheckDistance,
-        //                                        _data.WhatIsGround);
-
-            //float xDistance = xHit.distance;
-            //_workspaceVector2.Set(xDistance * EntityInternComponents.FacingDirection, 0f);
-
-            //RaycastHit2D yHit = Physics2D.Raycast(  _sensors.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
-            //                                        Vector2.down,
-            //                                        _sensors.LedgeCheck.transform.position.y - _sensors.EnvironmentCheck.transform.position.y,
-            //                                        _data.WhatIsGround);
-
-            //float yDistance = yHit.distance;
-            //_workspaceVector2.Set(  _sensors.EnvironmentCheck.transform.position.x + xDistance * EntityInternComponents.FacingDirection,
-            //                        _sensors.LedgeCheck.transform.position.y - yDistance);
-
-            //return _workspaceVector2;
-    }
-
-    public void ResetDetectedLedgeCornerPosition()
-    {
-        _playerIntStatusComponents.LedgeDetectedPosition = Vector2.zero;
-    }
-
     private void AnimationTrigger()
     {
         //_stateMachine.CurrentState.AnimationTrigger();
@@ -321,33 +257,6 @@ public sealed class Player : Entity
         //Gizmos.DrawLine(_environmentCheck.transform.position, _environmentCheck.transform.position + (Vector3)(Vector2.right * FacingDirection * _dataPlayer.EnvironmentCheckDistance));
         //Gizmos.DrawLine(_ledgeCheck.transform.position, _ledgeCheck.transform.position + (Vector3)(Vector2.right * FacingDirection * _dataPlayer.EnvironmentCheckDistance));
     }
-
-    //protected override void FSMInitializeModes()
-    //{
-        //AddNewMode(0);  // only 1 mode
-
-        //AddNewState(0, (int)PlayerStateID.Idle,            new PlayerIdleState(this, PlayerControllerParameters.Idle_b));
-        //AddNewState(0, (int)PlayerStateID.Move,            new PlayerMoveState(this, PlayerControllerParameters.Move_b));
-        //AddNewState(0, (int)PlayerStateID.Jump,            new PlayerJumpState(this, PlayerControllerParameters.InAir_b));
-        //AddNewState(0, (int)PlayerStateID.InAir,           new PlayerInAirState(this, PlayerControllerParameters.InAir_b));
-        //AddNewState(0, (int)PlayerStateID.Land,            new PlayerLandState(this, PlayerControllerParameters.Land_b));
-        //AddNewState(0, (int)PlayerStateID.WallSlide,       new PlayerWallSlideState(this, PlayerControllerParameters.WallSlide_b));
-        //AddNewState(0, (int)PlayerStateID.WallGrab,        new PlayerWallGrabState(this, PlayerControllerParameters.WallGrab_b));
-        //AddNewState(0, (int)PlayerStateID.WallClimb,       new PlayerWallClimbState(this, PlayerControllerParameters.WallClimb_b));
-        //AddNewState(0, (int)PlayerStateID.WallJump,        new PlayerWallJumpState(this, PlayerControllerParameters.InAir_b));
-        //AddNewState(0, (int)PlayerStateID.LedgeClimb,      new PlayerLedgeClimbState(this, PlayerControllerParameters.LedgeClimbState_b));
-        //AddNewState(0, (int)PlayerStateID.Dash,            new PlayerDashState(this, PlayerControllerParameters.InAir_b));
-        //AddNewState(0, (int)PlayerStateID.CrouchIdle,      new PlayerCrouchIdleState(this, PlayerControllerParameters.CrouchIdle_b));
-        //AddNewState(0, (int)PlayerStateID.CrouchMove,      new PlayerCrouchMoveState(this, PlayerControllerParameters.CrouchMove_b));
-        //AddNewState(0, (int)PlayerStateID.Roll,            new PlayerRollState(this, PlayerControllerParameters.Roll_b));
-        //AddNewState(0, (int)PlayerStateID.PrimaryAttack,   new PlayerAttackState(this, PlayerControllerParameters.Combat_b));
-        //AddNewState(0, (int)PlayerStateID.SecondaryDefend, new PlayerDefendState(this, PlayerControllerParameters.Combat_b));
-        //AddNewState(0, (int)PlayerStateID.SpellCast,       new PlayerSpellState(this, PlayerControllerParameters.Combat_b));
-
-        //_primaryAttackState.SetWeapon(_inventory.Weapons[_weaponIndex]);
-        //_secondaryDefendState.SetShield(_inventory.Shield);
-        //_spellCastState.SetSpell(_inventory.Spells[_spellIndex]);
-    //}
 
     //protected override void FSMInitializeTransitions()
     //{

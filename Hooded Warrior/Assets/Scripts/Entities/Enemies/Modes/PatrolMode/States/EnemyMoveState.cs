@@ -15,7 +15,7 @@ public sealed class EnemyMoveState : EntityModeState<EnemyPatrolMode.StateID>
     {
         base.Enter();
 
-        _enemyPatrolMode.Target_SetVelocityTowardsFacingDirection(_enemyPatrolModeData.MovementSpeed);
+        _enemyPatrolMode.Target_SetVelocityX(_enemyPatrolModeData.MovementSpeed * _enemyPatrolMode.Target_FacingDirection);
     }
 
     public override void Update()
@@ -37,10 +37,5 @@ public sealed class EnemyMoveState : EntityModeState<EnemyPatrolMode.StateID>
         base.Exit();
 
         _enemyPatrolMode.Target_SetVelocityZero();
-    }
-
-    protected override void DoChecks()                                              // Check Ranges
-    {
-        base.DoChecks();
     }
 }

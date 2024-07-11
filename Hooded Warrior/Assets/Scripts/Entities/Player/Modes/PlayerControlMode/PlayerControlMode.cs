@@ -75,10 +75,6 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
 
     private readonly Player                 _target;
     private readonly PlayerControlModeData  _controlData;
-    private PlayerActionComponents          _playerActionComponents;    // TODO: rename PlayerActionParameters
-
-
-    public ref PlayerActionComponents ActionComponents { get { return ref _playerActionComponents; } }
 
     public override string[] AnimatorParameterNames
     {
@@ -117,35 +113,83 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
         SetDefaultState(StateID.Idle);
     }
 
+    public int Target_JumpCount
+    { 
+        get
+        {
+            return _target.JumpCount;
+        }
+
+        set
+        {
+            _target.JumpCount = value;
+        }
+    }
+
+    public Vector2 Target_FuturePosition
+    {
+        get
+        {
+            return _target.FuturePosition;
+        }
+
+        set
+        {
+            _target.FuturePosition = value;
+        }
+    }
+
     public void Target_SetDashArrowRotation(Quaternion rotation)
     {
         // TODO:
         //_playerExternComponents._dashDirectionIndicator.transform.rotation = rotation;
     }
 
-    public void Target_ResetAmountOfJumpsLeft()
-    {
-        // TODO
-    }
+    //public bool Target_HasJumpsLeft()
+    //{
+    //    return _playerActionParameters.AmountOfJumpsLeft > 0;
+    //}
 
-    public void Target_DecreaseAmountOfJumpsLeft()
-    {
-        // TODO
-    }
+    //public void Target_ResetAmountOfJumpsLeft()
+    //{
+    //    _playerActionParameters.AmountOfJumpsLeft = _controlData.MaxAmountOfJumps;
+    //}
 
-    public void Target_ResetAndDecreaseAmountOfJumpsLeft()
-    {
-        Target_ResetAmountOfJumpsLeft();
-        Target_DecreaseAmountOfJumpsLeft();
-    }
+    //public void Target_DecreaseAmountOfJumpsLeft()
+    //{
+    //    --_playerActionParameters.AmountOfJumpsLeft;
+    //}
+
+    //public void Target_ResetAndDecreaseAmountOfJumpsLeft()
+    //{
+    //    _playerActionParameters.AmountOfJumpsLeft = _controlData.MaxAmountOfJumps - 1;
+    //}
 
     public Vector2 Target_GetDetectedLedgeCornerPosition()
     {
-        return _target.GetDetectedLedgeCornerPosition();
+        //RaycastHit2D xHit = Physics2D.Raycast(_sensors.EnvironmentCheck.transform.position,
+        //                                        Vector2.right * EntityInternComponents.FacingDirection,
+        //                                        _data.EnvironmentCheckDistance,
+        //                                        _data.WhatIsGround);
+
+        //float xDistance = xHit.distance;
+        //_workspaceVector2.Set(xDistance * EntityInternComponents.FacingDirection, 0f);
+
+        //RaycastHit2D yHit = Physics2D.Raycast(_sensors.LedgeCheck.transform.position + (Vector3)_workspaceVector2,
+        //                                        Vector2.down,
+        //                                        _sensors.LedgeCheck.transform.position.y - _sensors.EnvironmentCheck.transform.position.y,
+        //                                        _data.WhatIsGround);
+
+        //float yDistance = yHit.distance;
+        //_workspaceVector2.Set(_sensors.EnvironmentCheck.transform.position.x + xDistance * EntityInternComponents.FacingDirection,
+        //                        _sensors.LedgeCheck.transform.position.y - yDistance);
+
+        return _workspaceVector2;
     }
 
-    public void Target_ResetDetectedLedgeCornerPosition()
+    public void Target_FlipOnInputX(int inputX)
     {
-        _target.ResetDetectedLedgeCornerPosition();
+        if (inputX != 0 && inputX != _target.FacingDirection)
+            Target_Flip();
     }
 }

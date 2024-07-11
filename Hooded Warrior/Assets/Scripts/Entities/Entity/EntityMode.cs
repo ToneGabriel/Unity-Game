@@ -111,12 +111,6 @@ where EState : Enum
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void Target_SetVelocityTowardsFacingDirection(float velocity)
-    {
-        _workspaceVector2.Set(_target.FacingDirection * velocity, _target.Rigidbody.velocity.y);
-        _target.Rigidbody.velocity = _workspaceVector2;
-    }
-
     public void Target_SetColliderHight()
     {
         // TODO

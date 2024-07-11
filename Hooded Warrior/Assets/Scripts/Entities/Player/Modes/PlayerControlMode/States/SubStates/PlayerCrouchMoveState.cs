@@ -20,13 +20,15 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
             _playerControlMode.ChangeState(PlayerControlMode.StateID.CrouchIdle);
         else if (_inputY != -1 && !_isTouchingCeiling)
             _playerControlMode.ChangeState(PlayerControlMode.StateID.Move);
+
+        _playerControlMode.Target_FlipOnInputX(_inputX);
     }
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
 
-        //_playerControlMode.Target_SetVelocityX(_player.StateData.CrouchMovementVelocity * _inputX);
+        _playerControlMode.Target_SetVelocityX(_playerControlModeData.CrouchMovementVelocity * _inputX);
     }
 
     public override void Exit()

@@ -19,10 +19,7 @@ public sealed class PlayerLedgeClimbState : PlayerAbilityState
     {
         base.Exit();
 
-
-        Vector2 cornerPosition = _playerControlMode.Target_GetDetectedLedgeCornerPosition();
-        _playerControlMode.Target_Position = new Vector2(   cornerPosition.x + (_playerControlMode.Target_FacingDirection * _playerControlModeData.StopOffset.x),
-                                                            cornerPosition.y + _playerControlModeData.StopOffset.y);
+        _playerControlMode.Target_Position = _playerControlMode.Target_FuturePosition;  // future position set in LedgeHangState
         _playerControlMode.Target_SetVelocityZero();
         _playerControlMode.Target_SetRigidbodyDynamic();    // was static from ledge hang state
     }

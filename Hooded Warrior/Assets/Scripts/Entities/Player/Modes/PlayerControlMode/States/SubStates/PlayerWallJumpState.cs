@@ -9,18 +9,19 @@ public sealed class PlayerWallJumpState : PlayerAbilityState
     {
         base.Enter();
 
-        _playerControlMode.Target_ResetAndDecreaseAmountOfJumpsLeft();
-        //_playerControlMode.Target_SetVelocity(  _player.StateData.WallJumpVelocity,
-        //                                        _player.StateData.WallJumpAngle,
-        //                                        -_player.FacingDirection);
+        _playerControlMode.Target_JumpCount = _playerControlModeData.MaxAmountOfJumps - 1;
+
         _playerControlMode.Target_Flip();
+        _playerControlMode.Target_SetVelocity(  _playerControlModeData.WallJumpVelocity,
+                                                _playerControlModeData.WallJumpAngle,
+                                                _playerControlMode.Target_FacingDirection);
     }
 
     public override void Update()
     {
         base.Update();
 
-        //if (Time.time >= _stateStartTime + _player.StateData.WallJumpTime)
-        //    _isAbilityDone = true;
+        if (Time.time >= _stateStartTime + _playerControlModeData.WallJumpTime)
+            _isAbilityDone = true;
     }
 }

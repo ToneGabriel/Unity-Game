@@ -16,7 +16,7 @@ public abstract class PlayerTouchingWallState : PlayerState
     {
         base.Enter();
 
-        _playerControlMode.Target_ResetAndDecreaseAmountOfJumpsLeft();
+        _playerControlMode.Target_JumpCount = _playerControlModeData.MaxAmountOfJumps - 1;
         // TODO
         // _player.AdvancedStatus.CanDash = true;
     }
@@ -35,7 +35,7 @@ public abstract class PlayerTouchingWallState : PlayerState
         else if (!_isTouchingWall)
             _playerControlMode.ChangeState(PlayerControlMode.StateID.InAir);
         else if (_isTouchingWall && !_isTouchingLedge)
-            _playerControlMode.ChangeState(PlayerControlMode.StateID.LedgeClimb);
+            _playerControlMode.ChangeState(PlayerControlMode.StateID.LedgeHang);
     }
 
     public override void FixedUpdate()

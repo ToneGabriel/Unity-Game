@@ -2,7 +2,7 @@
 public sealed class PlayerMoveState : PlayerGroundedState
 {
     public PlayerMoveState(PlayerControlMode mode, PlayerControlModeData data, string animBoolName)
-        : base(mode, data, animBoolName) { }
+        : base(mode, data, animBoolName) { /*Empty*/ }
 
     public override void Update()
     {
@@ -14,6 +14,8 @@ public sealed class PlayerMoveState : PlayerGroundedState
             _playerControlMode.ChangeState(PlayerControlMode.StateID.CrouchMove);
         else if (_isGrounded && _rollInput)
             _playerControlMode.ChangeState(PlayerControlMode.StateID.Roll);
+
+        _playerControlMode.Target_FlipOnInputX(_inputX);
     }
 
     public override void FixedUpdate()

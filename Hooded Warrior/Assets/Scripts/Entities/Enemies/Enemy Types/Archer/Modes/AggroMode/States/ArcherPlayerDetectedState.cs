@@ -44,10 +44,4 @@ public sealed class ArcherPlayerDetectedState : EntityModeState<ArcherAggroMode.
     {
         base.Exit();
     }
-
-    protected override void DoChecks()                                             // Check Ranges
-    {
-        base.DoChecks();
-    }
-
 }

@@ -22,8 +22,6 @@ where EState : Enum
         _stateStartTime             = Time.time;
         _isStateAnimationFinished   = false;
         _entityMode.Target_SetAnimatorBoolParam(_animBoolName, true);
-
-        DoChecks();
     }
 
     public override void Exit()
@@ -33,7 +31,7 @@ where EState : Enum
 
     public override void Update() { }
 
-    public override void FixedUpdate() => DoChecks();
+    public override void FixedUpdate() { }
 
     public override void AnimationTrigger() { }
 
@@ -41,6 +39,4 @@ where EState : Enum
     {
         _isStateAnimationFinished = true;
     }
-
-    protected virtual void DoChecks() { }
 }

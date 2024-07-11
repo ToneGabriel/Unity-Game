@@ -45,11 +45,6 @@ public sealed class EnemyIdleState : EntityModeState<EnemyPatrolMode.StateID>
             _enemyPatrolMode.Target_Flip();
     }
 
-    protected override void DoChecks()                                         // Check ranges
-    {
-        base.DoChecks();
-    }
-
     private void SetRandomIdleTime()
     {
         _idleTime = Random.Range(_enemyPatrolModeData.MinIdleTime, _enemyPatrolModeData.MaxIdleTime);

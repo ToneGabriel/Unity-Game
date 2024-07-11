@@ -48,9 +48,4 @@ public sealed class EnemyLookForPlayerState : EntityModeState<EnemyPatrolMode.St
     {
         base.Exit();
     }
-
-    protected override void DoChecks()
-    {
-        base.DoChecks();
-    }
 }

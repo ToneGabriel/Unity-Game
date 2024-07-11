@@ -28,19 +28,24 @@ public class ArcherMeleeAttackState : EntityModeState<ArcherAggroMode.StateID>
         //_attackDetails.Position = _archer.transform.position;
     }
 
+    public override void Update()
+    {
+        base.Update();
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        _isPlayerInMinAgroRange = _archerAggroMode.CheckPlayerInMinAgroRange();
+    }
+
     public override void Exit()
     {
         base.Exit();
 
         IsOnCooldown = true;
         //CooldownManager.Instance.Subscribe(this);
-    }
-
-    protected override void DoChecks()
-    {
-        base.DoChecks();
-
-        _isPlayerInMinAgroRange = _archerAggroMode.CheckPlayerInMinAgroRange();
     }
 
     public virtual void FinishMeleeAttack()

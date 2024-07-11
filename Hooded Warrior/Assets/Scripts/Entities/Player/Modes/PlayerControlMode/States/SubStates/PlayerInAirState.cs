@@ -41,21 +41,16 @@ public sealed class PlayerInAirState : PlayerState
     {
         base.Update();
 
-        _playerControlMode.Target_SetAnimatorFloatParam(_animVelocityXFloatName, _playerControlMode.Target_Velocity.x);
-        _playerControlMode.Target_SetAnimatorFloatParam(_animVelocityYFloatName, _playerControlMode.Target_Velocity.y);
-
         _inputX         = InputManager.Instance.NormalizedInputX;
         _jumpInput      = InputManager.Instance.JumpInput;
         //_jumpInputStop  = InputManager.Instance.JumpInputStop;
         _grabInput      = InputManager.Instance.GrabInput;
         _dashInput      = InputManager.Instance.DashInput;
 
-        CheckJumpMultiplier();
-
         //if (_isGrounded && _player.VelocityY < 0.01f)
         //    _playerControlMode.ChangeState(PlayerControlMode.StateID.Land);
         //else if (_isTouchingWall && !_isTouchingLedge && !_isGrounded)
-        //    _playerControlMode.ChangeState(PlayerControlMode.StateID.LedgeClimb);
+        //    _playerControlMode.ChangeState(PlayerControlMode.StateID.LedgeHang);
         //else if (_jumpInput && _player.CanJump())
         //    _playerControlMode.ChangeState(PlayerControlMode.StateID.Jump);
         //else if (_isTouchingWall && _grabInput && _isTouchingLedge)
@@ -64,31 +59,24 @@ public sealed class PlayerInAirState : PlayerState
         //    _playerControlMode.ChangeState(PlayerControlMode.StateID.WallSlide);
         //else if (_dashInput /*&& _player._dashState.CheckIfCanDash()*/)
         //    _playerControlMode.ChangeState(PlayerControlMode.StateID.Dash);
-        //else
-        //{
-        //    _player.FlipIfShould(_inputX);
-        //    _playerControlMode.Target_SetVelocity(  _player.StateData.MovementVelocity * _inputX,
-        //                                            Mathf.Clamp(_player.VelocityY,
-        //                                                        -_player.StateData.MaxVelocityY,
-        //                                                        _player.StateData.MaxVelocityY));  // prevent falling too fast
-        //}
+
+        _playerControlMode.Target_FlipOnInputX(_inputX);
+
+        _playerControlMode.Target_SetAnimatorFloatParam(_animVelocityXFloatName, _playerControlMode.Target_Velocity.x);
+        _playerControlMode.Target_SetAnimatorFloatParam(_animVelocityYFloatName, _playerControlMode.Target_Velocity.y);
     }
 
-    public void SetIsJumping() // used for jump multiplier only
+    public override void FixedUpdate()
     {
-        _isJumping = true;
-    }
+        base.FixedUpdate();
 
-    private void CheckJumpMultiplier()
-    {
-        //if (_isJumping)
-        //    if (_jumpInputStop)
-        //    {
-        //        _player.SetVelocityY(_player.VelocityY * _player.StateData.JumpHeightMultiplier);
-        //        _isJumping = false;
-        //    }
-        //    else if (_player.VelocityY <= 0f)
-        //        _isJumping = false;
-    }
+        //_isGrounded = _player.IsGrounded();
+        //_isTouchingWall = _player.IsTouchingWall();
+        //_isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
 
+        _playerControlMode.Target_SetVelocity(  _playerControlModeData.InAirVelocityX * _inputX,  // move in air
+                                                Mathf.Clamp(_playerControlMode.Target_Velocity.y,
+                                                            -_playerControlModeData.MaxVelocityY,
+                                                            _playerControlModeData.MaxVelocityY));  // prevent falling too fast
+    }
 }

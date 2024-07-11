@@ -15,6 +15,7 @@ public class PlayerControlModeData : ScriptableObject
 
     [Header("In Air State")]
     [SerializeField] private float _jumpHeightMultiplier = 0.5f;
+    [SerializeField] private float _inAirVelocityX = 7f;
     [SerializeField] private float _maxVelocityY = 50f;
 
     [Header("Wall Touching State")]
@@ -60,6 +61,7 @@ public class PlayerControlModeData : ScriptableObject
     public int MaxAmountOfJumps { get { return _maxAmountOfJumps; } }
 
     public float JumpHeightMultiplier { get { return _jumpHeightMultiplier; } }
+    public float InAirVelocityX { get { return _inAirVelocityX; } }
     public float MaxVelocityY { get { return _maxVelocityY; } }
 
     public float WallSlideVelocity { get { return _wallSlideVelocity; } }

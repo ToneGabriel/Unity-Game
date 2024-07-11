@@ -45,13 +45,13 @@ public class ArcherDodgeState : EntityModeState<ArcherAggroMode.StateID>
             _isDodgeOver = true;
     }
 
-    protected override void DoChecks()                                                     // Check Ranges
+    public override void FixedUpdate()
     {
-        base.DoChecks();
+        base.FixedUpdate();
 
-        _isPlayerInMeleeRange = _archerAggroMode.CheckPlayerInMeleeRange();
+        _isPlayerInMeleeRange   = _archerAggroMode.CheckPlayerInMeleeRange();
         _isPlayerInMaxAgroRange = _archerAggroMode.CheckPlayerInMaxAgroRange();
-        _isGrounded = _archerAggroMode.Target_IsGrounded();
+        _isGrounded             = _archerAggroMode.Target_IsGrounded();
     }
 
     public void CheckCooldown()

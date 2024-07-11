@@ -24,19 +24,24 @@ public class ArcherRangedAttackState : EntityModeState<ArcherAggroMode.StateID>
         _archerAggroMode.Target_SetVelocityZero();
     }
 
+    public override void Update()
+    {
+        base.Update();
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        _isPlayerInMinAgroRange = _archerAggroMode.CheckPlayerInMinAgroRange();
+    }
+
     public override void Exit()
     {
         base.Exit();
 
         IsOnCooldown = true;
         //CooldownManager.Instance.Subscribe(this);
-    }
-
-    protected override void DoChecks()
-    {
-        base.DoChecks();
-
-        _isPlayerInMinAgroRange = _archerAggroMode.CheckPlayerInMinAgroRange();
     }
 
     public void CheckCooldown()
