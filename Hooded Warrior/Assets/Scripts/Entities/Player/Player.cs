@@ -10,10 +10,12 @@ public sealed class Player : Entity
         Hit
     }
 
+    #region Components & Data
     private FiniteStateMachine<StateID> _playerController = null;
 
-    #region Components & Data
-    [SerializeField] private PlayerExternComponents _playerExternComponents;
+    [Header("Player Extern Components")]
+    [SerializeField] private GameObject _dashDirectionIndicator;
+    [SerializeField] private GameObject _lightOrbPosition;
 
     [Header("Player Modes Data")]
     [SerializeField] private PlayerControlModeData  _playerControlModeData;
@@ -97,33 +99,22 @@ public sealed class Player : Entity
     #region Setters
     public void SetDashArrowActive(bool value)
     {
-        _playerExternComponents._dashDirectionIndicator.SetActive(value);
+        _dashDirectionIndicator.SetActive(value);
     }
 
     public void SetDashArrowRotation(Quaternion rotation)
     {
-        _playerExternComponents._dashDirectionIndicator.transform.rotation = rotation;
-    }
-
-    public void SetColiderHeight(float height)
-    {
-        //Vector2 center = EntityInternComponents.BoxCollider.offset;
-        //_workspaceVector2.Set(EntityInternComponents.BoxCollider.size.x, height);
-
-        //center.y += (height - EntityInternComponents.BoxCollider.size.y) / 2;
-
-        //EntityInternComponents.BoxCollider.size   = _workspaceVector2;
-        //EntityInternComponents.BoxCollider.offset = center;
+        _dashDirectionIndicator.transform.rotation = rotation;
     }
 
     public GameObject GetLightOrbPosition()
     {
-        return _playerExternComponents._lightOrbPosition;
+        return _lightOrbPosition;
     }
 
     public void SetLightOrbPosition(Vector2 position)
     {
-        _playerExternComponents._lightOrbPosition.transform.localPosition = position;
+        _lightOrbPosition.transform.localPosition = position;
     }
     #endregion
 
@@ -131,12 +122,6 @@ public sealed class Player : Entity
     public bool CanDash()
     {
         return false;   // TODO
-    }
-
-    public void FlipIfShould(int inputX)
-    {
-        //if (inputX != 0 && inputX != EntityInternComponents.FacingDirection)
-        //    Flip();
     }
 
     public bool CanDefend()

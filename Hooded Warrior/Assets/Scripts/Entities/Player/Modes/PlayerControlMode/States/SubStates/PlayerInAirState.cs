@@ -74,9 +74,8 @@ public sealed class PlayerInAirState : PlayerState
         //_isTouchingWall = _player.IsTouchingWall();
         //_isTouchingLedge = _player.IsTouchingLedge(_player.transform.right);
 
-        _playerControlMode.Target_SetVelocity(  _playerControlModeData.InAirVelocityX * _inputX,  // move in air
-                                                Mathf.Clamp(_playerControlMode.Target_Velocity.y,
-                                                            -_playerControlModeData.MaxVelocityY,
-                                                            _playerControlModeData.MaxVelocityY));  // prevent falling too fast
+        _playerControlMode.Target_SetVelocityXClampVelocityY(   _playerControlModeData.InAirVelocityX * _inputX,    // move in air
+                                                                -_playerControlModeData.MaxVelocityY,
+                                                                _playerControlModeData.MaxVelocityY);               // prevent falling too fast
     }
 }

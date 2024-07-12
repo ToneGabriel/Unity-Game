@@ -76,14 +76,6 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
     private readonly Player                 _target;
     private readonly PlayerControlModeData  _controlData;
 
-    public override string[] AnimatorParameterNames
-    {
-        get
-        {
-            return AnimatorParameters.GetAnimatorParameterNames();
-        }
-    }
-
     public PlayerControlMode(Player player, PlayerControlModeData data)
         : base(player)
     {
@@ -113,36 +105,49 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
         SetDefaultState(StateID.Idle);
     }
 
-    public int Target_JumpCount
-    { 
-        get
-        {
-            return _target.JumpCount;
-        }
+    #region Properties
+    public override string[] AnimatorParameterNames
+    {
+        get { return AnimatorParameters.GetAnimatorParameterNames(); }
+    }
 
-        set
-        {
-            _target.JumpCount = value;
-        }
+    public int Target_JumpCount
+    {
+        get { return _target.JumpCount; }
+        set { _target.JumpCount = value; }
     }
 
     public Vector2 Target_FuturePosition
     {
-        get
-        {
-            return _target.FuturePosition;
-        }
+        get { return _target.FuturePosition; }
+        set { _target.FuturePosition = value; }
+    }
+    #endregion Properties
 
-        set
-        {
-            _target.FuturePosition = value;
-        }
+    public void Target_SetBoxColliderHeight(float height)
+    {
+        Vector2 center = _target.BoxCollider.offset;
+        _workspaceVector2.Set(_target.BoxCollider.size.x, height);
+
+        center.y += (height - _target.BoxCollider.size.y) / 2;
+
+        _target.BoxCollider.size = _workspaceVector2;
+        _target.BoxCollider.offset = center;
+    }
+
+    public void Target_SetLightOrbPosition(Vector2 position)
+    {
+        _target.SetLightOrbPosition(position);
+    }
+
+    public void Target_SetDashArrowActive(bool value)
+    {
+        _target.SetDashArrowActive(value);
     }
 
     public void Target_SetDashArrowRotation(Quaternion rotation)
     {
-        // TODO:
-        //_playerExternComponents._dashDirectionIndicator.transform.rotation = rotation;
+        _target.SetDashArrowRotation(rotation);
     }
 
     //public bool Target_HasJumpsLeft()

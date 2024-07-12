@@ -9,7 +9,7 @@ public sealed class PlayerLedgeHangState : PlayerState
     {
         base.Enter();
 
-        _playerControlMode.Target_SetRigidbodyStatic();
+        _playerControlMode.Target_SetRigidbodyType(RigidbodyType2D.Static);
         _playerControlMode.Target_SetVelocityZero();
         _playerControlMode.Target_JumpCount = _playerControlModeData.MaxAmountOfJumps - 1;
         // TODO

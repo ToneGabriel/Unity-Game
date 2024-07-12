@@ -21,7 +21,7 @@ public sealed class PlayerLedgeClimbState : PlayerAbilityState
 
         _playerControlMode.Target_Position = _playerControlMode.Target_FuturePosition;  // future position set in LedgeHangState
         _playerControlMode.Target_SetVelocityZero();
-        _playerControlMode.Target_SetRigidbodyDynamic();    // was static from ledge hang state
+        _playerControlMode.Target_SetRigidbodyType(RigidbodyType2D.Dynamic);    // was static from ledge hang state
     }
 
     public override void AnimationFinishTrigger()

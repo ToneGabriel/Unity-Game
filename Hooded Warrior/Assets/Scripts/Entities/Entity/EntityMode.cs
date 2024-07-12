@@ -8,51 +8,37 @@ where EState : Enum
     private readonly Entity _target;
     protected Vector2       _workspaceVector2;
 
-    public abstract string[] AnimatorParameterNames { get; }
-
     public EntityMode(Entity entity)
     {
         _target = entity;
     }
 
-    #region Getters
+    #region Properties
+    public abstract string[] AnimatorParameterNames { get; }    // used for animator generation
+
     public int Target_FacingDirection
     {
-        get
-        {
-            return _target.FacingDirection;
-        }
+        get { return _target.FacingDirection; }
     }
 
     public Vector2 Target_Position
     {
-        get
-        {
-            return _target.transform.position;
-        }
-
-        set
-        {
-            _target.transform.position = value;
-        }
+        get { return _target.transform.position; }
+        set { _target.transform.position = value; }
     }
 
     public Quaternion Target_Rotation
     {
-        get
-        {
-            return _target.transform.rotation;
-        }
+        get { return _target.transform.rotation; }
+        set { _target.transform.rotation = value; }
     }
 
     public Vector2 Target_Velocity
     {
-        get
-        {
-            return _target.Rigidbody.velocity;
-        }
+        get { return _target.Rigidbody.velocity; }
+        set { _target.Rigidbody.velocity = value; }
     }
-    #endregion Getters
+    #endregion Properties
 
     #region Setters
     public void ExitCurrentMode()
@@ -93,11 +79,6 @@ where EState : Enum
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void Target_SetVelocity(Vector2 velocity)
-    {
-        _target.Rigidbody.velocity = velocity;
-    }
-
     public void Target_SetVelocity(float velocity, Vector2 direction)
     {
         _workspaceVector2 = direction * velocity;
@@ -111,19 +92,20 @@ where EState : Enum
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
+    public void Target_SetVelocityXClampVelocityY(float velocityX, float minY, float maxY)
+    {
+        _workspaceVector2.Set(velocityX, Mathf.Clamp(_target.Rigidbody.velocity.y, minY, maxY));
+        _target.Rigidbody.velocity = _workspaceVector2;
+    }
+
     public void Target_SetColliderHight()
     {
         // TODO
     }
 
-    public void Target_SetRigidbodyDynamic()
+    public void Target_SetRigidbodyType(RigidbodyType2D type)
     {
-        _target.Rigidbody.bodyType = RigidbodyType2D.Dynamic;
-    }
-
-    public void Target_SetRigidbodyStatic()
-    {
-        _target.Rigidbody.bodyType = RigidbodyType2D.Static;
+        _target.Rigidbody.bodyType = type;
     }
 
     public void Target_Flip()

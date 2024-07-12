@@ -8,8 +8,8 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
     {
         base.Enter();
 
-        //_player.SetColiderHeight(_player.StateData.CrouchColliderHeight);
-        //_player.SetLightOrbPosition(_player.StateData.CrouchLightOrbPosition);
+        _playerControlMode.Target_SetBoxColliderHeight(_playerControlModeData.CrouchColliderHeight);
+        _playerControlMode.Target_SetLightOrbPosition(_playerControlModeData.CrouchLightOrbPosition);
     }
 
     public override void Update()
@@ -35,7 +35,7 @@ public sealed class PlayerCrouchMoveState : PlayerGroundedState
     {
         base.Exit();
 
-        //_player.SetColiderHeight(_player.StateData.StandColliderHeight);
-        //_player.SetLightOrbPosition(_player.StateData.StandLightOrbPosition);
+        _playerControlMode.Target_SetBoxColliderHeight(_playerControlModeData.StandColliderHeight);
+        _playerControlMode.Target_SetLightOrbPosition(_playerControlModeData.StandLightOrbPosition);
     }
 }
