@@ -4,9 +4,9 @@ public sealed class LightOrbDieState : LightOrbBaseState
     public LightOrbDieState(LightOrb lightOrb)
         : base(lightOrb) { }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         if (_lightOrb.OuterLightInnerRadius > 0f)
         {

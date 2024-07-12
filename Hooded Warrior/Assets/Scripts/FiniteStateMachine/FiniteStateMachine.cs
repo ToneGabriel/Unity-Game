@@ -1,108 +1,97 @@
 using System;
-using UnityEngine;
+using System.Collections.Generic;
 
 
-public abstract class FiniteStateMachine : MonoBehaviour
+// EState is the enum used to map states
+public class FiniteStateMachine<EState> : State
+where EState : Enum
 {
-    private int     _defaultStateID = -1;
-    private int     _currentStateID = -1;
-    private State[] _states         = null;
+    #region Components
+    private EState                      _defaultStateID;
+    private State                       _currentState   = null;
+    private Dictionary<EState, State>   _states         = null;
+    #endregion Components 
 
-    public abstract string[] AnimatorParameterNames { get; }
-
-    protected virtual void Awake() { }
-
-    protected virtual void Start()
+    #region FSM Late Initialization
+    public void InitializeStates(params KeyValuePair<EState, State>[] newStates)
     {
-        // Check integrity
+        int stateCount = Enum.GetValues(typeof(EState)).Length;
 
-        foreach (var state in _states)
+        if (newStates == null || newStates.Length != stateCount)
+            throw new Exception("The number of states must be equal to the enum count!");
+
+        _states = new Dictionary<EState, State>();
+
+        foreach (var pair in newStates)
+        {
+            EState key  = pair.Key;
+            State state = pair.Value;
+
+            if (_states.ContainsKey(key))
+                throw new Exception("Duplicate Key!");
+
             if (state == null)
-                throw new Exception();
+                throw new Exception("Null State not allowed!");
 
-        if (_defaultStateID == -1)
-            throw new Exception();
+            _states.Add(key, state);
+        }
     }
 
-    protected virtual void OnEnable()
+    public void SetDefaultState(EState stateID)
     {
-        _currentStateID = _defaultStateID;
-        _states[_currentStateID].Enter();
-    }
-
-    protected virtual void OnDisable()
-    {
-        _states[_currentStateID].Exit();
-        _currentStateID = _defaultStateID;
-    }
-
-    protected virtual void Update()
-    {
-        _states[_currentStateID].LogicUpdate();
-    }
-
-    protected virtual void FixedUpdate()
-    {
-        _states[_currentStateID].PhysicsUpdate();
-    }
-
-    protected void CreateStateArray(int size)
-    {
-        if (_states != null)
-            throw new Exception();
-
-        if (size <= 0)
-            throw new Exception();
-
-        _states = new State[size];
-    }
-
-    protected void AddNewState(int stateID, State state)
-    {
-        if (_states == null)
-            throw new Exception();
-
-        if (state == null)
-            throw new Exception();
-
-        if (0 > stateID || _states.Length <= stateID || _states[stateID] != null)
-            throw new Exception();
-
-        _states[stateID] = state;
-    }
-
-    protected void SetDefaultState(int stateID)
-    {
-        if (0 > stateID || _states.Length <= stateID || _states[stateID] == null)
-            throw new Exception();
-
         _defaultStateID = stateID;
     }
+    #endregion FSM Late Initialization
 
-    public void ChangeState(int stateID)
+    #region State Interface
+    public override void Enter()
     {
-        CheckStateID(stateID);
-
-        _states[_currentStateID].Exit();
-        _currentStateID = stateID;
-        _states[_currentStateID].Enter();
+        _currentState = _states[_defaultStateID];
+        _currentState.Enter();
     }
 
-    public bool IsStateActive(int stateID)
+    public override void Update()
     {
-        CheckStateID(stateID);
+        _currentState.Update();
+    }
 
-        return _states[_currentStateID] == _states[stateID];
+    public override void FixedUpdate()
+    {
+        _currentState.FixedUpdate();
+    }
+
+    public override void Exit()
+    {
+        _currentState.Exit();
+    }
+
+    public override void AnimationTrigger()
+    {
+        _currentState.AnimationTrigger();
+    }
+
+    public override void AnimationFinishTrigger()
+    {
+        _currentState.AnimationFinishTrigger();
+    }
+    #endregion State Interface
+
+    #region FSM Interface
+    public void ChangeState(EState stateID)
+    {
+        _currentState.Exit();
+        _currentState = _states[stateID];
+        _currentState.Enter();
+    }
+
+    public bool IsStateActive(EState stateID)
+    {
+        return _currentState == _states[stateID];
     }
 
     public State CurrentState()
     {
-        return _states[_currentStateID];
+        return _currentState;
     }
-
-    private void CheckStateID(int stateID)
-    {
-        if (0 > stateID || _states.Length <= stateID)
-            throw new ArgumentException("No state with ID exists!");
-    }
+    #endregion FSM Interface
 }

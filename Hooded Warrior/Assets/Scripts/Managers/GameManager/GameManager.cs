@@ -1,7 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public sealed class GameManager : FSMMonoBehaviour
+public sealed class GameManager : MonoBehaviourController
 {
+    public enum StateID
+    {
+        StartMenu,
+        LoadingScreen,
+        Gameplay,
+        ResetGame
+    }
+
     public static GameManager Instance;
 
     #region Components & Data
@@ -44,6 +53,29 @@ public sealed class GameManager : FSMMonoBehaviour
     }
     #endregion
 
+    #region Controller Interface
+    protected override State GetControlState()
+    {
+        return null;// _fsm;
+    }
+
+    protected override bool UpdateConditions()
+    {
+        return true;
+    }
+
+    protected override bool FixedUpdateConditions()
+    {
+        return true;
+    }
+
+    public override void ChangeState()
+    {
+        throw new NotImplementedException("Not intended for implementation!");
+    }
+
+    #endregion Controller Interface
+
     #region Other
     public void LoadDataOnNewGame()
     {
@@ -51,26 +83,14 @@ public sealed class GameManager : FSMMonoBehaviour
         Player.SetNewGameData();
     }
 
-    protected override void FSMInitializeModes()
-    {
-        AddNewMode(0);
+    //protected override void FSMInitializeModes()
+    //{
+    //    //AddNewMode(0);
 
-        AddNewState(0, (int)GameManagerStateID.StartMenu,      new StartMenuState(Instance, _startMenuData));
-        AddNewState(0, (int)GameManagerStateID.LoadingScreen,  new LoadingScreenState(Instance, _loadingScreenData));
-        AddNewState(0, (int)GameManagerStateID.Gameplay,       new GameplayState(Instance, _gameplayData));
-        AddNewState(0, (int)GameManagerStateID.ResetGame,      new ResetGameState(Instance, _resetGameData));
-    }
-
-    protected override bool FSMUpdateConditions()
-    {
-        // always update
-        return true;
-    }
-
-    protected override bool FSMFixedUpdateConditions()
-    {
-        // always update
-        return true;
-    }
+    //    //AddNewState(0, (int)GameManagerStateID.StartMenu,      new StartMenuState(Instance, _startMenuData));
+    //    //AddNewState(0, (int)GameManagerStateID.LoadingScreen,  new LoadingScreenState(Instance, _loadingScreenData));
+    //    //AddNewState(0, (int)GameManagerStateID.Gameplay,       new GameplayState(Instance, _gameplayData));
+    //    //AddNewState(0, (int)GameManagerStateID.ResetGame,      new ResetGameState(Instance, _resetGameData));
+    //}
     #endregion Other
 }

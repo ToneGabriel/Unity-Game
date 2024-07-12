@@ -19,7 +19,7 @@ public static class Helpers
 
     public static void ChangeTimeScale(TimeScale value)
     {
-        Time.timeScale = (int)value / (int)TimeScale.Default;
+        Time.timeScale = (float)(int)value / (int)TimeScale.Default;
     }
 
     public static AsyncOperation LoadScene(SceneNames sceneID)

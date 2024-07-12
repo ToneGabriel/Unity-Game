@@ -4,9 +4,9 @@ public sealed class LightOrbBornState : LightOrbBaseState
     public LightOrbBornState(LightOrb lightOrb)
         : base(lightOrb) { }
 
-    public override void LogicUpdate()
+    public override void Update()
     {
-        base.LogicUpdate();
+        base.Update();
 
         if (_lightOrb.InnerLightInnerRadius < _lightOrb.Data.InnerLightMaxInnerRadius)
         {
@@ -20,7 +20,7 @@ public sealed class LightOrbBornState : LightOrbBaseState
             _lightOrb.OuterLightInnerRadius += _lightOrb.Data.OuterLightInnerRadiusChangeRatio;
             _lightOrb.OuterLightOuterRadius += _lightOrb.Data.OuterLightOuterRadiusChangeRatio;
         }
-        else
-            _lightOrb.ChangeState((int)LightOrbStateID.Live);
+        //else
+        //    _lightOrb.ChangeState((int)LightOrbStateID.Live);
     }
 }

@@ -1,0 +1,76 @@
+﻿using UnityEngine;
+
+public class ArcherMeleeAttackState : EntityModeState<ArcherAggroMode.StateID>
+{
+    public bool IsOnCooldown { get; private set; }
+
+    private ArcherAggroMode     _archerAggroMode;
+    private ArcherAggroModeData _archerAggroModeData;
+
+    private AttackDetails _attackDetails;
+    private bool _isPlayerInMinAgroRange;
+
+    public ArcherMeleeAttackState(ArcherAggroMode mode, ArcherAggroModeData data, string animBoolName)
+        : base(mode, animBoolName)
+    {
+        _archerAggroMode        = mode;
+        _archerAggroModeData    = data;
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+
+        //_isStateAnimationFinished = false;
+        //_archerAggroMode.SetVelocityZero();
+
+        //_attackDetails.DamageAmount = _archerAggroModeData.MeleeAttackDamage;
+        //_attackDetails.Position = _archer.transform.position;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        _isPlayerInMinAgroRange = _archerAggroMode.CheckPlayerInMinAgroRange();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+        IsOnCooldown = true;
+        //CooldownManager.Instance.Subscribe(this);
+    }
+
+    public virtual void FinishMeleeAttack()
+    {
+        _isStateAnimationFinished = true;
+    }
+
+    public void CheckCooldown()
+    {
+        if (IsOnCooldown && Time.time >= _stateStartTime + _archerAggroModeData.MeleeAttackCooldown)
+            ResetCooldown();
+    }
+
+    public void ResetCooldown()
+    {
+        IsOnCooldown = false;
+        //CooldownManager.Instance.UnSubscribe(this);
+    }
+
+    public void TriggerMeleeAttack()
+    {
+        //Collider2D detectedObject = Physics2D.OverlapCircle(_archer.MeleeAttackPosition.transform.position,
+        //                                                    _archerAggroModeData.MeleeAttackRadius,
+        //                                                    _archerAggroModeData.WhatIsPlayer);
+        //if (detectedObject)
+        //    detectedObject.gameObject.GetComponent<IDamageble>().Damage(_attackDetails);
+    }
+}

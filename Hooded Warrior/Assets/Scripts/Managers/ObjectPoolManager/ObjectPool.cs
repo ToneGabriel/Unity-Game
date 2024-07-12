@@ -7,12 +7,15 @@ public sealed partial class ObjectPoolManager
 {
     private partial class ObjectPool
     {
-        private Queue<GameObject>   _inactiveObjects;   // actual pool
-        private HashSet<GameObject> _activeObjects;     // monitor for faster cleanup and maintenance
+        #region Components & Data
+        private readonly Queue<GameObject>   _inactiveObjects;   // actual pool
+        private readonly HashSet<GameObject> _activeObjects;     // monitor for faster cleanup and maintenance
 
         private static readonly int _defaultCapacity    = 8;
         private static readonly int _minCount           = 2;
+        #endregion Components & Data
 
+        #region Pool Interface
         public ObjectPool(GameObject original)
         {
             _inactiveObjects    = new Queue<GameObject>();
@@ -21,7 +24,7 @@ public sealed partial class ObjectPoolManager
             Supply(original);
         }
 
-        public GameObject Get(Vector3 positionToSet, Quaternion rotationToSet)
+        public GameObject GetObject(Vector3 positionToSet, Quaternion rotationToSet)
         {
             if (_inactiveObjects.Count <= _minCount)
                 Resuply();
@@ -34,7 +37,7 @@ public sealed partial class ObjectPoolManager
             return instance;
         }
 
-        public void Return(GameObject instance)
+        public void ReturnObject(GameObject instance)
         {
             _activeObjects.Remove(instance);
             instance.SetActive(false);
@@ -44,10 +47,7 @@ public sealed partial class ObjectPoolManager
         public void ReturnAll()
         {
             while (_activeObjects.Any())
-            {
-                GameObject instance = _activeObjects.First();
-                Return(instance);
-            }
+                ReturnObject(_activeObjects.First());
         }
 
         public void CheckActivity()     // shrink pool if no activity
@@ -55,7 +55,9 @@ public sealed partial class ObjectPoolManager
             if (false == _activeObjects.Any())
                 Shrink();
         }
+        #endregion Pool Interface
 
+        #region Helpers
         private void Supply(GameObject original)
         {
             for (int i = 0; i < _defaultCapacity; ++i)
@@ -79,5 +81,6 @@ public sealed partial class ObjectPoolManager
             for (int i = 0; i < shrinkCount && _inactiveObjects.Count > _minCount; ++i)
                 GameObject.Destroy(_inactiveObjects.Dequeue());
         }
+        #endregion Helpers
     }
 }

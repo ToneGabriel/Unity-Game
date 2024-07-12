@@ -21,7 +21,7 @@ public class StartMenuState : GameManagerState
         _startMenuData.StartMenuCanvas.SetActive(true);
     }
 
-    public override void LogicUpdate() => base.LogicUpdate();
+    public override void Update() => base.Update();
 
     public override void Exit()
     {

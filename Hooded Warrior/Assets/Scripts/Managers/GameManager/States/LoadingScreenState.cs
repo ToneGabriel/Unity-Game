@@ -31,7 +31,7 @@ public class LoadingScreenState : GameManagerState
         _gameManager.StartCoroutine(LoadingScreen());
     }
 
-    public override void LogicUpdate() => base.LogicUpdate();
+    public override void Update() => base.Update();
 
     public override void Exit()
     {
