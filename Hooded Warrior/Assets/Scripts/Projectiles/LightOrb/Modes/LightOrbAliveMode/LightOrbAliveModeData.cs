@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-[CreateAssetMenu(fileName = "newLightOrbSpellData", menuName = "Data/Spell Data/Light Orb Spell")]
-public class LightOrbSpellData : ScriptableObject
+//[CreateAssetMenu(fileName = "newLightOrbAliveModeData", menuName = "Data/Spell Data/Light Orb Spell")]
+public class LightOrbAliveModeData : ScriptableObject
 {
     // Editor ==================================================
 

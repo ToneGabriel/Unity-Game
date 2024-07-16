@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -6,53 +7,40 @@ using UnityEngine.Rendering.Universal;
 [PoolObject]
 public sealed class LightOrb : MonoBehaviourController
 {
+    private enum StateID
+    {
+        Alive
+    }
+
     #region Components & Data
-    [SerializeField] private Light2D _innerLightComponent;
-    [SerializeField] private Light2D _outerLightComponent;
-    [SerializeField] private LightOrbSpellData _lightOrbSpellData;
+    [SerializeField] private Light2D                _innerLightComponent;
+    [SerializeField] private Light2D                _outerLightComponent;
+    [SerializeField] private LightOrbAliveModeData  _aliveModeData;
 
-    private Rigidbody2D _rigidbody;
-    private GameObject _target;
+    public Light2D InnerLight { get { return _innerLightComponent; } }
+    public Light2D OuterLight { get { return _outerLightComponent; } }
+    public Rigidbody2D Rigidbody { get; private set; }
+
+    public GameObject FollowTarget { get; set; }
+
+    private FiniteStateMachine<StateID> _lightOrbController;
     #endregion Components & Data
-
-    #region Component Getters & Setters
-    public LightOrbSpellData Data
-    {
-        get { return _lightOrbSpellData; }
-    }
-
-    public float InnerLightInnerRadius
-    {
-        get { return _innerLightComponent.pointLightInnerRadius; }
-        set { _innerLightComponent.pointLightInnerRadius = value; }
-    }
-
-    public float InnerLightOuterRadius
-    {
-        get { return _innerLightComponent.pointLightOuterRadius; }
-        set { _innerLightComponent.pointLightOuterRadius = value; }
-    }
-
-    public float OuterLightInnerRadius
-    {
-        get { return _outerLightComponent.pointLightInnerRadius; }
-        set { _outerLightComponent.pointLightInnerRadius = value; }
-    }
-
-    public float OuterLightOuterRadius
-    {
-        get { return _outerLightComponent.pointLightOuterRadius; }
-        set { _outerLightComponent.pointLightOuterRadius = value; }
-    }
-    #endregion Component Getters & Setters
 
     #region Unity Functions
     protected override void Awake()
     {
         base.Awake();
 
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _target = null;
+        Rigidbody = GetComponent<Rigidbody2D>();
+
+        _lightOrbController = new FiniteStateMachine<StateID>();
+
+        _lightOrbController.InitializeStates
+        (
+            new KeyValuePair<StateID, State>(StateID.Alive, new LightOrbAliveMode(this, _aliveModeData))
+        );
+
+        _lightOrbController.SetDefaultState(StateID.Alive);
     }
 
     protected override void OnEnable()
@@ -69,12 +57,17 @@ public sealed class LightOrb : MonoBehaviourController
     {
         base.FixedUpdate();
     }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
     #endregion Unity Functions
 
     #region Controller Interface
     protected override State GetControlState()
     {
-        return null; //_fsm;
+        return _lightOrbController;
     }
 
     protected override bool UpdateConditions()
@@ -89,44 +82,8 @@ public sealed class LightOrb : MonoBehaviourController
 
     public override void ChangeState()
     {
+        // has only 1 mode
         throw new NotImplementedException("Not intended for implementation!");
     }
     #endregion Controller Interface
-
-    #region Setters
-    public void SetTarget(GameObject target)
-    {
-        _target = target;
-        //_target = GameManager.Instance.Player.GetLightOrbPosition();
-    }
-
-    public void MoveTowardsTarget(float speed)
-    {
-        transform.position = Vector3.Lerp(transform.position, _target.transform.position, speed);
-    }
-
-    public void ApplyImpulse(Vector2 impulse)
-    {
-        _rigidbody.AddForce(impulse, ForceMode2D.Impulse);
-    }
-
-    public void SetVelocity(Vector2 velocity)
-    {
-        _rigidbody.velocity = velocity;
-    }
-
-    public void Die()
-    {
-        ObjectPoolManager.Instance.ReturnToPool(this);
-    }
-    #endregion Setters
-
-    #region Other
-    //protected override void FSMInitializeModes()
-    //{
-    //    //AddNewState((int)LightOrbStateID.Born, new LightOrbBornState(this));
-    //    //AddNewState((int)LightOrbStateID.Live, new LightOrbLiveState(this));
-    //    //AddNewState((int)LightOrbStateID.Die,  new LightOrbDieState(this));
-    //}
-    #endregion Other
 }

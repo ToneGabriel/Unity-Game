@@ -19,10 +19,22 @@ public sealed class Player : Entity
 
     [Header("Player Modes Data")]
     [SerializeField] private PlayerControlModeData  _playerControlModeData;
+    #endregion Components & Data
 
-    public int      JumpCount { get; set; }
-    public Vector2  FuturePosition { get; set; }
-    #endregion
+    #region Properties
+    public GameObject DashDirectionIndicator
+    {
+        get { return _dashDirectionIndicator; }
+    }
+    public GameObject LightOrbPosition
+    {
+        get { return _lightOrbPosition; }
+    }
+
+    public int JumpCount { get; set; }
+
+    public Vector2 FuturePosition { get; set; }
+    #endregion Properties
 
     #region Others
     //private int _weaponIndex;
@@ -90,31 +102,6 @@ public sealed class Player : Entity
     protected override void Update()
     {
         base.Update();
-
-        //SetAnimatorFloatParam(PlayerControllerParameters.VelocityY_f, VelocityY);
-        //SetAnimatorFloatParam(PlayerControllerParameters.VelocityX_f, Mathf.Abs(VelocityX));
-    }
-    #endregion
-
-    #region Setters
-    public void SetDashArrowActive(bool value)
-    {
-        _dashDirectionIndicator.SetActive(value);
-    }
-
-    public void SetDashArrowRotation(Quaternion rotation)
-    {
-        _dashDirectionIndicator.transform.rotation = rotation;
-    }
-
-    public GameObject GetLightOrbPosition()
-    {
-        return _lightOrbPosition;
-    }
-
-    public void SetLightOrbPosition(Vector2 position)
-    {
-        _lightOrbPosition.transform.localPosition = position;
     }
     #endregion
 

@@ -98,9 +98,15 @@ where EState : Enum
         _target.Rigidbody.velocity = _workspaceVector2;
     }
 
-    public void Target_SetColliderHight()
+    public void Target_SetBoxColliderHeight(float height)
     {
-        // TODO
+        Vector2 center = _target.BoxCollider.offset;
+        _workspaceVector2.Set(_target.BoxCollider.size.x, height);
+
+        center.y += (height - _target.BoxCollider.size.y) / 2;
+
+        _target.BoxCollider.size = _workspaceVector2;
+        _target.BoxCollider.offset = center;
     }
 
     public void Target_SetRigidbodyType(RigidbodyType2D type)

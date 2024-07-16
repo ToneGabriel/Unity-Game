@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
 {
     public enum StateID
@@ -124,30 +125,19 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
     }
     #endregion Properties
 
-    public void Target_SetBoxColliderHeight(float height)
-    {
-        Vector2 center = _target.BoxCollider.offset;
-        _workspaceVector2.Set(_target.BoxCollider.size.x, height);
-
-        center.y += (height - _target.BoxCollider.size.y) / 2;
-
-        _target.BoxCollider.size = _workspaceVector2;
-        _target.BoxCollider.offset = center;
-    }
-
     public void Target_SetLightOrbPosition(Vector2 position)
     {
-        _target.SetLightOrbPosition(position);
+        _target.LightOrbPosition.transform.localPosition = position;
     }
 
     public void Target_SetDashArrowActive(bool value)
     {
-        _target.SetDashArrowActive(value);
+        _target.DashDirectionIndicator.SetActive(value);
     }
 
     public void Target_SetDashArrowRotation(Quaternion rotation)
     {
-        _target.SetDashArrowRotation(rotation);
+        _target.DashDirectionIndicator.transform.rotation = rotation;
     }
 
     //public bool Target_HasJumpsLeft()

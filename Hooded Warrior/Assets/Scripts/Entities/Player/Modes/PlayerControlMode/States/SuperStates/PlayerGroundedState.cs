@@ -27,7 +27,7 @@ public abstract class PlayerGroundedState : PlayerState
     {
         base.Enter();
 
-        //_playerControlMode.ResetAmountOfJumpsLeft();
+        _playerControlMode.Target_JumpCount = _playerControlModeData.MaxAmountOfJumps;
         // TODO
         // _player.AdvancedStatus.CanDash = true;
     }
