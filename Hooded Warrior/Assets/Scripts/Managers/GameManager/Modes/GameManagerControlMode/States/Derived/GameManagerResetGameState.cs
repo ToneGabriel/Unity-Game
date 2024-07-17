@@ -1,13 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
-public class ResetGameState : GameManagerState
+public sealed class GameManagerResetGameState : GameManagerControlBaseState
 {
     private ResetGameData _resetGameData;
     private WaitForSeconds _timeBeforeDeathPrompt;
 
-    public ResetGameState(GameManager gameManager, ResetGameData resetGameData)
-        : base(gameManager)
+    public GameManagerResetGameState(GameManagerControlMode mode, ResetGameData resetGameData)
+        : base(mode)
     {
         _resetGameData = resetGameData;
         _timeBeforeDeathPrompt = new WaitForSeconds(2f);
@@ -20,7 +20,7 @@ public class ResetGameState : GameManagerState
     {
         base.Enter();
 
-        _gameManager.StartCoroutine(ShowDeathPrompt());
+        //_gameManager.StartCoroutine(ShowDeathPrompt());
     }
 
     public override void Update() => base.Update();

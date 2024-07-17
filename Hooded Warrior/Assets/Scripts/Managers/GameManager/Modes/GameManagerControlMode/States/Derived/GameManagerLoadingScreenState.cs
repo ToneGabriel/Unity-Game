@@ -3,15 +3,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoadingScreenState : GameManagerState
+public sealed class GameManagerLoadingScreenState : GameManagerControlBaseState
 {
     private LoadingScreenData _loadingScreenData;
-    private GameManagerState _nextState;
+    private GameManagerControlBaseState _nextState;
     private int _loadingBarLength;                                  // The number of processes included in loading bar
     private int _loadingProcessCounter;                             // The counter of these processes
 
-    public LoadingScreenState(GameManager gameManager, LoadingScreenData loadingScreenData)
-        :base(gameManager)
+    public GameManagerLoadingScreenState(GameManagerControlMode mode, LoadingScreenData loadingScreenData)
+        :base(mode)
     {
         _loadingScreenData = loadingScreenData;
         _loadingBarLength = _loadingScreenData.SceneLoaders.Length * 2;    // Loading bar includes loading/unloading of scenes, therefore double the number of scenes
@@ -24,11 +24,11 @@ public class LoadingScreenState : GameManagerState
         ObjectPoolManager.Instance.ClearScene();
         //CooldownManager.Instance.ResetCooldowns();
 
-        _gameManager.IsLoadingData = true;
-        _loadingScreenData.LoaderCanvas.SetActive(true);
-        _loadingScreenData.ProgressBar.fillAmount = 0f;
-        _loadingProcessCounter = 0;
-        _gameManager.StartCoroutine(LoadingScreen());
+        //_gameManager.IsLoadingData = true;
+        //_loadingScreenData.LoaderCanvas.SetActive(true);
+        //_loadingScreenData.ProgressBar.fillAmount = 0f;
+        //_loadingProcessCounter = 0;
+        //_gameManager.StartCoroutine(LoadingScreen());
     }
 
     public override void Update() => base.Update();
@@ -38,7 +38,7 @@ public class LoadingScreenState : GameManagerState
         base.Exit();
 
         _loadingScreenData.LoaderCanvas.SetActive(false);
-        _gameManager.IsLoadingData = false;
+        //_gameManager.IsLoadingData = false;
     }
 
     public void SetLoadData(Action loadData)
@@ -54,10 +54,11 @@ public class LoadingScreenState : GameManagerState
     #region Load Coroutines
     private IEnumerator LoadingScreen()
     {
-        yield return _gameManager.StartCoroutine(LoadScenes(false));        // Unload ALL scenes
-        _loadData?.Invoke();
-        yield return _gameManager.StartCoroutine(LoadScenes(true));         // Load needed scenes
+        //yield return _gameManager.StartCoroutine(LoadScenes(false));        // Unload ALL scenes
+        //_loadData?.Invoke();
+        //yield return _gameManager.StartCoroutine(LoadScenes(true));         // Load needed scenes
         //_gameManager.ChangeState(_nextState);
+        yield return null;
     }
 
     private IEnumerator LoadScenes(bool activateScenes)
@@ -75,7 +76,8 @@ public class LoadingScreenState : GameManagerState
                     sceneLoader.IsLoaded = false;
                 }
 
-            yield return _gameManager.StartCoroutine(LoadingProcess(sceneToProcess));
+            //yield return _gameManager.StartCoroutine(LoadingProcess(sceneToProcess));
+            yield return null;
         }
     }
 

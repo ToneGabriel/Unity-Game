@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public sealed class GameManager : MonoBehaviourController
 {
     public enum StateID
     {
-        StartMenu,
-        LoadingScreen,
-        Gameplay,
-        ResetGame
+        Control
     }
 
-    public static GameManager Instance;
+    public static GameManager Instance;     // Singleton instance
+
+    private FiniteStateMachine<StateID> _gameManagerController;
 
     #region Components & Data
     public Player Player;                                           // Reference to player
@@ -30,7 +31,7 @@ public sealed class GameManager : MonoBehaviourController
     #endregion
 
     #region Unity functions
-    protected override void Awake()                         // Singleton instance
+    protected override void Awake()
     {
         if (Instance != null && Instance != this)
             Destroy(gameObject);
@@ -38,8 +39,23 @@ public sealed class GameManager : MonoBehaviourController
         {
             Instance = this;
 
-            base.Awake();   // Init here due to singleton
+            // the rest of Awake
+            base.Awake();
+
+            _gameManagerController = new FiniteStateMachine<StateID>();
+
+            _gameManagerController.InitializeStates
+            (
+                new KeyValuePair<StateID, State>(StateID.Control, new GameManagerControlMode(Instance))
+            );
+
+            _gameManagerController.SetDefaultState(StateID.Control);
         }
+    }
+
+    protected override void Start()
+    {
+        base.Start();
     }
 
     protected override void OnEnable()
@@ -51,12 +67,22 @@ public sealed class GameManager : MonoBehaviourController
     {
         base.Update();
     }
-    #endregion
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
+    #endregion Unity functions
 
     #region Controller Interface
     protected override State GetControlState()
     {
-        return null;// _fsm;
+        return _gameManagerController;
     }
 
     protected override bool UpdateConditions()
@@ -71,9 +97,9 @@ public sealed class GameManager : MonoBehaviourController
 
     public override void ChangeState()
     {
+        // only 1 mode
         throw new NotImplementedException("Not intended for implementation!");
     }
-
     #endregion Controller Interface
 
     #region Other

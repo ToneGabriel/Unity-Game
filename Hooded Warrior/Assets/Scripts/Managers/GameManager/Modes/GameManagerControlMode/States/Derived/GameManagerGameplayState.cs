@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class GameplayState : GameManagerState
+public sealed class GameManagerGameplayState : GameManagerControlBaseState
 {
     private GameplayData _gameplayData;
     private bool _pauseGameInput;
 
-    public GameplayState(GameManager gameManager, GameplayData gameplayData)
-        : base(gameManager)
+    public GameManagerGameplayState(GameManagerControlMode mode, GameplayData gameplayData)
+        : base(mode)
     {
         _gameplayData = gameplayData;
         
@@ -20,8 +20,8 @@ public class GameplayState : GameManagerState
     {
         base.Enter();
 
-        _gameplayData.GameplayCanvas.SetActive(true);
-        _gameManager.Player.gameObject.SetActive(true);
+        //_gameplayData.GameplayCanvas.SetActive(true);
+        //_gameManager.Player.gameObject.SetActive(true);
     }
 
     public override void Update()
@@ -49,23 +49,23 @@ public class GameplayState : GameManagerState
     {
         base.Exit();
 
-        _gameplayData.GameplayCanvas.SetActive(false);
-        _gameManager.Player.gameObject.SetActive(false);
+        //_gameplayData.GameplayCanvas.SetActive(false);
+        //_gameManager.Player.gameObject.SetActive(false);
     }
 
     #region Pause Functions
     private void PauseGame()
     {
-        _gameManager.IsGamePaused = true;
-        Helpers.ChangeTimeScale(TimeScale.Frozen);
-        _gameplayData.PausePrompt.SetActive(true);
+        //_gameManager.IsGamePaused = true;
+        //Helpers.ChangeTimeScale(TimeScale.Frozen);
+        //_gameplayData.PausePrompt.SetActive(true);
     }
 
     private void ResumeGame()
     {
-        _gameManager.IsGamePaused = false;
-        Helpers.ChangeTimeScale(TimeScale.Normal);
-        _gameplayData.PausePrompt.SetActive(false);
+        //_gameManager.IsGamePaused = false;
+        //Helpers.ChangeTimeScale(TimeScale.Normal);
+        //_gameplayData.PausePrompt.SetActive(false);
     }
 
     private void SaveGame()

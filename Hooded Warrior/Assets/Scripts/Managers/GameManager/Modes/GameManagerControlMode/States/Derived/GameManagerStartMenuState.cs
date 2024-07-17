@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class StartMenuState : GameManagerState
+public sealed class GameManagerStartMenuState : GameManagerControlBaseState
 {
     private StartMenuData _startMenuData;
 
-    public StartMenuState(GameManager gameManager, StartMenuData startMenuData)
-        : base(gameManager) 
+    public GameManagerStartMenuState(GameManagerControlMode mode, StartMenuData startMenuData)
+        : base(mode) 
     {
         _startMenuData = startMenuData;
 
