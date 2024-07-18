@@ -11,7 +11,7 @@ public class BullAggroMode : EntityMode<BullAggroMode.StateID>
         MeleeAttack
     }
 
-    private static class AnimatorParameters
+    public static class AnimatorParameters
     {
         public static readonly string PlayerDetected_b  = "PlayerDetected_b";
         public static readonly string Charge_b          = "Charge_b";
@@ -29,8 +29,6 @@ public class BullAggroMode : EntityMode<BullAggroMode.StateID>
 
     private readonly Bull               _target;
     private readonly BullAggroModeData  _aggroData;
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public BullAggroMode(Bull bull, BullAggroModeData data)
         : base(bull)

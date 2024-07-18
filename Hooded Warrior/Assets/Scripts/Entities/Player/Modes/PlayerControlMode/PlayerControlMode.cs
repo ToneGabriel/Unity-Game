@@ -28,7 +28,7 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
         //SpellCast
     }
 
-    private static class AnimatorParameters
+    public static class AnimatorParameters
     {
         public static readonly string Idle_b        = "Idle_b";
         public static readonly string Move_b        = "Move_b";
@@ -107,11 +107,6 @@ public sealed class PlayerControlMode : EntityMode<PlayerControlMode.StateID>
     }
 
     #region Properties
-    public override string[] AnimatorParameterNames
-    {
-        get { return AnimatorParameters.GetAnimatorParameterNames(); }
-    }
-
     public int Target_JumpCount
     {
         get { return _target.JumpCount; }

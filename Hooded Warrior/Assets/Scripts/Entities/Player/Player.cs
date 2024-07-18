@@ -22,6 +22,14 @@ public sealed class Player : Entity
     #endregion Components & Data
 
     #region Properties
+    public override string[] AnimatorParameterNames
+    {
+        get
+        {
+            return PlayerControlMode.AnimatorParameters.GetAnimatorParameterNames();
+        }
+    }
+
     public GameObject DashDirectionIndicator
     {
         get { return _dashDirectionIndicator; }

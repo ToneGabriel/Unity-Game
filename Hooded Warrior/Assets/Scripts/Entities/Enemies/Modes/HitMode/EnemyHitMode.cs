@@ -12,7 +12,7 @@ public sealed class EnemyHitMode : EntityMode<EnemyHitMode.StateID>
         Dead
     }
 
-    private static class AnimatorParameters
+    public static class AnimatorParameters
     {
         public static readonly string Hit_b     = "Hit_b";
         public static readonly string Stun_b    = "Stun_b";
@@ -30,8 +30,6 @@ public sealed class EnemyHitMode : EntityMode<EnemyHitMode.StateID>
 
     private readonly Enemy              _target;
     private readonly EnemyHitModeData   _hitData;
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public EnemyHitMode(Enemy enemy, EnemyHitModeData data)
         : base(enemy)

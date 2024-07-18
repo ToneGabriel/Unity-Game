@@ -11,7 +11,7 @@ public sealed class EnemyPatrolMode : EntityMode<EnemyPatrolMode.StateID>
         LookForPlayer
     }
 
-    private static class AnimatorParameters
+    public static class AnimatorParameters
     {
         public static readonly string Idle_b            = "Idle_b";
         public static readonly string Move_b            = "Move_b";
@@ -29,8 +29,6 @@ public sealed class EnemyPatrolMode : EntityMode<EnemyPatrolMode.StateID>
 
     private readonly Enemy                  _target;
     private readonly EnemyPatrolModeData    _patrolData;
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public EnemyPatrolMode(Enemy enemy, EnemyPatrolModeData data)
         : base(enemy)

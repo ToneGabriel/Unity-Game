@@ -1,12 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class BringerOfDeath : Enemy
 {
     public enum StateID
     {
-
+        Patrol,
+        Aggro,
+        Hit
     }
+
+    public override string[] AnimatorParameterNames
+    {
+        get
+        {
+            return Helpers.ConcatArrays
+            (
+                EnemyPatrolMode.AnimatorParameters.GetAnimatorParameterNames(),
+                BringerOfDeathAggroMode.AnimatorParameters.GetAnimatorParameterNames(),
+                EnemyHitMode.AnimatorParameters.GetAnimatorParameterNames()
+            );
+        }
+    }
+
+    private FiniteStateMachine<StateID> _bodController = null;
 
     #region States and Data
     [SerializeField] private Data_Idle _idleStateData;
@@ -27,6 +45,17 @@ public sealed class BringerOfDeath : Enemy
     protected override void Awake()
     {
         base.Awake();
+
+        _bodController = new FiniteStateMachine<StateID>();
+
+        _bodController.InitializeStates
+        (
+            new KeyValuePair<StateID, State>(StateID.Patrol,    new EnemyPatrolMode(this, null)),
+            new KeyValuePair<StateID, State>(StateID.Aggro,     new BringerOfDeathAggroMode(this, null)),
+            new KeyValuePair<StateID, State>(StateID.Hit,       new EnemyHitMode(this, null))
+        );
+
+        _bodController.SetDefaultState(StateID.Patrol);
     }
 
     protected override void OnEnable()
@@ -46,7 +75,7 @@ public sealed class BringerOfDeath : Enemy
     #region Controller Interface
     protected override State GetControlState()
     {
-        return null;    // _fsm
+        return _bodController;
     }
 
     protected override bool UpdateConditions()
@@ -61,7 +90,12 @@ public sealed class BringerOfDeath : Enemy
 
     public override void ChangeState()
     {
-        // TODO
+        if (_bodController.IsStateActive(StateID.Patrol))
+            _bodController.ChangeState(StateID.Aggro);
+        else if (_bodController.IsStateActive(StateID.Aggro))
+            _bodController.ChangeState(StateID.Patrol);
+        else if (_bodController.IsStateActive(StateID.Hit))
+            _bodController.ChangeState(StateID.Aggro);
     }
     #endregion Controller Interface
 

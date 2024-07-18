@@ -1,8 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class Bull : Enemy
 {
+    private enum StateID
+    {
+        Patrol,
+        Aggro,
+        Hit
+    }
+
+    public override string[] AnimatorParameterNames
+    {
+        get
+        {
+            return Helpers.ConcatArrays
+            (
+                EnemyPatrolMode.AnimatorParameters.GetAnimatorParameterNames(),
+                BullAggroMode.AnimatorParameters.GetAnimatorParameterNames(),
+                EnemyHitMode.AnimatorParameters.GetAnimatorParameterNames()
+            );
+        }
+    }
+
+    private FiniteStateMachine<StateID> _bullController = null;
+
     //#region States and Data
     //[SerializeField] private Data_Idle _idleStateData;
     //[SerializeField] private Data_Move _moveStateData;
@@ -21,6 +44,17 @@ public sealed class Bull : Enemy
     protected override void Awake()
     {
         base.Awake();
+
+        _bullController = new FiniteStateMachine<StateID>();
+
+        _bullController.InitializeStates
+        (
+            new KeyValuePair<StateID, State>(StateID.Patrol,    new EnemyPatrolMode(this, null)),
+            new KeyValuePair<StateID, State>(StateID.Aggro,     new BullAggroMode(this, null)),
+            new KeyValuePair<StateID, State>(StateID.Hit,       new EnemyHitMode(this, null))
+        );
+
+        _bullController.SetDefaultState(StateID.Patrol);
     }
 
     protected override void OnEnable()
@@ -32,7 +66,7 @@ public sealed class Bull : Enemy
     #region Controller Interface
     protected override State GetControlState()
     {
-        return null;    // _fsm
+        return _bullController;
     }
 
     protected override bool UpdateConditions()
@@ -47,7 +81,12 @@ public sealed class Bull : Enemy
 
     public override void ChangeState()
     {
-        // TODO
+        if (_bullController.IsStateActive(StateID.Patrol))
+            _bullController.ChangeState(StateID.Aggro);
+        else if (_bullController.IsStateActive(StateID.Aggro))
+            _bullController.ChangeState(StateID.Patrol);
+        else if (_bullController.IsStateActive(StateID.Hit))
+            _bullController.ChangeState(StateID.Aggro);
     }
     #endregion Controller Interface
 

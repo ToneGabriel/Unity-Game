@@ -46,18 +46,14 @@ public sealed class GameManagerLoadingScreenState : GameManagerControlBaseState
         _loadData = loadData;
     }
 
-    //public void SetNextState(GameManagerState nextState)
-    //{
-    //    _nextState = nextState;
-    //}
-
     #region Load Coroutines
     private IEnumerator LoadingScreen()
     {
         //yield return _gameManager.StartCoroutine(LoadScenes(false));        // Unload ALL scenes
         //_loadData?.Invoke();
         //yield return _gameManager.StartCoroutine(LoadScenes(true));         // Load needed scenes
-        //_gameManager.ChangeState(_nextState);
+
+        //_gameManagerControlMode.ChangeState(_gameManagerControlMode.Target_BufferedStateID);
         yield return null;
     }
 

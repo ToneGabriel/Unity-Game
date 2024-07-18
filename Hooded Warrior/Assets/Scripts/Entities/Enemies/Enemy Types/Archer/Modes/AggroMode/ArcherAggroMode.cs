@@ -11,12 +11,12 @@ public sealed class ArcherAggroMode : EntityMode<ArcherAggroMode.StateID>
         RangedAttack
     }
 
-    private static class AnimatorParameters
+    public static class AnimatorParameters
     {
-        public static readonly string PlayerDetected_b = "PlayerDetected_b";
-        public static readonly string Dodge_b = "Dodge_b";
-        public static readonly string MeleeAttack_b = "MeleeAttack_b";
-        public static readonly string RangedAttack_b = "RangedAttack_b";
+        public static readonly string PlayerDetected_b  = "PlayerDetected_b";
+        public static readonly string Dodge_b           = "Dodge_b";
+        public static readonly string MeleeAttack_b     = "MeleeAttack_b";
+        public static readonly string RangedAttack_b    = "RangedAttack_b";
 
         public static string[] GetAnimatorParameterNames()
         {
@@ -31,8 +31,6 @@ public sealed class ArcherAggroMode : EntityMode<ArcherAggroMode.StateID>
 
     private readonly Archer                 _target;
     private readonly ArcherAggroModeData    _aggroData;
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public ArcherAggroMode(Archer archer, ArcherAggroModeData data)
         : base(archer)

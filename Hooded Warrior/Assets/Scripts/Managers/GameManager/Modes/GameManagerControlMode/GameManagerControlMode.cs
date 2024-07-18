@@ -29,4 +29,10 @@ public sealed class GameManagerControlMode : FiniteStateMachine<GameManagerContr
 
         SetDefaultState(StateID.StartMenu);
     }
+
+    public StateID Target_BufferedStateID
+    {
+        get;
+        set;
+    }
 }

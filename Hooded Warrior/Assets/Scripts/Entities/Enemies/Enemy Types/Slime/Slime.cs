@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -6,11 +7,25 @@ public sealed class Slime : Enemy
 {
     public enum StateID
     {
-        // TODO: change this for aggro, non-aggro ...
-        //Move,
-        //Idle,
-        //PlayerDetected
+        Patrol,
+        Aggro,
+        Hit
     }
+
+    public override string[] AnimatorParameterNames
+    {
+        get
+        {
+            return Helpers.ConcatArrays
+            (
+                EnemyPatrolMode.AnimatorParameters.GetAnimatorParameterNames(),
+                SlimeAggroMode.AnimatorParameters.GetAnimatorParameterNames(),
+                EnemyHitMode.AnimatorParameters.GetAnimatorParameterNames()
+            );
+        }
+    }
+
+    private FiniteStateMachine<StateID> _slimeController = null;
 
     [SerializeField] private Data_Idle _idleStateData;
     [SerializeField] private Data_Move _moveStateData;
@@ -19,6 +34,17 @@ public sealed class Slime : Enemy
     protected override void Awake()
     {
         base.Awake();
+
+        _slimeController = new FiniteStateMachine<StateID>();
+
+        _slimeController.InitializeStates
+        (
+            new KeyValuePair<StateID, State>(StateID.Patrol,    new EnemyPatrolMode(this, null)),
+            new KeyValuePair<StateID, State>(StateID.Aggro,     new SlimeAggroMode(this, null)),
+            new KeyValuePair<StateID, State>(StateID.Hit,       new EnemyHitMode(this, null))
+        );
+
+        _slimeController.SetDefaultState(StateID.Patrol);
     }
 
     protected override void OnEnable()
@@ -26,18 +52,10 @@ public sealed class Slime : Enemy
         base.OnEnable();
     }
 
-    //protected override void FSMInitializeModes()
-    //{
-    //    throw new System.NotImplementedException();
-    //    //AddNewState((int)SlimeStateID.Idle,             new SlimeIdleState(this, "idle", _idleStateData));
-    //    //AddNewState((int)SlimeStateID.Move,             new SlimeMoveState(this, "walk", _moveStateData));
-    //    //AddNewState((int)SlimeStateID.PlayerDetected,   new SlimePlayerDetectedState(this, "playerDetected", _playerDetectedStateData));
-    //}
-
     #region Controller Interface
     protected override State GetControlState()
     {
-        return null;    // _fsm
+        return _slimeController;
     }
 
     protected override bool UpdateConditions()
@@ -52,7 +70,12 @@ public sealed class Slime : Enemy
 
     public override void ChangeState()
     {
-        // TODO
+        if (_slimeController.IsStateActive(StateID.Patrol))
+            _slimeController.ChangeState(StateID.Aggro);
+        else if (_slimeController.IsStateActive(StateID.Aggro))
+            _slimeController.ChangeState(StateID.Patrol);
+        else if (_slimeController.IsStateActive(StateID.Hit))
+            _slimeController.ChangeState(StateID.Aggro);
     }
     #endregion Controller Interface
 }

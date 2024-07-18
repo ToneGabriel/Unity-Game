@@ -14,8 +14,6 @@ where EState : Enum
     }
 
     #region Properties
-    public abstract string[] AnimatorParameterNames { get; }    // used for animator generation
-
     public int Target_FacingDirection
     {
         get { return _target.FacingDirection; }

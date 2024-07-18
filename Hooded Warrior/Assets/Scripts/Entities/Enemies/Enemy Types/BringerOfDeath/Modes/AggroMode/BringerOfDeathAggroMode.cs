@@ -8,31 +8,23 @@ public class BringerOfDeathAggroMode : EntityMode<BringerOfDeathAggroMode.StateI
     public enum StateID
     {
         PlayerDetected,
+        // Charge,
+        // PortalRangedAttack,
+        // OrbRangedAttack,
         MeleeAttack,
         RangedAttack
     }
 
-    //public enum BringerOfDeathStateID
-    //{
-    //    PlayerDetected,
-    //    Charge,
-    //    MeleeAttack,
-    //    PortalRangedAttack,
-    //    OrbRangedAttack,
-    //}
-
-    private static class AnimatorParameters
+    public static class AnimatorParameters
     {
-        public static readonly string PlayerDetected_b = "PlayerDetected_b";
-        public static readonly string Dodge_b = "Dodge_b";
-        public static readonly string MeleeAttack_b = "MeleeAttack_b";
-        public static readonly string RangedAttack_b = "RangedAttack_b";
+        public static readonly string PlayerDetected_b  = "PlayerDetected_b";
+        public static readonly string MeleeAttack_b     = "MeleeAttack_b";
+        public static readonly string RangedAttack_b    = "RangedAttack_b";
 
         public static string[] GetAnimatorParameterNames()
         {
             return new string[] {
                                     PlayerDetected_b,
-                                    Dodge_b,
                                     MeleeAttack_b,
                                     RangedAttack_b,
                                 };
@@ -41,8 +33,6 @@ public class BringerOfDeathAggroMode : EntityMode<BringerOfDeathAggroMode.StateI
 
     private readonly BringerOfDeath                 _target;
     private readonly BringerOfDeathAggroModeData    _aggroData;
-
-    public override string[] AnimatorParameterNames { get { return AnimatorParameters.GetAnimatorParameterNames(); } }
 
     public BringerOfDeathAggroMode(BringerOfDeath bod, BringerOfDeathAggroModeData data)
         : base(bod)

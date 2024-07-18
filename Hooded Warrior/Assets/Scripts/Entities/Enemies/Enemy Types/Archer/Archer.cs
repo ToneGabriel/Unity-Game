@@ -10,6 +10,19 @@ public sealed class Archer : Enemy
         Hit
     }
 
+    public override string[] AnimatorParameterNames
+    {
+        get
+        {
+            return Helpers.ConcatArrays
+            (
+                EnemyPatrolMode.AnimatorParameters.GetAnimatorParameterNames(),
+                ArcherAggroMode.AnimatorParameters.GetAnimatorParameterNames(),
+                EnemyHitMode.AnimatorParameters.GetAnimatorParameterNames()
+            );
+        }
+    }
+
     private FiniteStateMachine<StateID> _archerController = null;
 
     #region Components

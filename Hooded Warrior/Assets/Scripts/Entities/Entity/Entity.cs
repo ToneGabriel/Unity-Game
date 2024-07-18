@@ -3,6 +3,8 @@ using UnityEngine;
 
 public abstract class Entity : MonoBehaviourController//, ISaveable, IDamageble
 {
+    public abstract string[] AnimatorParameterNames { get; }
+
     #region Components & Data
     [SerializeField] private EntitySensors  _sensors;
     [SerializeField] private EntityData     _data;
